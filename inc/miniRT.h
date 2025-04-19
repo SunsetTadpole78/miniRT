@@ -6,13 +6,13 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/19 18:31:17 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/04/19 19:39:21 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
 
-#include "libft.h"
+# include "libft.h"
 
 #endif
