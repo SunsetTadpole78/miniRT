@@ -11,6 +11,10 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y libx11-dev libxext-dev libxrandr-dev libxi-dev libgl1-mesa-dev
       - name: Compile
         run: make || exit 1
       - name: Clean
