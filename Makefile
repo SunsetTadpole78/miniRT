@@ -43,6 +43,8 @@ clean:
 	rm -rf $(OFILES)
 	rm -rf $(OBJS)
 	make -C $(LIBFT) clean > /dev/null
+	make -C $(MLX_X11) clean > /dev/null
+	make -C $(MLX_OPENGL) clean > /dev/null
 
 fclean: clean
 	rm -rf $(NAME)
