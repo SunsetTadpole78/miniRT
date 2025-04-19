@@ -6,7 +6,7 @@ jobs:
     name: Compile with Makefile
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Compile on Linux
         uses: actions/checkout@v4
         with:
           submodules: true
@@ -21,6 +21,19 @@ jobs:
             libxi-dev \
             libgl1-mesa-dev \
             libbsd-dev
+      - name: Compile
+        run: make || exit 1
+      - name: Clean
+        run: make fclean || exit 1
+  macos:
+    name: Compile on MacOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
       - name: Compile
         run: make || exit 1
       - name: Clean

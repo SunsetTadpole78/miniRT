@@ -23,12 +23,10 @@ FLAGS = -Wall -Wextra -Werror
 EXTRA_FLAGS = -g
 COMPILATOR = cc
 
-TYPE ?= linux
-
 all: $(NAME)
 
 $(NAME): $(LIBFTA) $(OFILES)
-ifeq ($(TYPE),mac)
+ifeq ($(shell uname), Darwin)
 	make -C $(MLX_OPENGL) > /dev/null
 	$(COMPILATOR) $(FLAGS) $(OFILES) $(LIBFTA) $(MLX_OPENGLA) -o $(NAME) -I $(INC) -I $(LIBFTI) -I $(MLX_OPENGLI) $(EXTRA_FLAGS)
 else
@@ -52,7 +50,7 @@ fclean: clean
 
 $(OBJS)/%.o: $(SRC)/%.c
 	mkdir -p $(dir $@)
-ifeq ($(TYPE),mac)
+ifeq ($(shell uname), Darwin)
 	$(COMPILATOR) $(FLAGS) $< -c -o $@ -I $(INC) -I $(LIBFTI) -I $(MLX_OPENGLI) $(EXTRA_FLAGS)
 else
 	$(COMPILATOR) $(FLAGS) $< -c -o $@ -I $(INC) -I $(LIBFTI) -I $(MLX_X11I) $(EXTRA_FLAGS)
