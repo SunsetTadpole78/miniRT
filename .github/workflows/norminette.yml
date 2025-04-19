@@ -17,7 +17,7 @@ jobs:
           pip install norminette
       - name: Run
         run: |
-          OUTPUT=$(norminette)
+          OUTPUT=$(norminette src inc libft)
           echo "$OUTPUT"
           echo "$OUTPUT" | grep -q "Error" && exit 1 || exit 0
           norminette | grep
