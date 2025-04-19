@@ -1,0 +1,23 @@
+name: Norminette
+on:
+  push
+jobs:
+  norminette:
+    name: Run Norminette
+    run-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+      - name: Install
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install norminette
+      - name: Run
+        run: |
+          OUTPUT=$(norminette)
+          echo "$OUTPUT"
+          echo "$OUTPUT" | grep -q "Error" && exit 1 || exit 0
+          norminette | grep
