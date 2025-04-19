@@ -1,0 +1,15 @@
+name: Compilation
+on:
+  push
+jobs:
+  linux:
+    name: Compile with Makefile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+      - name: Compile
+        run: make re || exit 1
