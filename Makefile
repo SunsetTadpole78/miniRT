@@ -16,7 +16,7 @@ MLX_X11F = -lX11 -lXext
 MLX_OPENGL = mlx/opengl
 MLX_OPENGLA = $(MLX_OPENGL)/libmlx.a
 MLX_OPENGLI = $(MLX_OPENGL)
-MLX_OPENGLF = -framework OpenGL -framework AppKit
+MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 
 FILES =	main.c									\
 
@@ -30,7 +30,7 @@ all: $(NAME)
 
 $(NAME): $(LIBFTA) $(OFILES)
 ifeq ($(shell uname), Darwin)
-	make -s -C $(MLX_OPENGL) > /dev/null
+	make -C $(MLX_OPENGL) > /dev/null
 	$(COMPILATOR) $(FLAGS) $(OFILES) $(LIBFTA) $(MLX_OPENGLA) -o $(NAME) -I $(INC) -I $(LIBFTI) -I $(MLX_OPENGLI) $(EXTRA_FLAGS) $(MLX_OPENGLF)
 else
 	make -C $(MLX_X11) > /dev/null

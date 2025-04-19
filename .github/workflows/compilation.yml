@@ -3,10 +3,10 @@ on:
   push
 jobs:
   linux:
-    name: Compile with Makefile
+    name: Compile on Linux
     runs-on: ubuntu-latest
     steps:
-      - name: Compile on Linux
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           submodules: true
