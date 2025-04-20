@@ -9,7 +9,7 @@ LIBFTA = $(LIBFT)/libft.a
 LIBFTI = $(LIBFT)
 
 MLX_X11 = mlx/x11
-MLX_X11A = $(MLX_X11)/libmlx.a
+MLX_X11A = $(MLX_X11)/libmlx_linux.a
 MLX_X11I = $(MLX_X11)
 MLX_X11F = -lX11 -lXext
 
