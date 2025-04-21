@@ -43,11 +43,11 @@ $(LIBFTA):
 clean:
 	rm -rf $(OFILES)
 	rm -rf $(OBJS)
-	make -C $(MLX_X11) clean > /dev/null
+	make -C $(LIBFT) clean > /dev/null
 ifeq ($(shell uname), Darwin)
 	make -C $(MLX_OPENGL) clean > /dev/null
 else
-	make -C $(LIBFT) clean > /dev/null
+	make -C $(MLX_X11) clean > /dev/null
 endif
 
 fclean: clean
