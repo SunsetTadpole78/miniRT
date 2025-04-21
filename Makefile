@@ -30,7 +30,7 @@ all: $(NAME)
 
 $(NAME): $(LIBFTA) $(OFILES)
 ifeq ($(shell uname), Darwin)
-	make -C $(MLX_OPENGL) CFLAGS="-DSTRINGPUTX11 -DGL_SILENCE_DEPRECATION -Wno-implicit-function-declaration -Wno-deprecated-declarations -Wno-deprecated-non-prototype" > /dev/null
+	make -C $(MLX_OPENGL) > /dev/null
 	$(COMPILATOR) $(FLAGS) $(OFILES) $(LIBFTA) $(MLX_OPENGLA) -o $(NAME) -I $(INC) -I $(LIBFTI) -I $(MLX_OPENGLI) $(EXTRA_FLAGS) $(MLX_OPENGLF)
 else
 	make -C $(MLX_X11) > /dev/null
@@ -43,9 +43,12 @@ $(LIBFTA):
 clean:
 	rm -rf $(OFILES)
 	rm -rf $(OBJS)
-	make -C $(LIBFT) clean > /dev/null
 	make -C $(MLX_X11) clean > /dev/null
+ifeq ($(shell uname), Darwin)
 	make -C $(MLX_OPENGL) clean > /dev/null
+else
+	make -C $(LIBFT) clean > /dev/null
+endif
 
 fclean: clean
 	rm -rf $(NAME)
