@@ -62,6 +62,9 @@ else
 	$(COMPILATOR) $(FLAGS) $< -c -o $@ -I $(INC) -I $(LIBFTI) -I $(MLX_X11I) $(EXTRA_FLAGS)
 endif
 
+submodules:
+	git submodule update --remote --init --recursive
+
 re: fclean $(NAME)
 
 .PHONY: all clean fclean re
