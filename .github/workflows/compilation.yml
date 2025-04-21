@@ -35,6 +35,6 @@ jobs:
           submodules: true
           fetch-depth: 0
       - name: Compile
-        run: make || exit 1
+        run: (make fclean && make) || exit 1
       - name: Clean
         run: make fclean || exit 1
