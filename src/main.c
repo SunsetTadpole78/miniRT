@@ -6,9 +6,11 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/19 18:31:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/04/21 12:56:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "miniRT.h"
 
 int	main(int argc, char **argv)
 {
