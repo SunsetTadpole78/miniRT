@@ -1,0 +1,5 @@
+*/*.o
+*/*.a
+*/*.sw*
+*.DS_Store
+miniRT
