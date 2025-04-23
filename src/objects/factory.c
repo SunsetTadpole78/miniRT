@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:45:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 11:23:09 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/04/23 11:36:52 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	register_object(char *id, t_object object)
 {
 	t_minirt	*mrt;
+
 	(void)mrt;
 	(void)id;
 	(void)object;
