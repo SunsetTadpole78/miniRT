@@ -1,5 +1,5 @@
-*/*.o
-*/*.a
-*/*.sw*
-*.DS_Store
+**/*.o
+**/*.a
+**/*.sw*
+**.DS_Store
 miniRT

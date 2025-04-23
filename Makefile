@@ -18,7 +18,10 @@ MLX_OPENGLA = $(MLX_OPENGL)/libmlx.a
 MLX_OPENGLI = $(MLX_OPENGL)
 MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 
-FILES =	main.c									\
+FILES =	destructor.c		\
+		initializer.c		\
+		main.c				\
+		objects/factory.c	\
 
 OFILES = $(FILES:%.c=$(OBJS)/%.o)
 
@@ -64,6 +67,17 @@ endif
 
 submodules:
 	git submodule update --remote --init --recursive
+
+norminette:
+	@echo "Checking norminette..."
+	@OUTPUT=$$(norminette src inc libft); \
+	ERR_LINES=$$(echo "$$OUTPUT" | grep -c "Error:"); \
+	if [ $$ERR_LINES -eq 0 ]; then \
+		echo "✅ Norminette: OK"; \
+	else \
+		echo "$$OUTPUT" | grep "Error"; \
+		echo "❌ Norminette: $$ERR_LINES error(s)"; \
+	fi
 
 re: fclean $(NAME)
 
