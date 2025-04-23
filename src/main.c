@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 11:36:45 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/04/23 12:13:55 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,7 @@ int	main(int argc, char **argv)
 		write(2, "miniRT: Malloc Error.\n", 22);
 		return (1);
 	}
+	register_object("pl", create_object(ft_fvector3(0, 0, 0),
+			ft_fvector3(0, 0, 0), ft_rgb(0, 0, 0)));
 	destruct_minirt();
 }

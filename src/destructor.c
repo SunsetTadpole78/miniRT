@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 11:32:23 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/04/23 11:49:34 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,9 @@
 
 void	destruct_minirt(void)
 {
-	free(minirt());
+	t_minirt	*mrt;
+
+	mrt = minirt();
+	ft_lstclear(&mrt->objects, free);
+	free(mrt);
 }
