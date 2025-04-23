@@ -21,7 +21,13 @@ MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 FILES =	destructor.c		\
 		initializer.c		\
 		main.c				\
+		objects/ambiant.c		\
+		objects/camera.c		\
+		objects/cylinder.c		\
 		objects/factory.c	\
+		objects/light.c		\
+		objects/plane.c		\
+		objects/sphere.c		\
 
 OFILES = $(FILES:%.c=$(OBJS)/%.o)
 

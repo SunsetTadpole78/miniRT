@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/23 09:45:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 13:23:02 by lroussel         ###   ########.fr       */
+/*   Created: 2025/04/23 13:06:06 by lroussel          #+#    #+#             */
+/*   Updated: 2025/04/23 13:07:11 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-void	register_object(void *object)
+t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov)
 {
-	t_minirt	*mrt;
+	t_camera	*c;
 
-	mrt = minirt();
-	ft_lstadd_back(&mrt->objects, ft_lstnew(object));
+	c = malloc(sizeof(t_camera));
+	if (!c)
+		return (NULL);
+	c->position = position;
+	c->normal = normal;
+	c->fov = fov;
+	return (c);
 }

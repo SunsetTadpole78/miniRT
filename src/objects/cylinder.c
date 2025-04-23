@@ -1,21 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/23 09:45:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 13:23:02 by lroussel         ###   ########.fr       */
+/*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
+/*   Updated: 2025/04/23 13:17:37 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-void	register_object(void *object)
+t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
+	t_fvector2 size, t_rgb color)
 {
-	t_minirt	*mrt;
+	t_cylinder	*cy;
 
-	mrt = minirt();
-	ft_lstadd_back(&mrt->objects, ft_lstnew(object));
+	cy = malloc(sizeof(t_cylinder));
+	if (!cy)
+		return (NULL);
+	cy->position = position;
+	cy->normal = normal;
+	cy->size = size;
+	cy->color = color;
+	return (cy);
 }

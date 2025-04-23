@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   ambiant.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/23 09:45:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 13:23:02 by lroussel         ###   ########.fr       */
+/*   Created: 2025/04/23 12:58:48 by lroussel          #+#    #+#             */
+/*   Updated: 2025/04/23 13:17:25 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-void	register_object(void *object)
+t_ambiant	*ambiant(float level, t_rgb color)
 {
-	t_minirt	*mrt;
+	t_ambiant	*a;
 
-	mrt = minirt();
-	ft_lstadd_back(&mrt->objects, ft_lstnew(object));
+	a = malloc(sizeof(t_ambiant));
+	if (!a)
+		return (NULL);
+	a->level = level;
+	a->color = color;
+	return (a);
 }

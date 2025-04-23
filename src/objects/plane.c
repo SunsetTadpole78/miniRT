@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   factory.c                                          :+:      :+:    :+:   */
+/*   plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/23 09:45:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 13:23:02 by lroussel         ###   ########.fr       */
+/*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
+/*   Updated: 2025/04/23 13:23:26 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-void	register_object(void *object)
+t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
 {
-	t_minirt	*mrt;
+	t_plane	*pl;
 
-	mrt = minirt();
-	ft_lstadd_back(&mrt->objects, ft_lstnew(object));
+	pl = malloc(sizeof(t_plane));
+	if (!pl)
+		return (NULL);
+	pl->position = position;
+	pl->normal = normal;
+	pl->color = color;
+	return (pl);
 }
