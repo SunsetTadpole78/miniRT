@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 13:17:37 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:35:57 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	cy = malloc(sizeof(t_cylinder));
 	if (!cy)
 		return (NULL);
+	cy->id = CYLINDER_ID;
 	cy->position = position;
 	cy->normal = normal;
 	cy->size = size;

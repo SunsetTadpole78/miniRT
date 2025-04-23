@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 13:25:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:36:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 	sp = malloc(sizeof(t_sphere));
 	if (!sp)
 		return (NULL);
+	sp->id = SPHERE_ID;
 	sp->position = position;
 	sp->diameter = diameter;
 	sp->color = color;

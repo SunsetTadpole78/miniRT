@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:06:06 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 13:07:11 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:35:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov)
 	c = malloc(sizeof(t_camera));
 	if (!c)
 		return (NULL);
+	c->id = CAMERA_ID;
 	c->position = position;
 	c->normal = normal;
 	c->fov = fov;

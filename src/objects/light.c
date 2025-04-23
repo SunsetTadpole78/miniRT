@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 13:07:22 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:36:17 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_light	*light(t_fvector3 position, float level, t_rgb color)
 	l = malloc(sizeof(t_light));
 	if (!l)
 		return (NULL);
+	l->id = LIGHT_ID;
 	l->position = position;
 	l->level = level;
 	l->color = color;
