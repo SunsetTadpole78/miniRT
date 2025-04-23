@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 14:05:13 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:33:53 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ typedef struct s_minirt
 }	t_minirt;
 
 t_minirt	*minirt(void);
-t_minirt	*init_minirt(void);
 void		destruct_minirt(void);
 
 //objects

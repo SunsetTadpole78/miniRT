@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 13:47:24 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:34:03 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int argc, char **argv)
 
 	(void)argc;
 	(void)argv;
-	mrt = init_minirt();
+	mrt = minirt();
 	if (!mrt)
 	{
 		write(2, "miniRT: Malloc Error.\n", 22);
