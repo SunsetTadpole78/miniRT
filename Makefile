@@ -39,10 +39,10 @@ all: $(NAME)
 
 $(NAME): $(LIBFTA) $(OFILES)
 ifeq ($(shell uname), Darwin)
-	make -C $(MLX_OPENGL) > /dev/null
+	make -C $(MLX_OPENGL) -w > /dev/null
 	$(COMPILATOR) $(FLAGS) $(OFILES) $(LIBFTA) $(MLX_OPENGLA) -o $(NAME) -I $(INC) -I $(LIBFTI) -I $(MLX_OPENGLI) $(EXTRA_FLAGS) $(MLX_OPENGLF)
 else
-	make -C $(MLX_X11) > /dev/null
+	make -C $(MLX_X11) -w > /dev/null
 	$(COMPILATOR) $(FLAGS) $(OFILES) $(LIBFTA) $(MLX_X11A) -o $(NAME) -I $(INC) -I $(LIBFTI) -I $(MLX_X11I) $(EXTRA_FLAGS) $(MLX_X11F)
 endif
 
