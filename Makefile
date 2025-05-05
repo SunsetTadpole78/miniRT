@@ -76,7 +76,7 @@ submodules:
 
 norminette:
 	@echo "Checking norminette..."
-	@OUTPUT=$$(norminette src inc libft); \
+	@OUTPUT=$$(norminette $(SRC) $(INC) $(LIBFT)); \
 	ERR_LINES=$$(echo "$$OUTPUT" | grep -c "Error:"); \
 	if [ $$ERR_LINES -eq 0 ]; then \
 		echo "✅ Norminette: OK"; \

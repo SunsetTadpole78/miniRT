@@ -6,17 +6,17 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 11:49:34 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:36:31 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-void	destruct_minirt(void)
+void	destruct_minirt(t_minirt *mrt)
 {
-	t_minirt	*mrt;
-
-	mrt = minirt();
 	ft_lstclear(&mrt->objects, free);
+	ft_lstclear(&mrt->lights, free);
+	free(mrt->ambiant);
+	free(mrt->camera);
 	free(mrt);
 }
