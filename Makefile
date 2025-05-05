@@ -74,6 +74,16 @@ endif
 submodules:
 	git submodule update --remote --init --recursive
 
+clean-branches:
+	@echo "Fetching and pruning remote branches...";
+	@git fetch --prune
+	@for branch in $$(git branch --format '%(refname:short)' | grep -v '\*'); do \
+		if ! git show-ref --quiet --verify refs/remotes/origin/$$branch; then \
+			git branch -D $$branch; \
+		fi \
+	done
+	@echo "✅ Cleanup complete";
+
 norminette:
 	@echo "Checking norminette..."
 	@OUTPUT=$$(norminette $(SRC) $(INC) $(LIBFT)); \
