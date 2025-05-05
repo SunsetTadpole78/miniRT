@@ -18,7 +18,16 @@ MLX_OPENGLA = $(MLX_OPENGL)/libmlx.a
 MLX_OPENGLI = $(MLX_OPENGL)
 MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 
-FILES =	main.c									\
+FILES =	destructor.c		\
+		initializer.c		\
+		main.c				\
+		objects/ambiant.c		\
+		objects/camera.c		\
+		objects/cylinder.c		\
+		objects/factory.c	\
+		objects/light.c		\
+		objects/plane.c		\
+		objects/sphere.c		\
 
 OFILES = $(FILES:%.c=$(OBJS)/%.o)
 
@@ -30,10 +39,10 @@ all: $(NAME)
 
 $(NAME): $(LIBFTA) $(OFILES)
 ifeq ($(shell uname), Darwin)
-	make -C $(MLX_OPENGL) > /dev/null
+	make -C $(MLX_OPENGL) CFLAGS="-O3 -DSTRINGPUTX11 -w" > /dev/null
 	$(COMPILATOR) $(FLAGS) $(OFILES) $(LIBFTA) $(MLX_OPENGLA) -o $(NAME) -I $(INC) -I $(LIBFTI) -I $(MLX_OPENGLI) $(EXTRA_FLAGS) $(MLX_OPENGLF)
 else
-	make -C $(MLX_X11) > /dev/null
+	make -C $(MLX_X11) > /dev/null 2>&1
 	$(COMPILATOR) $(FLAGS) $(OFILES) $(LIBFTA) $(MLX_X11A) -o $(NAME) -I $(INC) -I $(LIBFTI) -I $(MLX_X11I) $(EXTRA_FLAGS) $(MLX_X11F)
 endif
 
@@ -64,6 +73,27 @@ endif
 
 submodules:
 	git submodule update --remote --init --recursive
+
+clean-branches:
+	@echo "Fetching and pruning remote branches...";
+	@git fetch --prune
+	@for branch in $$(git branch --format '%(refname:short)' | grep -v '\*'); do \
+		if ! git show-ref --quiet --verify refs/remotes/origin/$$branch; then \
+			git branch -D $$branch; \
+		fi \
+	done
+	@echo "✅ Cleanup complete";
+
+norminette:
+	@echo "Checking norminette..."
+	@OUTPUT=$$(norminette $(SRC) $(INC) $(LIBFT)); \
+	ERR_LINES=$$(echo "$$OUTPUT" | grep -c "Error:"); \
+	if [ $$ERR_LINES -eq 0 ]; then \
+		echo "✅ Norminette: OK"; \
+	else \
+		echo "$$OUTPUT" | grep "Error"; \
+		echo "❌ Norminette: $$ERR_LINES error(s)"; \
+	fi
 
 re: fclean $(NAME)
 
