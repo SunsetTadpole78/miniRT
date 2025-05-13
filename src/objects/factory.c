@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:45:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 14:04:19 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:26:39 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	register_object(void *object)
 {
 	char		*id;
 	int			len;
-	t_minirt	*mrt;
 
 	if (!object)
 		return (0);
@@ -29,8 +28,7 @@ int	register_object(void *object)
 		free(object);
 		return (0);
 	}
-	mrt = minirt();
-	ft_lstadd_back(&mrt->objects, ft_lstnew(object));
+	ft_lstadd_back(&(minirt()->objects), ft_lstnew(object));
 	return (1);
 }
 
@@ -38,7 +36,6 @@ int	register_light(t_light *light)
 {
 	char		*id;
 	int			len;
-	t_minirt	*mrt;
 
 	if (!light)
 		return (0);
@@ -49,8 +46,7 @@ int	register_light(t_light *light)
 		free(light);
 		return (0);
 	}
-	mrt = minirt();
-	ft_lstadd_back(&mrt->lights, ft_lstnew(light));
+	ft_lstadd_back(&(minirt()->lights), ft_lstnew(light));
 	return (1);
 }
 
