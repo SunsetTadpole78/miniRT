@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ambiant.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/13 17:22:56 by lroussel         ###   ########.fr       */
+/*   Created: 2025/04/23 12:58:48 by lroussel          #+#    #+#             */
+/*   Updated: 2025/04/23 13:35:33 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	main(int argc, char **argv)
+t_ambiant	*ambiant(float level, t_rgb color)
 {
-	t_minirt	*mrt;
+	t_ambiant	*a;
 
-	(void)argc;
-	(void)argv;
-	mrt = minirt();
-	if (!mrt)
-	{
-		write(2, "miniRT: Malloc Error.\n", 22);
-		return (1);
-	}
-	destruct_minirt(mrt);
-	return (0);
+	a = malloc(sizeof(t_ambiant));
+	if (!a)
+		return (NULL);
+	a->id = AMBIANT_ID;
+	a->level = level;
+	a->color = color;
+	return (a);
 }

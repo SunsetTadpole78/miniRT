@@ -1,29 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   destructor.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/13 17:22:56 by lroussel         ###   ########.fr       */
+/*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
+/*   Updated: 2025/04/23 15:36:31 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	main(int argc, char **argv)
+void	destruct_minirt(t_minirt *mrt)
 {
-	t_minirt	*mrt;
-
-	(void)argc;
-	(void)argv;
-	mrt = minirt();
-	if (!mrt)
-	{
-		write(2, "miniRT: Malloc Error.\n", 22);
-		return (1);
-	}
-	destruct_minirt(mrt);
-	return (0);
+	ft_lstclear(&mrt->objects, free);
+	ft_lstclear(&mrt->lights, free);
+	free(mrt->ambiant);
+	free(mrt->camera);
+	free(mrt);
 }

@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   light.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/13 17:22:56 by lroussel         ###   ########.fr       */
+/*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
+/*   Updated: 2025/04/23 13:36:17 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	main(int argc, char **argv)
+t_light	*light(t_fvector3 position, float level, t_rgb color)
 {
-	t_minirt	*mrt;
+	t_light	*l;
 
-	(void)argc;
-	(void)argv;
-	mrt = minirt();
-	if (!mrt)
-	{
-		write(2, "miniRT: Malloc Error.\n", 22);
-		return (1);
-	}
-	destruct_minirt(mrt);
-	return (0);
+	l = malloc(sizeof(t_light));
+	if (!l)
+		return (NULL);
+	l->id = LIGHT_ID;
+	l->position = position;
+	l->level = level;
+	l->color = color;
+	return (l);
 }

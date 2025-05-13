@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   initializer.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/13 17:22:56 by lroussel         ###   ########.fr       */
+/*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
+/*   Updated: 2025/05/13 17:22:23 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	main(int argc, char **argv)
+t_minirt	*minirt(void)
 {
-	t_minirt	*mrt;
+	static t_minirt	*mrt = NULL;
 
-	(void)argc;
-	(void)argv;
-	mrt = minirt();
 	if (!mrt)
 	{
-		write(2, "miniRT: Malloc Error.\n", 22);
-		return (1);
+		mrt = malloc(sizeof(t_minirt));
+		if (!mrt)
+			return (NULL);
+		mrt->objects = NULL;
+		mrt->lights = NULL;
+		mrt->ambiant = NULL;
+		mrt->camera = NULL;
 	}
-	destruct_minirt(mrt);
-	return (0);
+	return (mrt);
 }

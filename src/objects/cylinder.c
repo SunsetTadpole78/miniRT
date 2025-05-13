@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/13 17:22:56 by lroussel         ###   ########.fr       */
+/*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
+/*   Updated: 2025/04/23 13:35:57 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	main(int argc, char **argv)
+t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
+	t_fvector2 size, t_rgb color)
 {
-	t_minirt	*mrt;
+	t_cylinder	*cy;
 
-	(void)argc;
-	(void)argv;
-	mrt = minirt();
-	if (!mrt)
-	{
-		write(2, "miniRT: Malloc Error.\n", 22);
-		return (1);
-	}
-	destruct_minirt(mrt);
-	return (0);
+	cy = malloc(sizeof(t_cylinder));
+	if (!cy)
+		return (NULL);
+	cy->id = CYLINDER_ID;
+	cy->position = position;
+	cy->normal = normal;
+	cy->size = size;
+	cy->color = color;
+	return (cy);
 }

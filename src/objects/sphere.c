@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/13 17:22:56 by lroussel         ###   ########.fr       */
+/*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
+/*   Updated: 2025/04/23 13:36:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	main(int argc, char **argv)
+t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 {
-	t_minirt	*mrt;
+	t_sphere	*sp;
 
-	(void)argc;
-	(void)argv;
-	mrt = minirt();
-	if (!mrt)
-	{
-		write(2, "miniRT: Malloc Error.\n", 22);
-		return (1);
-	}
-	destruct_minirt(mrt);
-	return (0);
+	sp = malloc(sizeof(t_sphere));
+	if (!sp)
+		return (NULL);
+	sp->id = SPHERE_ID;
+	sp->position = position;
+	sp->diameter = diameter;
+	sp->color = color;
+	return (sp);
 }

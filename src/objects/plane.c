@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/13 17:22:56 by lroussel         ###   ########.fr       */
+/*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
+/*   Updated: 2025/04/23 13:36:30 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	main(int argc, char **argv)
+t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
 {
-	t_minirt	*mrt;
+	t_plane	*pl;
 
-	(void)argc;
-	(void)argv;
-	mrt = minirt();
-	if (!mrt)
-	{
-		write(2, "miniRT: Malloc Error.\n", 22);
-		return (1);
-	}
-	destruct_minirt(mrt);
-	return (0);
+	pl = malloc(sizeof(t_plane));
+	if (!pl)
+		return (NULL);
+	pl->id = PLANE_ID;
+	pl->position = position;
+	pl->normal = normal;
+	pl->color = color;
+	return (pl);
 }
