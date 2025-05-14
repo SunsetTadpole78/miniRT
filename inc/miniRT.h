@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 18:15:02 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:18:30 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 # include "libft.h"
 # include "mlx.h"
+# include <fcntl.h>
 
 // Macros for Type Objects
 

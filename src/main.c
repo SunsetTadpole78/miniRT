@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 18:16:55 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:20:03 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ int	main(int argc, char **argv)
 		return (ft_error(MALLOC_ERROR, RED, 2));
 	code = parse_map(argv[1]);
 	if (code != 0)
-		code += 2;
+	{
+		destruct_minirt(mrt);
+		return (2 + code);
+	}
 	init_mlx(mrt->mlx);
 	mlx_loop(mrt->mlx->mlx_ptr);
 	return (0);
