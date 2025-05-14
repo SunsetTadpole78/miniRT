@@ -4,7 +4,7 @@ TMPFILE=$(mktemp)
 
 set -x
 echo "Launching valgrind..."
-valgrind ./miniRT maps/c 2> "$TMPFILE" &
+valgrind ./miniRT scripts/good_map.rt 2> "$TMPFILE" &
 PID=$!
 
 sleep 5
