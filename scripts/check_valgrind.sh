@@ -13,6 +13,7 @@ wait $PID
 
 output=$(grep "total heap usage" "$TMPFILE" | grep -oP '\d+ allocs, \d+ frees')
 
+cat "$TMPFILE"
 rm "$TMPFILE"
 
 allocs=$(echo "$output" | grep -oP '^\d+')
