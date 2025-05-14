@@ -111,7 +111,6 @@ typedef struct s_minirt
 t_minirt	*minirt(void);
 void		destruct_minirt(t_minirt *mrt);
 
-// mlx
 void		init_mlx(t_mlx *mlx);
 
 //objects
