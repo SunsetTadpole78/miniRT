@@ -32,7 +32,7 @@ FILES =	destructor.c		\
 
 OFILES = $(FILES:%.c=$(OBJS)/%.o)
 
-FLAGSf = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
 EXTRA_FLAGS = -g
 COMPILATOR = cc
 
