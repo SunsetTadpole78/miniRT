@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/13 17:22:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 21:38:54 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,12 @@
 int	main(int argc, char **argv)
 {
 	t_minirt	*mrt;
+	int	i;
 
 	(void)argc;
 	(void)argv;
+	if (mrt == NULL)
+		i = 1;
 	mrt = minirt();
 	if (!mrt)
 	{
