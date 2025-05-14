@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 18:23:27 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:28:32 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	main(int argc, char **argv)
 	code = parse_map(argv[1]);
 	if (code != 0)
 	{
-		destruct_minirt(mrt);
+		destruct_minirt(mrt, 0);
 		return (2 + code);
 	}
 	init_mlx(mrt->mlx);

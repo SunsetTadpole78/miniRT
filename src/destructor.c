@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 18:25:51 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:34:56 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,22 @@ static void	free_objects(t_object *objects);
 static void	free_types(t_type *type);
 /* -------------------------------------------------------------------------- */
 
-void	destruct_minirt(t_minirt *mrt)
+void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 {
 	t_mlx		*mlx;
 
+	mlx = mrt->mlx;
 	free_types(mrt->types);
 	free_objects(mrt->objects);
 	free_objects((t_object *)mrt->lights);
 	free(mrt->ambiant);
 	free(mrt->camera);
-	mlx = mrt->mlx;
-	mlx_destroy_image(mlx->mlx_ptr, mlx->img_ptr);
-	mlx_destroy_window(mlx->mlx_ptr, mlx->win_ptr);
-	free(mlx->mlx_ptr);
+	if (destroy_mlx)
+	{
+		mlx_destroy_image(mlx->mlx_ptr, mlx->img_ptr);
+		mlx_destroy_window(mlx->mlx_ptr, mlx->win_ptr);
+		free(mlx->mlx_ptr);
+	}
 	free(mlx);
 	free(mrt);
 }

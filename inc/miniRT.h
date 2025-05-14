@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 18:25:05 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:29:32 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,13 +115,6 @@ typedef struct s_mlx
 	void		*img_ptr;
 }	t_mlx;
 
-typedef struct s_mlx
-{
-	void		*mlx_ptr;
-	void		*win_ptr;
-	void		*img_ptr;
-}	t_mlx;
-
 typedef struct s_minirt
 {
 	t_type		*types;
@@ -133,7 +126,7 @@ typedef struct s_minirt
 }	t_minirt;
 
 t_minirt	*minirt(void);
-void		destruct_minirt(t_minirt *mrt);
+void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
 void		init_mlx(t_mlx *mlx);
 

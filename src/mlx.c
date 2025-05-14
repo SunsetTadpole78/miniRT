@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated:   by Juste                              ###   ########.fr       */
+/*   Updated: 2025/05/14 18:32:36 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@ static int	key_hook(int keycode, t_minirt *mrt)
 
 static int	close_window(t_minirt *mrt)
 {
-	destruct_minirt(mrt);
+	destruct_minirt(mrt, 1);
 	exit(0);
 }
