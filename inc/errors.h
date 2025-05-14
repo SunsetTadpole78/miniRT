@@ -6,14 +6,14 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:59:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 16:19:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:53:16 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERRORS_H
 # define ERRORS_H
 
-# define RED "\033[31m"
+# define RED "\033[91m"
 
 # define USAGE_ERROR "miniRT: Usage: /miniRT <map_path>\n"
 # define MALLOC_ERROR "miniRT: Malloc Error.\n"
