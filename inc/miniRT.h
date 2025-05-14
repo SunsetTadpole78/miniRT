@@ -13,11 +13,9 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-// Standard Libraries
+// Libraries
 
 # include <stdio.h>
-
-// Local Libraries
 
 # include "libft.h"
 # include "mlx.h"
@@ -36,8 +34,10 @@
 # define WIN_HEIGHT 1100
 # define WIN_WIDTH 900
 
-// Pour Macos: 53 ; Pour Linux: 65307
-# define MAIN_PAD_ESC 53
+# define MAC_ESC_KEY 53
+# define LINUX_ESC_KEY 65307
+
+// Structures
 
 typedef struct s_ambiant
 {

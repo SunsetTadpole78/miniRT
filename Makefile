@@ -98,7 +98,4 @@ norminette:
 
 re: fclean $(NAME)
 
-leak:
-	leaks --atExit -- ./$(NAME)
-
 .PHONY: all clean fclean re

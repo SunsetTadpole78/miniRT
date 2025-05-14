@@ -26,6 +26,5 @@ int	main(int argc, char **argv)
 	}
 	init_mlx(mrt->mlx);
 	mlx_loop(mrt->mlx->mlx_ptr);
-	destruct_minirt(mrt);
 	return (0);
 }
