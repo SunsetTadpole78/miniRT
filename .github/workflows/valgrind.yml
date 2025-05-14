@@ -15,6 +15,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb xdotool valgrind
+          sudo apt install -y \
+            libx11-dev \
+            libxext-dev \
+            libxrandr-dev \
+            libxi-dev \
+            libgl1-mesa-dev \
+            libbsd-dev
       - name: Compile
         run: make || exit 1
       - name: Run
