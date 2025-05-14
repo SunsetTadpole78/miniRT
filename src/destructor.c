@@ -18,5 +18,6 @@ void	destruct_minirt(t_minirt *mrt)
 	ft_lstclear(&mrt->lights, free);
 	free(mrt->ambiant);
 	free(mrt->camera);
+	free(mrt->mlx);
 	free(mrt);
 }

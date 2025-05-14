@@ -24,6 +24,8 @@ int	main(int argc, char **argv)
 		write(2, "miniRT: Malloc Error.\n", 22);
 		return (1);
 	}
+	init_mlx(mrt->mlx);
+	mlx_loop(mrt->mlx->mlx_ptr);
 	destruct_minirt(mrt);
 	return (0);
 }

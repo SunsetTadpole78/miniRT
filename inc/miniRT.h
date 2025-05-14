@@ -13,8 +13,16 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
+// Standard Libraries
+
+# include <stdio.h>
+
+// Local Libraries
+
 # include "libft.h"
 # include "mlx.h"
+
+// Macros for Type Objects
 
 # define AMBIANT_ID "A"
 # define CAMERA_ID "C"
@@ -22,6 +30,14 @@
 # define LIGHT_ID "L"
 # define PLANE_ID "pl"
 # define SPHERE_ID "sp"
+
+// Macros for MLX
+
+# define WIN_HEIGHT 1100
+# define WIN_WIDTH 900
+
+// Pour Macos: 53 ; Pour Linux: 65307
+# define MAIN_PAD_ESC 53
 
 typedef struct s_ambiant
 {
@@ -76,16 +92,27 @@ typedef struct s_identifiable
 	char	*id;
 }	t_identifiable;
 
+typedef struct s_mlx
+{
+	void		*mlx_ptr;
+	void		*win_ptr;
+	void		*img_ptr;
+}	t_mlx;
+
 typedef struct s_minirt
 {
 	t_list		*objects;
 	t_list		*lights;
 	t_ambiant	*ambiant;
 	t_camera	*camera;
+	t_mlx		*mlx;
 }	t_minirt;
 
 t_minirt	*minirt(void);
 void		destruct_minirt(t_minirt *mrt);
+
+// mlx
+void		init_mlx(t_mlx *mlx);
 
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);

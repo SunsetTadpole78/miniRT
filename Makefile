@@ -21,6 +21,7 @@ MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 FILES =	destructor.c		\
 		initializer.c		\
 		main.c				\
+		mlx.c				\
 		objects/ambiant.c		\
 		objects/camera.c		\
 		objects/cylinder.c		\
@@ -96,5 +97,8 @@ norminette:
 	fi
 
 re: fclean $(NAME)
+
+leak:
+	leaks --atExit -- ./$(NAME)
 
 .PHONY: all clean fclean re
