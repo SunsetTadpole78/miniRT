@@ -14,9 +14,16 @@
 
 void	destruct_minirt(t_minirt *mrt)
 {
+	t_mlx		*mlx;
+
+	mlx = mrt->mlx;
 	ft_lstclear(&mrt->objects, free);
 	ft_lstclear(&mrt->lights, free);
 	free(mrt->ambiant);
 	free(mrt->camera);
+	mlx_destroy_image(mlx->mlx_ptr, mlx->img_ptr);
+	mlx_destroy_window(mlx->mlx_ptr, mlx->win_ptr);
+	free(mlx->mlx_ptr);
+	free(mlx);
 	free(mrt);
 }
