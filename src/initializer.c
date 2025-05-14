@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/13 17:22:23 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:34:31 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,17 @@ t_minirt	*minirt(void)
 		mrt = malloc(sizeof(t_minirt));
 		if (!mrt)
 			return (NULL);
+		mrt->types = NULL;
 		mrt->objects = NULL;
 		mrt->lights = NULL;
 		mrt->ambiant = NULL;
 		mrt->camera = NULL;
+		register_type(AMBIANT_ID, parse_ambiant, NULL);
+		register_type(CAMERA_ID, parse_camera, NULL);
+		register_type(CYLINDER_ID, parse_cylinder, NULL);
+		register_type(LIGHT_ID, parse_light, NULL);
+		register_type(PLANE_ID, parse_plane, NULL);
+		register_type(SPHERE_ID, parse_sphere, NULL);
 	}
 	return (mrt);
 }

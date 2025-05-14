@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 13:36:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:32:22 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,10 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 	sp->diameter = diameter;
 	sp->color = color;
 	return (sp);
+}
+
+void	*parse_sphere(char **values)
+{
+	(void)values;
+	return (NULL);
 }

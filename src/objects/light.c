@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 13:36:17 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:32:08 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,10 @@ t_light	*light(t_fvector3 position, float level, t_rgb color)
 	l->level = level;
 	l->color = color;
 	return (l);
+}
+
+void	*parse_light(char **values)
+{
+	(void)values;
+	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:58:48 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 13:35:33 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:39:34 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,10 @@ t_ambiant	*ambiant(float level, t_rgb color)
 	a->level = level;
 	a->color = color;
 	return (a);
+}
+
+void	*parse_ambiant(char **values)
+{
+	(void)values;
+	return (NULL);
 }

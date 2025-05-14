@@ -1,33 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   plane.c                                            :+:      :+:    :+:   */
+/*   errors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 12:32:14 by lroussel         ###   ########.fr       */
+/*   Created: 2025/05/13 17:59:42 by lroussel          #+#    #+#             */
+/*   Updated: 2025/05/13 18:44:07 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#ifndef ERRORS_H
+# define ERRORS_H
 
-t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
-{
-	t_plane	*pl;
+# define USAGE_ERROR "miniRT: Usage: /miniRT <map_path>\n"
+# define MALLOC_ERROR "miniRT: Malloc Error.\n"
+# define MAP_NOT_FOUND_ERROR "miniRT: Map path not found\n"
+# define INVALID_OBJECT_ERROR "miniRT: Invalid object id\n"
 
-	pl = malloc(sizeof(t_plane));
-	if (!pl)
-		return (NULL);
-	pl->id = PLANE_ID;
-	pl->position = position;
-	pl->normal = normal;
-	pl->color = color;
-	return (pl);
-}
-
-void	*parse_plane(char **values)
-{
-	(void)values;
-	return (NULL);
-}
+#endif

@@ -28,6 +28,8 @@ FILES =	destructor.c		\
 		objects/light.c		\
 		objects/plane.c		\
 		objects/sphere.c		\
+		objects/types_factory.c	\
+		parsing/parser.c		\
 
 OFILES = $(FILES:%.c=$(OBJS)/%.o)
 

@@ -6,24 +6,26 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/13 17:22:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:39:23 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
+#include "errors.h"
 
 int	main(int argc, char **argv)
 {
 	t_minirt	*mrt;
+	int			code;
 
-	(void)argc;
-	(void)argv;
+	if (argc != 2)
+		return (ft_error(USAGE_ERROR, 1));
 	mrt = minirt();
 	if (!mrt)
-	{
-		write(2, "miniRT: Malloc Error.\n", 22);
-		return (1);
-	}
+		return (ft_error(MALLOC_ERROR, 2));
+	code = parse_map(argv[1]);
+	if (code != 0)
+		code += 2;
 	destruct_minirt(mrt);
 	return (0);
 }
