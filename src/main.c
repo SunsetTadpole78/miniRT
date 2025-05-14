@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 12:39:23 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:18:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ int	main(int argc, char **argv)
 	int			code;
 
 	if (argc != 2)
-		return (ft_error(USAGE_ERROR, 1));
+		return (ft_error(USAGE_ERROR, RED, 1));
 	mrt = minirt();
 	if (!mrt)
-		return (ft_error(MALLOC_ERROR, 2));
+		return (ft_error(MALLOC_ERROR, RED, 2));
 	code = parse_map(argv[1]);
 	if (code != 0)
 		code += 2;

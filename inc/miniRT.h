@@ -6,16 +6,18 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 12:42:45 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:39:39 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
 
+# include <fcntl.h>
+# include <stdio.h>
+
 # include "libft.h"
 # include "mlx.h"
-# include <fcntl.h>
 
 # define AMBIANT_ID "A"
 # define CAMERA_ID "C"
