@@ -25,7 +25,8 @@ void	init_mlx(t_mlx *mlx)
 
 	mrt = minirt();
 	mlx->mlx_ptr = mlx_init();
-	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, WIN_HEIGHT, WIN_WIDTH, "Cetait une blague");
+	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr,
+			WIN_HEIGHT, WIN_WIDTH, "Cetait une blague");
 	mlx->img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_HEIGHT, WIN_WIDTH);
 	mlx_hook(mlx->win_ptr, 2, 0, key_hook, mrt);
 	mlx_hook(mlx->win_ptr, 17, 0, close_window, mrt);
