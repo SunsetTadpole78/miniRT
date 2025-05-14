@@ -6,12 +6,14 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 16:39:39 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:15:02 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
+
+// Libraries
 
 # include <fcntl.h>
 # include <stdio.h>
@@ -19,12 +21,24 @@
 # include "libft.h"
 # include "mlx.h"
 
+// Macros for Type Objects
+
 # define AMBIANT_ID "A"
 # define CAMERA_ID "C"
 # define CYLINDER_ID "cl"
 # define LIGHT_ID "L"
 # define PLANE_ID "pl"
 # define SPHERE_ID "sp"
+
+// Macros for MLX
+
+# define WIN_HEIGHT 1100
+# define WIN_WIDTH 900
+
+# define MAC_ESC_KEY 53
+# define LINUX_ESC_KEY 65307
+
+// Structures
 
 typedef struct s_object
 {
@@ -94,6 +108,13 @@ typedef struct s_cylinder
 	t_rgb		color;
 }	t_cylinder;
 
+typedef struct s_mlx
+{
+	void		*mlx_ptr;
+	void		*win_ptr;
+	void		*img_ptr;
+}	t_mlx;
+
 typedef struct s_minirt
 {
 	t_type		*types;
@@ -101,10 +122,13 @@ typedef struct s_minirt
 	t_light		*lights;
 	t_ambiant	*ambiant;
 	t_camera	*camera;
+	t_mlx		*mlx;
 }	t_minirt;
 
 t_minirt	*minirt(void);
 void		destruct_minirt(t_minirt *mrt);
+
+void		init_mlx(t_mlx *mlx);
 
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);
