@@ -2,7 +2,6 @@
 
 TMPFILE=$(mktemp)
 
-set -x
 echo "Launching valgrind..."
 valgrind ./miniRT scripts/good_map.rt 2> "$TMPFILE" &
 PID=$!
@@ -19,7 +18,6 @@ rm "$TMPFILE"
 allocs=$(echo "$output" | grep -oP '^\d+')
 frees=$(echo "$output" | grep -oP '\d+(?= frees)')
 
-set +x
 if [[ "$allocs" == "$frees" ]]; then
     echo "OK"
     exit 0
