@@ -16,4 +16,4 @@ jobs:
           sudo apt update
           sudo apt install xdotool
       - name: Run
-        run: ./scripts/check_valgrind.sh || exit 1
+        run: xvfb-run --auto-servernum ./scripts/check_valgrind.sh || exit 1

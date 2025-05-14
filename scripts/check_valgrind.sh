@@ -6,9 +6,7 @@ valgrind ./miniRT maps/c 2> "$TMPFILE" &
 PID=$!
 
 sleep 5
-
 xdotool key Escape
-
 wait $PID
 
 output=$(grep "total heap usage" "$TMPFILE" | grep -oP '\d+ allocs, \d+ frees')
