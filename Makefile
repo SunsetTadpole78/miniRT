@@ -18,7 +18,9 @@ MLX_OPENGLA = $(MLX_OPENGL)/libmlx.a
 MLX_OPENGLI = $(MLX_OPENGL)
 MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 
-FILES =	destructor.c		\
+FILES =		JusteTest.c			\
+		destructor.c		\
+		func_math_fvector3.c		\
 		initializer.c		\
 		main.c				\
 		mlx.c				\

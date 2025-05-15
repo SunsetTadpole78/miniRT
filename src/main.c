@@ -25,6 +25,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	init_mlx(mrt->mlx);
+	init_cam_and_plane();
 	mlx_loop(mrt->mlx->mlx_ptr);
 	return (0);
 }

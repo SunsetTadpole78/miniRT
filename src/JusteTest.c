@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mlx.c                                              :+:      :+:    :+:   */
+/*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,34 +13,39 @@
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static int		key_hook(int keycode, t_minirt *mrt);
-static int		close_window(t_minirt *mrt);
+void		init_cam_and_plane(void);
 /* -------------------------------------------------------------------------- */
 
-void	init_mlx(t_mlx *mlx)
+void	init_cam_and_plane(void)
 {
 	t_minirt		*mrt;
+	t_fvector3		pos;
+	t_fvector3		norm;
+	t_rgb			rgb;
 
 	mrt = minirt();
-	mlx->mlx_ptr = mlx_init();
-	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr,
-			WIN_HEIGHT, WIN_WIDTH, "miniRT");
-	mlx->img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_HEIGHT, WIN_WIDTH);
-	mlx->data = mlx_get_data_addr(mlx->img_ptr, &mlx->bpp,
-			&mlx->size_line, &mlx->endian);
-	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_hook, mrt);
-	mlx_hook(mlx->win_ptr, 17, 1L << 17, close_window, mrt);
+	pos = ft_fvector3(-50.0f, 0.0f, 20.0f);
+	norm = ft_fvector3(0.0f, 0.0f, 1.0f);
+	mrt->camera = camera(pos, norm, 70);
+	pos = ft_fvector3(0.0f, 0.0f, -10.0f);
+	norm = ft_fvector3(0.0f, 1.0f, 0.0f);
+	rgb = ft_rgb(255, 0, 0);
+	mrt->plane = plane(pos, norm, rgb);
 }
 
-static int	key_hook(int keycode, t_minirt *mrt)
+// aspect ratio
+// scale
+// imagex; imagey;
+// direction
+//ray.origin = cam->posit;
+//ray.direction = normalize();
+t_ray	get_ray(t_camera *cam, t_fvector2 uv)
 {
-	if (keycode == MAC_ESC_KEY || keycode == LINUX_ESC_KEY)
-		close_window(mrt);
-	return (0);
-}
+	t_ray		ray;
 
-static int	close_window(t_minirt *mrt)
-{
-	destruct_minirt(mrt);
-	exit(0);
+	(void)ray.origin;
+	(void)ray.direction;
+	(void)uv;
+	(void)cam;
+	return (ray);
 }

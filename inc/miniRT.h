@@ -16,6 +16,7 @@
 // Libraries
 
 # include <stdio.h>
+# include <math.h>
 
 # include "libft.h"
 # include "mlx.h"
@@ -45,6 +46,12 @@ typedef struct s_ambiant
 	float		level;
 	t_rgb		color;
 }	t_ambiant;
+
+typedef struct s_ray
+{
+	t_fvector3		origin;
+	t_fvector3		direction;
+}	t_ray;
 
 typedef struct s_camera
 {
@@ -97,6 +104,10 @@ typedef struct s_mlx
 	void		*mlx_ptr;
 	void		*win_ptr;
 	void		*img_ptr;
+	char		*data;
+	int			bpp;
+	int			size_line;
+	int			endian;
 }	t_mlx;
 
 typedef struct s_minirt
@@ -105,6 +116,7 @@ typedef struct s_minirt
 	t_list		*lights;
 	t_ambiant	*ambiant;
 	t_camera	*camera;
+	t_plane		*plane;
 	t_mlx		*mlx;
 }	t_minirt;
 
@@ -112,6 +124,13 @@ t_minirt	*minirt(void);
 void		destruct_minirt(t_minirt *mrt);
 
 void		init_mlx(t_mlx *mlx);
+void		init_cam_and_plane(void);
+
+//func_math_fvector3.c
+t_fvector3	normalize(t_fvector3 v);
+t_fvector3	cross(t_fvector3 v1, t_fvector3 v2);
+t_fvector3	add_vectors(t_fvector3 v1, t_fvector3 v2);
+float		dot(t_fvector3 v1, t_fvector3 v2);
 
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);
