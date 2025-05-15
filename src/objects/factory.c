@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:45:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 12:11:01 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/15 09:56:03 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@ int	register_object(void *object)
 		return (0);
 	id = ((t_object *)object)->id;
 	len = ft_strlen(id) + 1;
-	if (ft_strncmp(AMBIANT_ID, id, len) == 0
-		|| ft_strncmp(LIGHT_ID, id, len) == 0
-		|| ft_strncmp(CAMERA_ID, id, len) == 0)
-	{
-		free(object);
-		return (0);
-	}
+	if (ft_strncmp(AMBIANT_ID, id, len) == 0)
+		return (set_ambiant((t_ambiant *)object));
+	if (ft_strncmp(LIGHT_ID, id, len) == 0)
+		return (register_light((t_light *)object));
+	if (ft_strncmp(CAMERA_ID, id, len) == 0)
+		return (set_camera((t_camera *)object));
 	mrt = minirt();
 	((t_object *)object)->next = mrt->objects;
 	mrt->objects = (t_object *)object;

@@ -92,10 +92,10 @@ norminette:
 	@OUTPUT=$$(norminette $(SRC) $(INC) $(LIBFT)); \
 	ERR_LINES=$$(echo "$$OUTPUT" | grep -c "Error:"); \
 	if [ $$ERR_LINES -eq 0 ]; then \
-		echo "✅ Norminette: OK"; \
+		echo "\033[0;32m✅\033[0m Norminette: OK"; \
 	else \
 		echo "$$OUTPUT" | grep "Error"; \
-		echo "❌ Norminette: $$ERR_LINES error(s)"; \
+		echo "\033[0;31m❌\033[0m Norminette: $$ERR_LINES error(s)"; \
 	fi
 
 re: fclean $(NAME)

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:58:48 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 18:23:47 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/15 10:30:43 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,24 @@ t_ambiant	*ambiant(float level, t_rgb color)
 void	*parse_ambiant(char **values)
 {
 	float	level;
+	t_rgb	rgb;
 
 	if (!values[0] || !values[1] || values[2])
 	{
-		ft_error(INVALID_AMBIANT_ARGS_ERROR, RED, 0);
-		return (NULL);
-	}
-	if (!ft_isfloat(values[0]))
-	{
-		ft_error(INVALID_AMBIANT_LEVEL_ERROR, RED, 0);
+		ft_error(INV_AMBIANT_ARGS_ERR, ERR_PREFIX, 0);
 		return (NULL);
 	}
 	level = ft_atof(values[0]);
-	if (level < 0.0f || level > 1.0f)
+	if (!ft_isfloat(values[0]) || level < 0.0f || level > 1.0f)
 	{
-		ft_error(INVALID_AMBIANT_LEVEL_ERROR, RED, 0);
+		ft_error(INV_AMBIANT_LEVEL_ERR, ERR_PREFIX, 0);
 		return (NULL);
 	}
-	return (NULL);
+	rgb = ft_atorgb(values[1]);
+	if (rgb.r == -1)
+	{
+		ft_error(INV_AMBIANT_RGB_ERR, ERR_PREFIX, 0);
+		return (NULL);
+	}
+	return (ambiant(level, rgb));
 }
