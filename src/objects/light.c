@@ -6,11 +6,12 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 12:32:08 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 01:50:39 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
+#include "errors.h"
 
 t_light	*light(t_fvector3 position, float level, t_rgb color)
 {
@@ -28,6 +29,19 @@ t_light	*light(t_fvector3 position, float level, t_rgb color)
 
 void	*parse_light(char **values)
 {
-	(void)values;
-	return (NULL);
+	t_fvector3	position;
+	float		level;
+	t_rgb		color;
+
+	if (!values[0] || !values[1] || !values[2] || values[3])
+		return (error_and_null(INV_L_ARGS_E));
+	if (!parse_fvector3(values[0], &position, INV_L_POS_E))
+		return (NULL);
+	level = ft_atof(values[1]);
+	if (level < 0.0f || level > 1.0f)
+		return (error_and_null(INV_L_LVL_E));
+	color = ft_atorgb(values[2]);
+	if (color.r == -1)
+		return (error_and_null(INV_L_RGB_E));
+	return (light(position, level, color));
 }

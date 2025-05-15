@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:58:48 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 01:36:30 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 01:48:57 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_ambiant	*ambiant(float level, t_rgb color)
 void	*parse_ambiant(char **values)
 {
 	float	level;
-	t_rgb	rgb;
+	t_rgb	color;
 
 	if (!values[0] || !values[1] || values[2])
 		return (error_and_null(INV_A_ARGS_E));
@@ -38,8 +38,8 @@ void	*parse_ambiant(char **values)
 	level = ft_atof(values[0]);
 	if (level < 0.0f || level > 1.0f)
 		return (error_and_null(INV_A_LVL_E));
-	rgb = ft_atorgb(values[1]);
-	if (rgb.r == -1)
+	color = ft_atorgb(values[1]);
+	if (color.r == -1)
 		return (error_and_null(INV_A_RGB_E));
-	return (ambiant(level, rgb));
+	return (ambiant(level, color));
 }
