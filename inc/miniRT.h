@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 18:29:32 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 01:39:35 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,5 +162,8 @@ void		*get_parser_by_id(char *id);
 
 //parsing
 int			parse_map(char *path);
+int			parse_fvector3(char *value, t_fvector3 *v3,
+				char *invalid_format_error);
+void		*error_and_null(char *error);
 
 #endif

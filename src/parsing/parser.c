@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:52:59 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/15 10:31:06 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 01:16:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ int	parse_map(char *path)
 
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
-		return (ft_error(MAP_NOT_FOUND_ERR, ERR_PREFIX, 1));
+		return (ft_error(MAP_NOT_FOUND_E, ERR_PREFIX, 1));
 	content = ft_get_contents(fd);
 	if (!content)
-		return (ft_error(MALLOC_ERR, ERR_PREFIX, 2));
+		return (ft_error(MALLOC_E, ERR_PREFIX, 2));
 	code = parse_lines(content);
 	if (code != 0)
 		code += 2;
@@ -46,7 +46,7 @@ static int	parse_lines(char *content)
 
 	lines = ft_split(content, '\n');
 	if (!lines)
-		return (ft_error(MALLOC_ERR, ERR_PREFIX, 1));
+		return (ft_error(MALLOC_E, ERR_PREFIX, 1));
 	i = 0;
 	code = 0;
 	while (lines[i])
@@ -75,18 +75,18 @@ static int	parse_object(char *line)
 
 	splited = ft_split_charset(line, " \t\r\v\f");
 	if (!splited)
-		return (ft_error(MALLOC_ERR, ERR_PREFIX, 1));
+		return (ft_error(MALLOC_E, ERR_PREFIX, 1));
 	method = get_parser_by_id(splited[0]);
 	code = 0;
 	if (!method)
-		code = ft_error(INV_OBJECT_ERR, ERR_PREFIX, 2);
+		code = ft_error(INV_OBJ_E, ERR_PREFIX, 2);
 	else
 	{
 		object = method(splited + 1);
 		if (!object)
 			code = 3;
 		else if (!register_object(object))
-			code = ft_error(REGISTRATION_ERR, ERR_PREFIX, 4);
+			code = ft_error(REGISTRATION_E, ERR_PREFIX, 4);
 		else
 			printf("Register object with id %s\n", object->id);
 	}
