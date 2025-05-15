@@ -32,8 +32,8 @@
 
 // Macros for MLX
 
-# define WIN_HEIGHT 1100
-# define WIN_WIDTH 900
+# define WIN_HEIGHT 700
+# define WIN_WIDTH 1100
 
 # define MAC_ESC_KEY 53
 # define LINUX_ESC_KEY 65307
@@ -122,15 +122,17 @@ typedef struct s_minirt
 
 t_minirt	*minirt(void);
 void		destruct_minirt(t_minirt *mrt);
+void		render_scene(t_minirt *mrt);
 
 void		init_mlx(t_mlx *mlx);
 void		init_cam_and_plane(void);
 
 //func_math_fvector3.c
-t_fvector3	normalize(t_fvector3 v);
-t_fvector3	cross(t_fvector3 v1, t_fvector3 v2);
-t_fvector3	add_vectors(t_fvector3 v1, t_fvector3 v2);
-float		dot(t_fvector3 v1, t_fvector3 v2);
+t_fvector3	normalize(t_fvector3 *v);
+t_fvector3	cross(t_fvector3 *v1, t_fvector3 *v2);
+t_fvector3	add_vectors(t_fvector3 *v1, t_fvector3 *v2);
+t_fvector3	sub_vectors(t_fvector3 *v1, t_fvector3 *v2);
+float		dot(t_fvector3 *v1, t_fvector3 *v2);
 
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);

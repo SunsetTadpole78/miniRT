@@ -24,8 +24,8 @@ void	init_mlx(t_mlx *mlx)
 	mrt = minirt();
 	mlx->mlx_ptr = mlx_init();
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr,
-			WIN_HEIGHT, WIN_WIDTH, "miniRT");
-	mlx->img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_HEIGHT, WIN_WIDTH);
+			WIN_WIDTH, WIN_HEIGHT, "miniRT");
+	mlx->img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	mlx->data = mlx_get_data_addr(mlx->img_ptr, &mlx->bpp,
 			&mlx->size_line, &mlx->endian);
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_hook, mrt);

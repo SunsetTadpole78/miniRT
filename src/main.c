@@ -15,6 +15,7 @@
 int	main(int argc, char **argv)
 {
 	t_minirt	*mrt;
+	t_mlx		*mlx;
 
 	(void)argc;
 	(void)argv;
@@ -24,8 +25,11 @@ int	main(int argc, char **argv)
 		write(2, "miniRT: Malloc Error.\n", 22);
 		return (1);
 	}
-	init_mlx(mrt->mlx);
+	mlx = mrt->mlx;
+	init_mlx(mlx);
 	init_cam_and_plane();
-	mlx_loop(mrt->mlx->mlx_ptr);
+	render_scene(mrt);
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img_ptr, 0, 0);
+	mlx_loop(mlx->mlx_ptr);
 	return (0);
 }
