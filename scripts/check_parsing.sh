@@ -146,7 +146,6 @@ declare -A expected_errors=(
 	["out_range_min_color_cy.rt"]="Cylinder rgb format: [0;255],[0;255],[0;255]"
 )
 
-dir="../maps/parsing"
 i=0
 
 for file_path in "$MAP_DIR"/*.rt; do

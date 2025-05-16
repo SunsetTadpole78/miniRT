@@ -1,7 +1,11 @@
 #!/bin/bash
 
-if [[ ! $# -eq 1 || ! -f $1 || ! "$1" == *.rt ]]; then
-	echo -e "\033[0;91mYou must specified .rt map path\033[0m"
+GREEN="\033[0;32m"
+RED="\033[0;91m"
+RESET="\033[0m"
+
+if [[ ! $# -eq 2 || ! "$2" =~ ^-?[0-9]+([.][0-9]+)?$ ]]; then
+	echo -e "${RED}You must specified .rt map path and time before press escape key ${RESET}"
 	exit 1
 fi
 
@@ -11,7 +15,7 @@ echo "Launching valgrind..."
 valgrind ./miniRT $1 2> "$TMPFILE" &
 PID=$!
 
-sleep 5
+sleep $2
 xdotool key Escape
 wait $PID
 
@@ -26,16 +30,16 @@ allocs=$(echo "$output" | grep -oP '^\d+')
 frees=$(echo "$output" | grep -oP '\d+(?= frees)')
 
 if [[ "$allocs" == "$frees" ]]; then
-    echo "Leaks OK"
+    echo -e "${GREEN}Leaks OK${RESET}"
 else
-    echo "Leaks KO: $allocs allocs, $frees frees"
+    echo -e "${RED}Leaks KO: $allocs allocs, $frees frees${RESET}"
     code=1
 fi
 
 if [[ "$output2" == "0" ]]; then
-	echo "Conditional jump or move OK"
+	echo -e "${GREEN}Conditional jump or move OK${RESET}"
 else
-	echo "Conditional jump or move KO: $output2 errors"
+	echo -e "${RED}Conditional jump or move KO: $output2 errors${RESET}"
 	code=1
 fi
 

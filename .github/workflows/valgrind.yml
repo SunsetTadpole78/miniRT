@@ -24,5 +24,7 @@ jobs:
             libbsd-dev
       - name: Compile
         run: make || exit 1
-      - name: Run
-        run: ./scripts/check_valgrind.sh ./maps/valid.rt
+      - name: Run Valid Map
+        run: xvfb-run --auto-servernum ./scripts/check_valgrind.sh ./maps/valid.rt 1.1
+      - name: Run Invalid Maps
+        run: xvfb-run --auto-servernum ./scripts/check_valgrind_parsing.sh
