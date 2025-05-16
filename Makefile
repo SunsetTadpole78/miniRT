@@ -22,6 +22,7 @@ FILES =		JusteTest.c			\
 		destructor.c		\
 		func_math_fvector3.c		\
 		initializer.c		\
+		intersection.c			\
 		main.c				\
 		mlx.c				\
 		objects/ambiant.c		\
