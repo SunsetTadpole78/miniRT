@@ -17,6 +17,7 @@ int	main(int argc, char **argv)
 {
 	t_minirt	*mrt;
 	int			code;
+	t_mlx		*mlx;
 
 	if (argc != 2)
 		return (ft_error(USAGE_E, ERR_PREFIX, 1));
@@ -29,7 +30,11 @@ int	main(int argc, char **argv)
 		destruct_minirt(mrt, 0);
 		return (2 + code);
 	}
-	init_mlx(mrt->mlx);
-	mlx_loop(mrt->mlx->mlx_ptr);
+	mlx = mrt->mlx;
+	init_mlx(mlx);
+	init_cam_and_plane();
+	render_scene(mrt);
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img_ptr, 0, 0);
+	mlx_loop(mlx->mlx_ptr);
 	return (0);
 }
