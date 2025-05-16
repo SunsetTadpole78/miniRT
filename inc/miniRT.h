@@ -35,6 +35,8 @@
 # define WIN_HEIGHT 700
 # define WIN_WIDTH 1100
 
+# define RATIO (WIN_WIDTH / WIN_HEIGHT)
+
 # define MAC_ESC_KEY 53
 # define LINUX_ESC_KEY 65307
 
@@ -59,6 +61,7 @@ typedef struct s_camera
 	t_fvector3	position;
 	t_fvector3	normal;
 	int			fov;
+	float			norm_fov;
 }	t_camera;
 
 typedef struct s_light
@@ -128,11 +131,11 @@ void		init_mlx(t_mlx *mlx);
 void		init_cam_and_plane(void);
 
 //func_math_fvector3.c
-t_fvector3	normalize(t_fvector3 *v);
-t_fvector3	cross(t_fvector3 *v1, t_fvector3 *v2);
-t_fvector3	add_vectors(t_fvector3 *v1, t_fvector3 *v2);
-t_fvector3	sub_vectors(t_fvector3 *v1, t_fvector3 *v2);
-float		dot(t_fvector3 *v1, t_fvector3 *v2);
+t_fvector3	normalize(t_fvector3 v);
+t_fvector3	cross(t_fvector3 v1, t_fvector3 v2);
+t_fvector3	add_vectors(t_fvector3 v1, t_fvector3 v2);
+t_fvector3	sub_vectors(t_fvector3 v1, t_fvector3 v2);
+float		dot(t_fvector3 v1, t_fvector3 v2);
 
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);
