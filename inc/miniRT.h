@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 14:21:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:30:30 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include "libft.h"
 # include "mlx.h"
 
-// Macros for Objects Types
+// Macros for Object Types
 
 # define AMBIANT_ID "A"
 # define CAMERA_ID "C"
