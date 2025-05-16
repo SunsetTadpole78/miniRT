@@ -71,7 +71,7 @@ typedef struct s_camera
 	t_fvector3	position;
 	t_fvector3	normal;
 	int			fov;
-	float			norm_fov;
+	float		norm_fov;
 }	t_camera;
 
 typedef struct s_light
@@ -89,6 +89,7 @@ typedef struct s_sphere
 	t_object	*next;
 	t_fvector3	position;
 	float		diameter;
+	float		radius;
 	t_rgb		color;
 }	t_sphere;
 
@@ -125,6 +126,8 @@ typedef struct s_minirt
 	t_light		*lights;
 	t_ambiant	*ambiant;
 	t_camera	*camera;
+	t_plane		*plane;
+	t_sphere	*sphere;
 	t_mlx		*mlx;
 }	t_minirt;
 
@@ -137,6 +140,11 @@ void		destruct_mlx(t_mlx *mlx);
 void		render_scene(t_minirt *mrt);
 
 void		init_cam_and_plane(void);
+
+void		render_scene(t_minirt *mrt);
+
+float		intersection_plane(t_ray ray, t_plane *plane);
+float		intersection_sphere(t_ray ray, t_sphere *sphere);
 
 //func_math_fvector3.c
 t_fvector3	normalize(t_fvector3 v);
