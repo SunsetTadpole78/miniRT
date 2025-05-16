@@ -22,7 +22,7 @@ MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 FILES =	destructor.c			\
 		initializer.c			\
 		main.c					\
-		mlx.c					\
+		mlx/mlx.c				\
 		objects/ambiant.c		\
 		objects/camera.c		\
 		objects/cylinder.c		\
@@ -34,6 +34,12 @@ FILES =	destructor.c			\
 		parsing/elements.c		\
 		parsing/parser.c		\
 		parsing/utils.c			\
+
+ifeq ($(shell uname), Darwin)
+FILES += mlx/opengl.c
+else
+FILES += mlx/x11.c
+endif
 
 OFILES = $(FILES:%.c=$(OBJS)/%.o)
 
