@@ -146,13 +146,12 @@ declare -A expected_errors=(
 	["out_range_min_color_cy.rt"]="Cylinder rgb format: [0;255],[0;255],[0;255]"
 )
 
-dir="../maps/parsing"
 i=0
 
 for file_path in "$MAP_DIR"/*.rt; do
 	file_name=$(basename "$file_path")
 
-	[[ "$file_name" == "valid.rt" || "$file_name" == "empty.rt" ]] && continue
+	[[ "$file_name" == "empty.rt" ]] && continue
 
 	expected=$(echo -e "${PREFIX}${expected_errors[$file_name]}${SUFFIX}")
 	output=$("$MINIRT" "$file_path" 2>&1 > /dev/null)

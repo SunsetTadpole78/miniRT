@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 14:30:30 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:31:57 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,10 @@
 
 # define WIN_HEIGHT 1100
 # define WIN_WIDTH 900
+# define WIN_NAME "miniRT"
 
-# define MAC_ESC_KEY 53
-# define LINUX_ESC_KEY 65307
+# define OPENGL_ESC_KEY 53
+# define X11_ESC_KEY 65307
 
 // Structures
 
@@ -140,6 +141,7 @@ void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
 //mlx
 void		init_mlx(t_mlx *mlx);
+void		destruct_mlx(t_mlx *mlx);
 
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);
