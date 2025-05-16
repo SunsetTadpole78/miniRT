@@ -1,0 +1,27 @@
+name: Parser
+on:
+  push
+jobs:
+  parser:
+    name: Run Parser Checker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            libx11-dev \
+            libxext-dev \
+            libxrandr-dev \
+            libxi-dev \
+            libgl1-mesa-dev \
+            libbsd-dev
+      - name: Compile
+        run: make || exit 1
+      - name: Check parser
+        run: make check_parsing || exit 1

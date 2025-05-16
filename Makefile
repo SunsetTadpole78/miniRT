@@ -3,6 +3,7 @@ NAME = miniRT
 INC = inc
 SRC = src
 OBJS = objs
+SCRIPTS = scripts
 
 LIBFT = libft
 LIBFTA = $(LIBFT)/libft.a
@@ -18,17 +19,21 @@ MLX_OPENGLA = $(MLX_OPENGL)/libmlx.a
 MLX_OPENGLI = $(MLX_OPENGL)
 MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 
-FILES =	destructor.c		\
-		initializer.c		\
-		main.c				\
-		mlx.c				\
+FILES =	destructor.c			\
+		initializer.c			\
+		main.c					\
+		mlx.c					\
 		objects/ambiant.c		\
 		objects/camera.c		\
 		objects/cylinder.c		\
-		objects/factory.c	\
-		objects/light.c		\
-		objects/plane.c		\
+		objects/factory.c		\
+		objects/light.c			\
+		objects/plane.c			\
 		objects/sphere.c		\
+		objects/types_factory.c	\
+		parsing/elements.c		\
+		parsing/parser.c		\
+		parsing/utils.c			\
 
 OFILES = $(FILES:%.c=$(OBJS)/%.o)
 
@@ -90,11 +95,14 @@ norminette:
 	@OUTPUT=$$(norminette $(SRC) $(INC) $(LIBFT)); \
 	ERR_LINES=$$(echo "$$OUTPUT" | grep -c "Error:"); \
 	if [ $$ERR_LINES -eq 0 ]; then \
-		echo "✅ Norminette: OK"; \
+		echo "\033[0;32m✅\033[0m Norminette: OK"; \
 	else \
 		echo "$$OUTPUT" | grep "Error"; \
-		echo "❌ Norminette: $$ERR_LINES error(s)"; \
+		echo "\033[0;31m❌\033[0m Norminette: $$ERR_LINES error(s)"; \
 	fi
+
+check_parsing:
+	bash $(SCRIPTS)/check_parsing.sh
 
 re: fclean $(NAME)
 
