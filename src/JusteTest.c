@@ -29,14 +29,14 @@ void	init_cam_and_plane(void)
 
 	mrt = minirt();
 	pos = ft_fvector3(-50.0f, 10.0f, 20.0f);
-	norm = normalize(ft_fvector3(0.0f, 0.0f, 1.0f));
+	norm = ft_fvector3(0.0f, 0.0f, 1.0f);
 	mrt->camera = camera(pos, norm, 70);
 	mrt->camera->norm_fov = tan((mrt->camera->fov / 2) * (M_PI / 180.0f));
 	pos = ft_fvector3(0.0f, 0.0f, 10.0f);
-	norm = normalize(ft_fvector3(0.0f, 1.0f, 0.0f));
+	norm = ft_fvector3(0.0f, 1.0f, 0.0f);
 	rgb = ft_rgb(255, 0, 0);
 	mrt->plane = plane(pos, norm, rgb);
-	pos = ft_fvector3(-50.0f, 7.0f, -10.0f);
+	pos = ft_fvector3(-50.0f, 7.0f, 40.0f);
 	rgb = ft_rgb(0, 255, 0);
 	mrt->sphere = sphere(pos, 10, rgb);
 	mrt->sphere->radius = mrt->sphere->diameter / 2.0f;
@@ -90,6 +90,6 @@ static t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v)
 	norm_x = (2 * ((v.x + 0.5f) / WIN_WIDTH) - 1)
 		* ((float)WIN_WIDTH / (float)WIN_HEIGHT) * cam->norm_fov;
 	norm_y = (1 - 2 * ((v.y + 0.5f) / WIN_HEIGHT)) * cam->norm_fov;
-	ray_dir = normalize(ft_fvector3(norm_x, norm_y, -cam->norm_fov));
+	ray_dir = normalize(ft_fvector3(norm_x, norm_y, cam->norm_fov));
 	return (ray_dir);
 }
