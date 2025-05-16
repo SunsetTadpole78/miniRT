@@ -25,4 +25,4 @@ jobs:
       - name: Compile
         run: make || exit 1
       - name: Run
-        run: xvfb-run --auto-servernum ./scripts/check_valgrind.sh
+        run: ./scripts/check_valgrind.sh ./maps/valid.rt

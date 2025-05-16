@@ -1,9 +1,14 @@
 #!/bin/bash
 
+if [[ ! $# -eq 1 || ! -f $1 || ! "$1" == *.rt ]]; then
+	echo -e "\033[0;91mYou must specified .rt map path\033[0m"
+	exit 1
+fi
+
 TMPFILE=$(mktemp)
 
 echo "Launching valgrind..."
-valgrind ./miniRT scripts/good_map.rt 2> "$TMPFILE" &
+valgrind ./miniRT $1 2> "$TMPFILE" &
 PID=$!
 
 sleep 5
