@@ -33,8 +33,8 @@
 
 // Macros for MLX
 
-# define WIN_HEIGHT 1100
-# define WIN_WIDTH 700
+# define WIN_HEIGHT 700
+# define WIN_WIDTH 1100
 
 # define WINDOW_NAME "miniRT"
 
@@ -42,12 +42,6 @@
 # define X11_ESC_KEY 65307
 
 // Structures
-
-typedef struct s_ray
-{
-	t_fvector3		origin;
-	t_fvector3		direction;
-}	t_ray;
 
 typedef struct s_object
 {

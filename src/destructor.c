@@ -27,6 +27,8 @@ void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 	free_objects((t_object *)mrt->lights);
 	free(mrt->ambiant);
 	free(mrt->camera);
+	free(mrt->plane);
+	free(mrt->sphere);
 	if (destroy_mlx)
 		destruct_mlx(mlx);
 	free(mlx);

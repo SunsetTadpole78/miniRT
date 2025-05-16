@@ -25,6 +25,9 @@ t_minirt	*minirt(void)
 		mrt->objects = NULL;
 		mrt->lights = NULL;
 		mrt->ambiant = NULL;
+		mrt->camera = NULL;
+		mrt->plane = NULL;
+		mrt->sphere = NULL;
 		mrt->mlx = malloc(sizeof(t_mlx));
 		if (!mrt->mlx)
 			return (NULL);
