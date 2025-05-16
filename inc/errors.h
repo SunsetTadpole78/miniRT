@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:59:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 02:51:11 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 10:56:47 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,29 @@
 # define A_LVL_E "Ambiant level format: [0.0;1.0]\n"
 # define A_RGB_E "Ambiant rgb format: [0;255],[0;255],[0;255]\n"
 # define C_ARGS_E "Camera format: 'C <position> <normal> <fov>'\n"
-# define C_POS_E "Camera position format: <f>,<f>,<f>\n"
+# define C_POS_E "Camera position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX]\
+,[INT_MIN;INT_MAX]\n"
 # define C_NORM_E "Camera normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]\n"
 # define C_FOV_E "Camera fov format: [0;180]\n"
 # define L_ARGS_E "Camera format: 'L <position> <level> <color>'\n"
-# define L_POS_E "Light position format: <f>,<f>,<f>\n"
+# define L_POS_E "Light position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX]\
+,[INT_MIN;INT_MAX]\n"
 # define L_LVL_E "Light level format: [0.0;1.0]\n"
 # define L_RGB_E "Light rgb format: [0;255],[0;255],[0;255]\n"
 # define PL_ARGS_E "Plane format: 'pl <position> <normal> <color>'\n"
-# define PL_POS_E "Plane position format: <f>,<f>,<f>\n"
+# define PL_POS_E "Plane position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX]\
+,[INT_MIN;INT_MAX]\n"
 # define PL_NORM_E "Plane normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]\n"
 # define PL_RGB_E "Plane rgb format: [0;255],[0;255],[0;255]\n"
 # define SP_ARGS_E "Sphere format: 'sp <position> <diameter> <color>'\n"
-# define SP_POS_E "Sphere position format: <f>,<f>,<f>\n"
-# define SP_DIAM_E "Sphere diameter format: [0.0;+inf[\n"
+# define SP_POS_E "Sphere position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX]\
+,[INT_MIN;INT_MAX]\n"
+# define SP_DIAM_E "Sphere diameter format: [0.0;INT_MAX]\n"
 # define SP_RGB_E "Sphere rgb format: [0;255],[0;255],[0;255]\n"
 # define CY_ARGS_E "Cylinder format: 'cy <position> <normal> <diameter> <height> \
 <color>'\n"
-# define CY_POS_E "Cylinder position format: <f>,<f>,<f>\n"
+# define CY_POS_E "Cylinder position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX]\
+,[INT_MIN;INT_MAX]\n"
 # define CY_NORM_E "Cylinder normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]\n"
 # define CY_DIAM_E "Cylinder diameter format: [0.0;INT_MAX]\n"
 # define CY_HEI_E "Cylinder height format: [0.0;INT_MAX]\n"

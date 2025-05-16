@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 02:52:11 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 10:41:13 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,8 @@ void	*parse_cylinder(char **values)
 	if (!values[0] || !values[1] || !values[2] || !values[3]
 		|| !values[4] || values[5])
 		return (error_and_null(CY_ARGS_E));
-	if (!parse_fvector3(values[0], &position, CY_POS_E))
-		return (NULL);
-	if (!parse_normal(values[1], &normal, CY_NORM_E))
+	if (!parse_fvector3(values[0], &position, CY_POS_E)
+		|| !parse_normal(values[1], &normal, CY_NORM_E))
 		return (NULL);
 	if (!ft_isnumeric(values[2]) || ft_isoutint(values[2]))
 		return (error_and_null(CY_DIAM_E));
@@ -52,7 +51,7 @@ void	*parse_cylinder(char **values)
 		return (error_and_null(CY_HEI_E));
 	size.y = ft_atof(values[3]);
 	if (size.y < 0.0f)
-		return (error_and_null(CY_DIAM_E));
+		return (error_and_null(CY_HEI_E));
 	if (!parse_color(values[4], &color, CY_RGB_E))
 		return (NULL);
 	return (cylinder(position, normal, size, color));

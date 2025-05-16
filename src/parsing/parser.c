@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:52:59 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 02:41:33 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 10:58:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,15 @@ static int	parse_lines(char *content)
 static int	parse_object(char *line)
 {
 	char		**splited;
-	void		*(*method)(char **values);
 	int			code;
+	void		*(*method)(char **values);
 	t_object	*object;
 
 	splited = ft_split_charset(line, " \t\r\v\f");
 	if (!splited)
 		return (ft_error(MALLOC_E, ERR_PREFIX, 1));
-	method = get_parser_by_id(splited[0]);
 	code = 0;
+	method = get_parser_by_id(splited[0]);
 	if (!method)
 		code = ft_error(OBJ_E, ERR_PREFIX, 2);
 	else
