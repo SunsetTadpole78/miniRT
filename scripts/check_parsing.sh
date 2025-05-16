@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    check_parsing.sh                                   :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/05/16 11:41:26 by lroussel          #+#    #+#              #
-#    Updated: 2025/05/16 12:06:17 by lroussel         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 #!/bin/bash
 
 PREFIX="\033[91mminiRT: " 
@@ -155,25 +143,27 @@ declare -A expected_errors=(
 	["invalid_value_position_cy.rt"]="Cylinder position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
 	["overflow_normal_cy.rt"]="Cylinder normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
 	["overflow_position_cy.rt"]="Cylinder position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
-	["out_range_min_color_cy.rta"]="Cylinder rgb format: [0;255],[0;255],[0;255]"
+	["out_range_min_color_cy.rt"]="Cylinder rgb format: [0;255],[0;255],[0;255]"
 )
 
 dir="../maps/parsing"
+i=0
 
 for file_path in "$MAP_DIR"/*.rt; do
-    file_name=$(basename "$file_path")
+	file_name=$(basename "$file_path")
 
-    [[ "$file_name" == "valid.rt" || "$file_name" == "empty.rt" ]] && continue
+	[[ "$file_name" == "valid.rt" || "$file_name" == "empty.rt" ]] && continue
 
-    expected=$(echo -e "${PREFIX}${expected_errors[$file_name]}${SUFFIX}")
-    output=$("$MINIRT" "$file_path" 2>&1 > /dev/null)
+	expected=$(echo -e "${PREFIX}${expected_errors[$file_name]}${SUFFIX}")
+	output=$("$MINIRT" "$file_path" 2>&1 > /dev/null)
 
-    if [[ "$output" == "$expected" ]]; then
-        echo -e "${GREEN}✅ $file_name: OK${RESET}"
-    else
-        echo -e "${RED}❌ $file_name: KO${RESET}"
-        echo -e "> Expected: '$expected'"
-        echo -e "> Obtained: '$output'"
+	if [[ "$output" == "$expected" ]]; then
+		echo -e "${i}.	${GREEN}✅ $file_name: OK${RESET}"
+	else
+		echo -e "${i}.	${RED}❌ $file_name: KO${RESET}"
+		echo -e "> Expected: '$expected'"
+		echo -e "> Obtained: '$output'"
 	exit 1
-    fi
+	fi
+	(( i++ ))
 done
