@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/04/23 15:35:12 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 02:56:52 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 // Libraries
 
+# include <fcntl.h>
 # include <stdio.h>
 
 # include "libft.h"
@@ -24,7 +25,7 @@
 
 # define AMBIANT_ID "A"
 # define CAMERA_ID "C"
-# define CYLINDER_ID "cl"
+# define CYLINDER_ID "cy"
 # define LIGHT_ID "L"
 # define PLANE_ID "pl"
 # define SPHERE_ID "sp"
@@ -39,9 +40,24 @@
 
 // Structures
 
+typedef struct s_object
+{
+	char			*id;
+	struct s_object	*next;
+}	t_object;
+
+typedef struct s_type
+{
+	char			*id;
+	void			*(*parser)(char **);
+	void			(*render)(t_object *);
+	struct s_type	*next;
+}	t_type;
+
 typedef struct s_ambiant
 {
 	char		*id;
+	t_object	*next;
 	float		level;
 	t_rgb		color;
 }	t_ambiant;
@@ -49,6 +65,7 @@ typedef struct s_ambiant
 typedef struct s_camera
 {
 	char		*id;
+	t_object	*next;
 	t_fvector3	position;
 	t_fvector3	normal;
 	int			fov;
@@ -57,6 +74,7 @@ typedef struct s_camera
 typedef struct s_light
 {
 	char		*id;
+	t_object	*next;
 	t_fvector3	position;
 	float		level;
 	t_rgb		color;
@@ -65,6 +83,7 @@ typedef struct s_light
 typedef struct s_sphere
 {
 	char		*id;
+	t_object	*next;
 	t_fvector3	position;
 	float		diameter;
 	t_rgb		color;
@@ -73,6 +92,7 @@ typedef struct s_sphere
 typedef struct s_plane
 {
 	char		*id;
+	t_object	*next;
 	t_fvector3	position;
 	t_fvector3	normal;
 	t_rgb		color;
@@ -81,16 +101,12 @@ typedef struct s_plane
 typedef struct s_cylinder
 {
 	char		*id;
+	t_object	*next;
 	t_fvector3	position;
 	t_fvector3	normal;
 	t_fvector2	size;
 	t_rgb		color;
 }	t_cylinder;
-
-typedef struct s_identifiable
-{
-	char	*id;
-}	t_identifiable;
 
 typedef struct s_mlx
 {
@@ -101,29 +117,56 @@ typedef struct s_mlx
 
 typedef struct s_minirt
 {
-	t_list		*objects;
-	t_list		*lights;
+	t_type		*types;
+	t_object	*objects;
+	t_light		*lights;
 	t_ambiant	*ambiant;
 	t_camera	*camera;
 	t_mlx		*mlx;
 }	t_minirt;
 
 t_minirt	*minirt(void);
-void		destruct_minirt(t_minirt *mrt);
+void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
 void		init_mlx(t_mlx *mlx);
 
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);
+void		*parse_ambiant(char **values);
+
 t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
+void		*parse_camera(char **values);
+
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_rgb color);
+void		*parse_cylinder(char **values);
+
+t_light		*light(t_fvector3 position, float level, t_rgb color);
+void		*parse_light(char **values);
+
+t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
+void		*parse_plane(char **values);
+
+t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color);
+void		*parse_sphere(char **values);
+
 int			register_object(void *object);
 int			register_light(t_light *light);
 int			set_ambiant(t_ambiant *ambiant);
 int			set_camera(t_camera *camera);
-t_light		*light(t_fvector3 position, float level, t_rgb color);
-t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
-t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color);
+
+int			register_type(char *id, void *(*parser)(char **),
+				void (*render)(t_object *));
+int			exist_type(char *id);
+void		*get_parser_by_id(char *id);
+
+//parsing
+int			parse_map(char *path);
+int			parse_fvector3(char *value, t_fvector3 *v3,
+				char *invalid_format_error);
+int			parse_normal(char *value, t_fvector3 *normal,
+				char *invalid_format_error);
+int			parse_color(char *value, t_rgb *rgb, char *invalid_format_error);
+void		*error_and_null(char *error);
 
 #endif
