@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 10:41:13 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 11:57:31 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	*parse_cylinder(char **values)
 		return (error_and_null(CY_DIAM_E));
 	size.x = ft_atof(values[2]);
 	if (size.x < 0.0f)
-		return (error_and_null(SP_DIAM_E));
+		return (error_and_null(CY_DIAM_E));
 	if (!ft_isnumeric(values[3]) || ft_isoutint(values[3]))
 		return (error_and_null(CY_HEI_E));
 	size.y = ft_atof(values[3]);

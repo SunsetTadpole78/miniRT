@@ -1,0 +1,179 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    check_parsing.sh                                   :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/05/16 11:41:26 by lroussel          #+#    #+#              #
+#    Updated: 2025/05/16 12:06:17 by lroussel         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+#!/bin/bash
+
+PREFIX="\033[91mminiRT: " 
+SUFFIX="\n\033[0m"
+
+MAP_DIR="./maps/parsing"
+MINIRT="./miniRT"
+
+GREEN="\033[0;32m"
+RED="\033[0;91m"
+RESET="\033[0m"
+
+declare -A expected_errors=(
+	["invalid_object.rt"]="Invalid object id"
+
+	# Ambiant
+	["too_few_args_a.rt"]="Ambiant format: 'A <level> <color>'"
+	["innerflow_lvl_a.rt"]="Ambiant level format: [0.0;1.0]"
+	["innerflow_color_a.rt"]="Ambiant rgb format: [0;255],[0;255],[0;255]"
+	["out_range_min_lvl_a.rt"]="Ambiant level format: [0.0;1.0]"
+	["out_range_max_lvl_a.rt"]="Ambiant level format: [0.0;1.0]"
+	["out_range_min_color_a.rt"]="Ambiant rgb format: [0;255],[0;255],[0;255]"
+	["out_range_max_color_a.rt"]="Ambiant rgb format: [0;255],[0;255],[0;255]"
+	["invalid_value_color_a.rt"]="Ambiant rgb format: [0;255],[0;255],[0;255]"
+	["overflow_color_a.rt"]="Ambiant rgb format: [0;255],[0;255],[0;255]"
+	["overflow_lvl_a.rt"]="Ambiant level format: [0.0;1.0]"
+	["too_many_args_a.rt"]="Ambiant format: 'A <level> <color>'"
+	["too_few_args_color_a.rt"]="Ambiant rgb format: [0;255],[0;255],[0;255]"
+	["too_many_args_color_a.rt"]="Ambiant rgb format: [0;255],[0;255],[0;255]"
+	["invalid_value_lvl_a.rt"]="Ambiant level format: [0.0;1.0]"
+
+	# Camera
+	["too_few_args_c.rt"]="Camera format: 'C <position> <normal> <fov>'"
+	["innerflow_position_c.rt"]="Camera position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["innerflow_normal_c.rt"]="Camera normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["innerflow_fov_c.rt"]="Camera fov format: [0;180]"
+	["out_range_min_normal_c.rt"]="Camera normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["out_range_max_normal_c.rt"]="Camera normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["out_range_min_fov_c.rt"]="Camera fov format: [0;180]"
+	["out_range_max_fov_c.rt"]="Camera fov format: [0;180]"
+	["invalid_value_normal_c.rt"]="Camera normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["invalid_value_fov_c.rt"]="Camera fov format: [0;180]"
+	["too_few_args_position_c.rt"]="Camera position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["too_few_args_normal_c.rt"]="Camera normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["too_many_args_c.rt"]="Camera format: 'C <position> <normal> <fov>'"
+	["too_many_args_position_c.rt"]="Camera position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["too_many_args_normal_c.rt"]="Camera normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["overflow_fov_c.rt"]="Camera fov format: [0;180]"
+	["overflow_normal_c.rt"]="Camera normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["invalid_value_position_c.rt"]="Camera position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["overflow_position_c.rt"]="Camera position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+
+	# Light
+	["too_few_args_l.rt"]="Camera format: 'L <position> <level> <color>'"
+	["innerflow_position_l.rt"]="Light position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["innerflow_lvl_l.rt"]="Light level format: [0.0;1.0]"
+	["innerflow_color_l.rt"]="Light rgb format: [0;255],[0;255],[0;255]"
+	["out_range_min_lvl_l.rt"]="Light level format: [0.0;1.0]"
+	["out_range_max_lvl_l.rt"]="Light level format: [0.0;1.0]"
+	["out_range_min_color_l.rt"]="Light rgb format: [0;255],[0;255],[0;255]"
+	["out_range_max_color_l.rt"]="Light rgb format: [0;255],[0;255],[0;255]"
+	["invalid_value_lvl_l.rt"]="Light level format: [0.0;1.0]"
+	["invalid_value_color_l.rt"]="Light rgb format: [0;255],[0;255],[0;255]"
+	["overflow_lvl_l.rt"]="Light level format: [0.0;1.0]"
+	["overflow_color_l.rt"]="Light rgb format: [0;255],[0;255],[0;255]"
+	["too_few_args_position_l.rt"]="Light position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["too_few_args_color_l.rt"]="Light rgb format: [0;255],[0;255],[0;255]"
+	["too_many_args_l.rt"]="Camera format: 'L <position> <level> <color>'"
+	["too_many_args_position_l.rt"]="Light position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["too_many_args_color_l.rt"]="Light rgb format: [0;255],[0;255],[0;255]"
+	["invalid_value_position_l.rt"]="Light position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["overflow_position_l.rt"]="Light position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+
+	# Plane
+	["innerflow_position_pl.rt"]="Plane position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["innerflow_normal_pl.rt"]="Plane normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["innerflow_color_pl.rt"]="Plane rgb format: [0;255],[0;255],[0;255]"
+	["out_range_min_normal_pl.rt"]="Plane normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["out_range_max_normal_pl.rt"]="Plane normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["out_range_min_color_pl.rt"]="Plane rgb format: [0;255],[0;255],[0;255]"
+	["out_range_max_color_pl.rt"]="Plane rgb format: [0;255],[0;255],[0;255]"
+	["invalid_value_normal_pl.rt"]="Plane normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["invalid_value_color_pl.rt"]="Plane rgb format: [0;255],[0;255],[0;255]"
+	["overflow_color_pl.rt"]="Plane rgb format: [0;255],[0;255],[0;255]"
+	["too_few_args_pl.rt"]="Plane format: 'pl <position> <normal> <color>'"
+	["too_few_args_position_pl.rt"]="Plane position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["too_few_args_normal_pl.rt"]="Plane normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["too_few_args_color_pl.rt"]="Plane rgb format: [0;255],[0;255],[0;255]"
+	["too_many_args_pl.rt"]="Plane format: 'pl <position> <normal> <color>'"
+	["too_many_args_position_pl.rt"]="Plane position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["too_many_args_normal_pl.rt"]="Plane normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["too_many_args_color_pl.rt"]="Plane rgb format: [0;255],[0;255],[0;255]"
+	["invalid_value_position_pl.rt"]="Plane position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["overflow_normal_pl.rt"]="Plane normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["overflow_position_pl.rt"]="Plane position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+
+	# Sphere
+	["innerflow_position_sp.rt"]="Sphere position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["innerflow_diameter_sp.rt"]="Sphere diameter format: [0.0;INT_MAX]"
+	["innerflow_color_sp.rt"]="Sphere rgb format: [0;255],[0;255],[0;255]"
+	["out_range_min_diameter_sp.rt"]="Sphere diameter format: [0.0;INT_MAX]"
+	["out_range_max_color_sp.rt"]="Sphere rgb format: [0;255],[0;255],[0;255]"
+	["invalid_value_diameter_sp.rt"]="Sphere diameter format: [0.0;INT_MAX]"
+	["invalid_value_color_sp.rt"]="Sphere rgb format: [0;255],[0;255],[0;255]"
+	["overflow_diameter_sp.rt"]="Sphere diameter format: [0.0;INT_MAX]"
+	["overflow_color_sp.rt"]="Sphere rgb format: [0;255],[0;255],[0;255]"
+	["too_few_args_sp.rt"]="Sphere format: 'sp <position> <diameter> <color>'"
+	["too_few_args_position_sp.rt"]="Sphere position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["too_few_args_color_sp.rt"]="Sphere rgb format: [0;255],[0;255],[0;255]"
+	["too_many_args_sp.rt"]="Sphere format: 'sp <position> <diameter> <color>'"
+	["too_many_args_position_sp.rt"]="Sphere position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["too_many_args_color_sp.rt"]="Sphere rgb format: [0;255],[0;255],[0;255]"
+	["invalid_value_position_sp.rt"]="Sphere position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["out_range_min_color_sp.rt"]="Sphere rgb format: [0;255],[0;255],[0;255]"
+	["overflow_position_sp.rt"]="Sphere position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+
+	# Cylinder
+	["innerflow_position_cy.rt"]="Cylinder position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["innerflow_normal_cy.rt"]="Cylinder normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["innerflow_diameter_cy.rt"]="Cylinder diameter format: [0.0;INT_MAX]"
+	["innerflow_height_cy.rt"]="Cylinder height format: [0.0;INT_MAX]"
+	["innerflow_color_cy.rt"]="Cylinder rgb format: [0;255],[0;255],[0;255]"
+	["out_range_min_normal_cy.rt"]="Cylinder normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["out_range_max_normal_cy.rt"]="Cylinder normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["out_range_min_diameter_cy.rt"]="Cylinder diameter format: [0.0;INT_MAX]"
+	["out_range_min_height_cy.rt"]="Cylinder height format: [0.0;INT_MAX]"
+	["out_range_max_color_cy.rt"]="Cylinder rgb format: [0;255],[0;255],[0;255]"
+	["invalid_value_normal_cy.rt"]="Cylinder normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["invalid_value_diameter_cy.rt"]="Cylinder diameter format: [0.0;INT_MAX]"
+	["invalid_value_height_cy.rt"]="Cylinder height format: [0.0;INT_MAX]"
+	["invalid_value_color_cy.rt"]="Cylinder rgb format: [0;255],[0;255],[0;255]"
+	["overflow_diameter_cy.rt"]="Cylinder diameter format: [0.0;INT_MAX]"
+	["overflow_height_cy.rt"]="Cylinder height format: [0.0;INT_MAX]"
+	["overflow_color_cy.rt"]="Cylinder rgb format: [0;255],[0;255],[0;255]"
+	["too_few_args_cy.rt"]="Cylinder format: 'cy <position> <normal> <diameter> <height> <color>'"
+	["too_few_args_position_cy.rt"]="Cylinder position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["too_few_args_normal_cy.rt"]="Cylinder normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["too_few_args_color_cy.rt"]="Cylinder rgb format: [0;255],[0;255],[0;255]"
+	["too_many_args_cy.rt"]="Cylinder format: 'cy <position> <normal> <diameter> <height> <color>'"
+	["too_many_args_position_cy.rt"]="Cylinder position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["too_many_args_normal_cy.rt"]="Cylinder normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["too_many_args_color_cy.rt"]="Cylinder rgb format: [0;255],[0;255],[0;255]"
+	["invalid_value_position_cy.rt"]="Cylinder position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["overflow_normal_cy.rt"]="Cylinder normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]"
+	["overflow_position_cy.rt"]="Cylinder position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
+	["out_range_min_color_cy.rta"]="Cylinder rgb format: [0;255],[0;255],[0;255]"
+)
+
+dir="../maps/parsing"
+
+for file_path in "$MAP_DIR"/*.rt; do
+    file_name=$(basename "$file_path")
+
+    [[ "$file_name" == "valid.rt" || "$file_name" == "empty.rt" ]] && continue
+
+    expected=$(echo -e "${PREFIX}${expected_errors[$file_name]}${SUFFIX}")
+    output=$("$MINIRT" "$file_path" 2>&1 > /dev/null)
+
+    if [[ "$output" == "$expected" ]]; then
+        echo -e "${GREEN}✅ $file_name: OK${RESET}"
+    else
+        echo -e "${RED}❌ $file_name: KO${RESET}"
+        echo -e "> Expected: '$expected'"
+        echo -e "> Obtained: '$output'"
+	exit 1
+    fi
+done

@@ -3,6 +3,7 @@ NAME = miniRT
 INC = inc
 SRC = src
 OBJS = objs
+SCRIPTS = scripts
 
 LIBFT = libft
 LIBFTA = $(LIBFT)/libft.a
@@ -99,6 +100,9 @@ norminette:
 		echo "$$OUTPUT" | grep "Error"; \
 		echo "\033[0;31m❌\033[0m Norminette: $$ERR_LINES error(s)"; \
 	fi
+
+check_parsing:
+	bash $(SCRIPTS)/check_parsing.sh
 
 re: fclean $(NAME)
 
