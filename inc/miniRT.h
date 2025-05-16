@@ -17,6 +17,7 @@
 
 # include <fcntl.h>
 # include <stdio.h>
+# include <math.h>
 
 # include "libft.h"
 # include "mlx.h"
@@ -32,8 +33,8 @@
 
 // Macros for MLX
 
-# define WIN_HEIGHT 700
-# define WIN_WIDTH 1100
+# define WIN_HEIGHT 1100
+# define WIN_WIDTH 700
 
 # define WINDOW_NAME "miniRT"
 
@@ -41,6 +42,12 @@
 # define X11_ESC_KEY 65307
 
 // Structures
+
+typedef struct s_ray
+{
+	t_fvector3		origin;
+	t_fvector3		direction;
+}	t_ray;
 
 typedef struct s_object
 {
@@ -117,6 +124,10 @@ typedef struct s_mlx
 	void		*mlx_ptr;
 	void		*win_ptr;
 	void		*img_ptr;
+	char		*data;
+	int			bpp;
+	int			size_line;
+	int			endian;
 }	t_mlx;
 
 typedef struct s_minirt
