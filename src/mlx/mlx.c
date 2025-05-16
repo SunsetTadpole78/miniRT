@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/14 18:32:36 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 13:57:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	init_mlx(t_mlx *mlx)
 	mrt = minirt();
 	mlx->mlx_ptr = mlx_init();
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr,
-			WIN_HEIGHT, WIN_WIDTH, "miniRT");
+			WIN_HEIGHT, WIN_WIDTH, WINDOW_NAME);
 	mlx->img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_HEIGHT, WIN_WIDTH);
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_hook, mrt);
 	mlx_hook(mlx->win_ptr, 17, 1L << 17, close_window, mrt);
@@ -32,7 +32,7 @@ void	init_mlx(t_mlx *mlx)
 
 static int	key_hook(int keycode, t_minirt *mrt)
 {
-	if (keycode == MAC_ESC_KEY || keycode == LINUX_ESC_KEY)
+	if (keycode == OPENGL_ESC_KEY || keycode == X11_ESC_KEY)
 		close_window(mrt);
 	return (0);
 }
