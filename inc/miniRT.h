@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 02:56:52 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:21:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include "libft.h"
 # include "mlx.h"
 
-// Macros for Type Objects
+// Macros for Objects Types
 
 # define AMBIANT_ID "A"
 # define CAMERA_ID "C"
@@ -30,7 +30,7 @@
 # define PLANE_ID "pl"
 # define SPHERE_ID "sp"
 
-// Macros for MLX
+// Macros for Mlx Usage
 
 # define WIN_HEIGHT 1100
 # define WIN_WIDTH 900
@@ -40,45 +40,58 @@
 
 // Structures
 
-typedef struct s_object
-{
-	char			*id;
-	struct s_object	*next;
-}	t_object;
+/* -------------------------------- PROTOTYPE ------------------------------- */
+typedef struct s_type		t_type;
+typedef struct s_object		t_object;
+typedef struct s_light		t_light;
+typedef struct s_ambiant	t_ambiant;
+typedef struct s_camera		t_camera;
+typedef struct s_mlx		t_mlx;
+/* -------------------------------------------------------------------------- */
 
-typedef struct s_type
+typedef struct s_minirt
 {
-	char			*id;
-	void			*(*parser)(char **);
-	void			(*render)(t_object *);
-	struct s_type	*next;
-}	t_type;
+	t_type		*types;
+	t_object	*objects;
+	t_light		*lights;
+	t_ambiant	*ambiant;
+	t_camera	*camera;
+	t_mlx		*mlx;
+}	t_minirt;
 
-typedef struct s_ambiant
+struct s_type
+{
+	char	*id;
+	void	*(*parser)(char **);
+	void	(*render)(t_object *);
+	t_type	*next;
+};
+
+struct s_ambiant
 {
 	char		*id;
 	t_object	*next;
 	float		level;
 	t_rgb		color;
-}	t_ambiant;
+};
 
-typedef struct s_camera
+struct s_camera
 {
 	char		*id;
 	t_object	*next;
 	t_fvector3	position;
 	t_fvector3	normal;
 	int			fov;
-}	t_camera;
+};
 
-typedef struct s_light
+struct s_light
 {
 	char		*id;
 	t_object	*next;
 	t_fvector3	position;
 	float		level;
 	t_rgb		color;
-}	t_light;
+};
 
 typedef struct s_sphere
 {
@@ -108,26 +121,24 @@ typedef struct s_cylinder
 	t_rgb		color;
 }	t_cylinder;
 
-typedef struct s_mlx
+struct s_object
 {
-	void		*mlx_ptr;
-	void		*win_ptr;
-	void		*img_ptr;
-}	t_mlx;
+	char		*id;
+	t_object	*next;
+};
 
-typedef struct s_minirt
+struct s_mlx
 {
-	t_type		*types;
-	t_object	*objects;
-	t_light		*lights;
-	t_ambiant	*ambiant;
-	t_camera	*camera;
-	t_mlx		*mlx;
-}	t_minirt;
+	void	*mlx_ptr;
+	void	*win_ptr;
+	void	*img_ptr;
+};
 
+//src
 t_minirt	*minirt(void);
 void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
+//mlx
 void		init_mlx(t_mlx *mlx);
 
 //objects
