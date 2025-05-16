@@ -18,20 +18,21 @@ MLX_OPENGLA = $(MLX_OPENGL)/libmlx.a
 MLX_OPENGLI = $(MLX_OPENGL)
 MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 
-FILES =	destructor.c		\
-		initializer.c		\
-		main.c				\
-		mlx.c				\
+FILES =	destructor.c			\
+		initializer.c			\
+		main.c					\
+		mlx.c					\
 		objects/ambiant.c		\
 		objects/camera.c		\
 		objects/cylinder.c		\
-		objects/factory.c	\
-		objects/light.c		\
-		objects/plane.c		\
+		objects/factory.c		\
+		objects/light.c			\
+		objects/plane.c			\
 		objects/sphere.c		\
 		objects/types_factory.c	\
+		parsing/elements.c		\
 		parsing/parser.c		\
-		parsing/utils.c		\
+		parsing/utils.c			\
 
 OFILES = $(FILES:%.c=$(OBJS)/%.o)
 
