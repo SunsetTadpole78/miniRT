@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 01:39:35 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 02:56:52 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 # define AMBIANT_ID "A"
 # define CAMERA_ID "C"
-# define CYLINDER_ID "cl"
+# define CYLINDER_ID "cy"
 # define LIGHT_ID "L"
 # define PLANE_ID "pl"
 # define SPHERE_ID "sp"
@@ -164,6 +164,9 @@ void		*get_parser_by_id(char *id);
 int			parse_map(char *path);
 int			parse_fvector3(char *value, t_fvector3 *v3,
 				char *invalid_format_error);
+int			parse_normal(char *value, t_fvector3 *normal,
+				char *invalid_format_error);
+int			parse_color(char *value, t_rgb *rgb, char *invalid_format_error);
 void		*error_and_null(char *error);
 
 #endif

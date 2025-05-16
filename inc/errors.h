@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:59:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 01:49:20 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 02:51:11 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,32 @@
 # define MALLOC_E "Malloc Error.\n"
 # define REGISTRATION_E "Object Registration Error\n"
 # define MAP_NOT_FOUND_E "Map path not found\n"
-# define INV_OBJ_E "Invalid object id\n"
-# define INV_A_ARGS_E "Ambiant format: 'A <level> <color>'\n"
-# define INV_A_LVL_E "Ambiant level format: [0.0;1.0]\n"
-# define INV_A_RGB_E "Ambiant rgb format: [0;255],[0;255],[0;255]\n"
-# define INV_C_ARGS_E "Camera format: 'C <position> <normal> <fov>'\n"
-# define INV_C_POS_E "Camera position format: <f>,<f>,<f>\n"
-# define INV_C_NORM_E "Camera normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]\n"
-# define INV_C_FOV_E "Camera fov format: [0;180]\n"
-# define INV_L_ARGS_E "Camera format: 'L <position> <level> <color>'\n"
-# define INV_L_POS_E "Light position format: <f>,<f>,<f>\n"
-# define INV_L_LVL_E "Light level format: [0.0;1.0]\n"
-# define INV_L_RGB_E "Light rgb format: [0;255],[0;255],[0;255]\n"
+# define OBJ_E "Invalid object id\n"
+# define A_ARGS_E "Ambiant format: 'A <level> <color>'\n"
+# define A_LVL_E "Ambiant level format: [0.0;1.0]\n"
+# define A_RGB_E "Ambiant rgb format: [0;255],[0;255],[0;255]\n"
+# define C_ARGS_E "Camera format: 'C <position> <normal> <fov>'\n"
+# define C_POS_E "Camera position format: <f>,<f>,<f>\n"
+# define C_NORM_E "Camera normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]\n"
+# define C_FOV_E "Camera fov format: [0;180]\n"
+# define L_ARGS_E "Camera format: 'L <position> <level> <color>'\n"
+# define L_POS_E "Light position format: <f>,<f>,<f>\n"
+# define L_LVL_E "Light level format: [0.0;1.0]\n"
+# define L_RGB_E "Light rgb format: [0;255],[0;255],[0;255]\n"
+# define PL_ARGS_E "Plane format: 'pl <position> <normal> <color>'\n"
+# define PL_POS_E "Plane position format: <f>,<f>,<f>\n"
+# define PL_NORM_E "Plane normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]\n"
+# define PL_RGB_E "Plane rgb format: [0;255],[0;255],[0;255]\n"
+# define SP_ARGS_E "Sphere format: 'sp <position> <diameter> <color>'\n"
+# define SP_POS_E "Sphere position format: <f>,<f>,<f>\n"
+# define SP_DIAM_E "Sphere diameter format: [0.0;+inf[\n"
+# define SP_RGB_E "Sphere rgb format: [0;255],[0;255],[0;255]\n"
+# define CY_ARGS_E "Cylinder format: 'cy <position> <normal> <diameter> <height> \
+<color>'\n"
+# define CY_POS_E "Cylinder position format: <f>,<f>,<f>\n"
+# define CY_NORM_E "Cylinder normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]\n"
+# define CY_DIAM_E "Cylinder diameter format: [0.0;INT_MAX]\n"
+# define CY_HEI_E "Cylinder height format: [0.0;INT_MAX]\n"
+# define CY_RGB_E "Cylinder rgb format: [0;255],[0;255],[0;255]\n"
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:06:06 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 01:34:18 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 02:40:35 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,15 @@ void	*parse_camera(char **values)
 	int			fov;
 
 	if (!values[0] || !values[1] || !values[2] || values[3])
-		return (error_and_null(INV_C_ARGS_E));
-	if (!parse_fvector3(values[0], &position, INV_C_POS_E))
+		return (error_and_null(C_ARGS_E));
+	if (!parse_fvector3(values[0], &position, C_POS_E))
 		return (NULL);
-	if (!parse_fvector3(values[1], &normal, INV_C_NORM_E))
+	if (!parse_normal(values[1], &normal, C_NORM_E))
 		return (NULL);
-	if (normal.x < -1.0f || normal.x > 1.0f || normal.y < -1.0f
-		|| normal.y > 1.0f || normal.z < -1.0f || normal.z > 1.0f)
-		return (error_and_null(INV_C_NORM_E));
 	if (!ft_isnumeric(values[2]) || ft_isoutint(values[2]))
-		return (error_and_null(INV_C_NORM_E));
+		return (error_and_null(C_NORM_E));
 	fov = ft_atoi(values[2]);
 	if (fov < 0 || fov > 180 || ft_isoutint(values[2]))
-		return (error_and_null(INV_C_FOV_E));
+		return (error_and_null(C_FOV_E));
 	return (camera(position, normal, fov));
 }

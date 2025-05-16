@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:52:59 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 01:16:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 02:41:33 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static int	parse_object(char *line)
 	method = get_parser_by_id(splited[0]);
 	code = 0;
 	if (!method)
-		code = ft_error(INV_OBJ_E, ERR_PREFIX, 2);
+		code = ft_error(OBJ_E, ERR_PREFIX, 2);
 	else
 	{
 		object = method(splited + 1);

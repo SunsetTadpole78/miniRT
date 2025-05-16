@@ -6,14 +6,14 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 01:34:33 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 01:39:18 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/16 02:59:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "errors.h"
 
-int	parse_fvector3(char *value, t_fvector3	*v3,
+int	parse_fvector3(char *value, t_fvector3 *v3,
 			char *invalid_format_error)
 {
 	char	**splited;
@@ -34,6 +34,27 @@ int	parse_fvector3(char *value, t_fvector3	*v3,
 	}
 	ft_free_str_array(splited);
 	return (valid);
+}
+
+int	parse_normal(char *value, t_fvector3 *normal, char *invalid_format_error)
+{
+	if (!parse_fvector3(value, normal, invalid_format_error))
+		return (0);
+	if (normal->x < -1.0f || normal->x > 1.0f || normal->y < -1.0f
+		|| normal->y > 1.0f || normal->z < -1.0f || normal->z > 1.0f)
+	{
+		ft_error(invalid_format_error, ERR_PREFIX, 0);
+		return (0);
+	}
+	return (1);
+}
+
+int	parse_color(char *value, t_rgb *color, char *invalid_format_error)
+{
+	*color = ft_atorgb(value);
+	if (color->r == -1)
+		return (ft_error(invalid_format_error, ERR_PREFIX, 0));
+	return (1);
 }
 
 void	*error_and_null(char *error)
