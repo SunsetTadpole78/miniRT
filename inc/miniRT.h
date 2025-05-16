@@ -71,6 +71,12 @@ typedef struct s_ambiant
 	t_rgb		color;
 }	t_ambiant;
 
+typedef struct s_ray
+{
+	t_fvector3		origin;
+	t_fvector3		direction;
+}	t_ray;
+
 typedef struct s_camera
 {
 	char		*id;
@@ -147,8 +153,6 @@ void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
 void		init_mlx(t_mlx *mlx);
 void		destruct_mlx(t_mlx *mlx);
-
-void		render_scene(t_minirt *mrt);
 
 void		init_cam_and_plane(void);
 
