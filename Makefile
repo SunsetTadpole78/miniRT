@@ -7,7 +7,7 @@ SCRIPTS = scripts
 
 LIBFT = libft
 LIBFTA = $(LIBFT)/libft.a
-LIBFTI = $(LIBFT)
+LIBFTI = $(LIBFT)/include
 
 MLX_X11 = mlx/x11
 MLX_X11A = $(MLX_X11)/libmlx.a
@@ -59,7 +59,7 @@ else
 endif
 
 $(LIBFTA):
-	make -C $(LIBFT) bonus > /dev/null
+	make -C $(LIBFT) > /dev/null
 
 clean:
 	rm -rf $(OFILES)
