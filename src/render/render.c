@@ -42,7 +42,7 @@ static void	intercept(t_minirt *mrt, t_fvector2 v, t_ray ray)
 	t_object		*cur;
 	void			(*render)(t_mlx *, t_ray *, t_fvector2, t_object *);
 
-	ray.dist = FLT_MAX;
+	ray.dist = 3.4E+38;
 	cur = mrt->objects;
 	while (cur)
 	{
