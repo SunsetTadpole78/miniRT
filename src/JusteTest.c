@@ -41,14 +41,15 @@ void	render_scene(t_minirt *mrt)
 static void	intercept(t_minirt *mrt, t_fvector2 v, t_ray ray)
 {
 	t_object		*cur;
-	void			(*render)(t_ray, t_fvector2, t_object *);
+	void			(*render)(t_ray *, t_fvector2, t_object *);
 
+	ray.t = FLT_MAX;
 	cur = mrt->objects;
 	while (cur)
 	{
 		render = get_render_by_id(cur->id);
 		if (render)
-			render(ray, v, cur);
+			render(&ray, v, cur);
 		cur = cur->next;
 	}
 }

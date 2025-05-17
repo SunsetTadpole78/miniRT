@@ -61,13 +61,16 @@ static float	intersection_plane(t_ray ray, t_plane *plane)
 	return (-1.0f);
 }
 
-void	render_plane(t_ray ray, t_fvector2 pixelpos, t_object *object)
+void	render_plane(t_ray *ray, t_fvector2 pixelpos, t_object *object)
 {
 	float	t;
 	t_plane	*plane;
 
 	plane = (t_plane *)object;
-	t = intersection_plane(ray, plane);
-	if (t > 0)
+	t = intersection_plane(*ray, plane);
+	if (t > 0 && t <= ray->t)
+	{
 		put_pixel(minirt()->mlx, pixelpos, plane->color);
+		ray->t = t;
+	}
 }

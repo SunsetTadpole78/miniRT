@@ -74,13 +74,16 @@ static float	intersection_sphere(t_ray ray, t_sphere *sphere)
 	return (-1.0f);
 }
 
-void	render_sphere(t_ray ray, t_fvector2 pixelpos, t_object *object)
+void	render_sphere(t_ray *ray, t_fvector2 pixelpos, t_object *object)
 {
 	float		t;
 	t_sphere	*sphere;
 
 	sphere = (t_sphere *)object;
-	t = intersection_sphere(ray, sphere);
-	if (t > 0)
+	t = intersection_sphere(*ray, sphere);
+	if (t > 0 && t <= ray->t)
+	{
 		put_pixel(minirt()->mlx, pixelpos, sphere->color);
+		ray->t = t;
+	}
 }
