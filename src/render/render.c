@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   JusteTest.c                                        :+:      :+:    :+:   */
+/*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/17 19:03:48 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 22:23:55 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	render_scene(t_minirt *mrt)
 static void	intercept(t_minirt *mrt, t_fvector2 v, t_ray ray)
 {
 	t_object		*cur;
-	void			(*render)(t_mlx *, t_ray *, t_fvector2, t_object *);
+	void			(*render)(t_minirt *, t_ray *, t_fvector2, t_object *);
 
 	ray.dist = 3.4E+38;
 	cur = mrt->objects;
@@ -48,7 +48,7 @@ static void	intercept(t_minirt *mrt, t_fvector2 v, t_ray ray)
 	{
 		render = get_render_by_id(cur->id);
 		if (render)
-			render(mrt->mlx, &ray, v, cur);
+			render(mrt, &ray, v, cur);
 		cur = cur->next;
 	}
 }

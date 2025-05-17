@@ -6,14 +6,14 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:11:12 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/17 09:55:08 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 22:23:19 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 int	register_type(char *id, void *(*parser)(char **),
-	void (*render)(t_mlx *, t_ray *, t_fvector2, t_object *))
+	void (*render)(t_minirt *, t_ray *, t_fvector2, t_object *))
 {
 	t_type		*type;
 	t_minirt	*mrt;
