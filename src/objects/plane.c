@@ -49,15 +49,15 @@ void	*parse_plane(char **values)
 static float	intersection_plane(t_ray ray, t_plane *plane)
 {
 	float			denominator;
-	float			t;
+	float			x;
 
 	denominator = ft_fdot_product(ray.direction, plane->normal);
 	if (fabs(denominator) < 0.000001f)
 		return (-1.0f);
-	t = ft_fdot_product(ft_fvector3_diff(plane->position, ray.origin),
+	x = ft_fdot_product(ft_fvector3_diff(plane->position, ray.origin),
 			plane->normal) / denominator;
-	if (t >= 0.0f)
-		return (t);
+	if (x >= 0.0f)
+		return (x);
 	return (-1.0f);
 }
 
