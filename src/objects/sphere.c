@@ -77,7 +77,8 @@ static float	intersection_sphere(t_ray ray, t_sphere *sphere)
 	return (-1.0f);
 }
 
-void	render_sphere(t_ray *ray, t_fvector2 pixelpos, t_object *object)
+void	render_sphere(t_mlx *mlx, t_ray *ray,
+		t_fvector2 pixel, t_object *object)
 {
 	float		dist;
 	t_sphere	*sphere;
@@ -86,7 +87,7 @@ void	render_sphere(t_ray *ray, t_fvector2 pixelpos, t_object *object)
 	dist = intersection_sphere(*ray, sphere);
 	if (dist > 0 && dist <= ray->dist)
 	{
-		put_pixel(minirt()->mlx, pixelpos, sphere->color);
+		put_pixel(mlx, pixel, sphere->color);
 		ray->dist = dist;
 	}
 }

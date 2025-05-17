@@ -61,7 +61,7 @@ static float	intersection_plane(t_ray ray, t_plane *plane)
 	return (-1.0f);
 }
 
-void	render_plane(t_ray *ray, t_fvector2 pixelpos, t_object *object)
+void	render_plane(t_mlx *mlx, t_ray *ray, t_fvector2 pixel, t_object *object)
 {
 	float		dist;
 	t_plane		*plane;
@@ -70,7 +70,7 @@ void	render_plane(t_ray *ray, t_fvector2 pixelpos, t_object *object)
 	dist = intersection_plane(*ray, plane);
 	if (dist > 0 && dist <= ray->dist)
 	{
-		put_pixel(minirt()->mlx, pixelpos, plane->color);
+		put_pixel(mlx, pixel, plane->color);
 		ray->dist = dist;
 	}
 }
