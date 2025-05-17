@@ -49,14 +49,6 @@ typedef struct s_object
 	struct s_object	*next;
 }	t_object;
 
-typedef struct s_type
-{
-	char			*id;
-	void			*(*parser)(char **);
-	void			(*render)(t_object *);
-	struct s_type	*next;
-}	t_type;
-
 typedef struct s_ambiant
 {
 	char		*id;
@@ -130,6 +122,14 @@ typedef struct s_mlx
 	int			endian;
 }	t_mlx;
 
+typedef struct s_type
+{
+	char			*id;
+	void			*(*parser)(char **);
+	float			(*render)(t_ray, t_object *);
+	struct s_type	*next;
+}	t_type;
+
 typedef struct s_minirt
 {
 	t_type		*types;
@@ -137,8 +137,6 @@ typedef struct s_minirt
 	t_light		*lights;
 	t_ambiant	*ambiant;
 	t_camera	*camera;
-	t_plane		*plane;
-	t_sphere	*sphere;
 	t_mlx		*mlx;
 }	t_minirt;
 
@@ -148,12 +146,7 @@ void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 void		init_mlx(t_mlx *mlx);
 void		destruct_mlx(t_mlx *mlx);
 
-void		init_cam_and_plane(void);
-
 void		render_scene(t_minirt *mrt);
-
-float		intersection_plane(t_ray ray, t_plane *plane);
-float		intersection_sphere(t_ray ray, t_sphere *sphere);
 
 //func_math_fvector3.c
 t_fvector3	normalize(t_fvector3 v);
@@ -178,9 +171,11 @@ void		*parse_light(char **values);
 
 t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
 void		*parse_plane(char **values);
+float		intersection_plane(t_ray ray, t_plane *plane);
 
 t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color);
 void		*parse_sphere(char **values);
+float		intersection_sphere(t_ray ray, t_sphere *sphere);
 
 int			register_object(void *object);
 int			register_light(t_light *light);
@@ -188,9 +183,10 @@ int			set_ambiant(t_ambiant *ambiant);
 int			set_camera(t_camera *camera);
 
 int			register_type(char *id, void *(*parser)(char **),
-				void (*render)(t_object *));
+				float (*render)(t_ray, t_object *));
 int			exist_type(char *id);
 void		*get_parser_by_id(char *id);
+void		*get_render_by_id(char *id);
 
 //parsing
 int			parse_map(char *path);

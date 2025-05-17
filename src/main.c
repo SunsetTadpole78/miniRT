@@ -32,7 +32,6 @@ int	main(int argc, char **argv)
 	}
 	mlx = mrt->mlx;
 	init_mlx(mlx);
-	init_cam_and_plane();
 	render_scene(mrt);
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img_ptr, 0, 0);
 	mlx_loop(mlx->mlx_ptr);

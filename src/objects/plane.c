@@ -41,3 +41,22 @@ void	*parse_plane(char **values)
 		return (NULL);
 	return (plane(position, normal, color));
 }
+
+// t = ((P - O) * N) / D * N
+// P = point du plan.		O = origin du rayon.
+// D = direction du rayon.	N = normal du plan.
+float	intersection_plane(t_ray ray, t_plane *plane)
+{
+	t_fvector3		vec;
+	float			denominator;
+	float			t;
+
+	denominator = dot(ray.direction, plane->normal);
+	if (fabs(denominator) < 0.000001)
+		return (-1.0f);
+	vec = sub_vectors(plane->position, ray.origin);
+	t = dot(vec, plane->normal) / denominator;
+	if (t >= 0)
+		return (t);
+	return (-1.0f);
+}

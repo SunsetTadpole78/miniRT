@@ -28,7 +28,7 @@ t_fvector3	normalize(t_fvector3 v)
 
 	len = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 	if (!len)
-		exit(1);
+		return (v);
 	res.x = v.x / len;
 	res.y = v.y / len;
 	res.z = v.z / len;

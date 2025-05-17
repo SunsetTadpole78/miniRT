@@ -13,41 +13,17 @@
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-void				init_cam_and_plane(void);
 void				render_scene(t_minirt *mrt);
 static t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v);
+static void			intercept(t_minirt *mrt, t_fvector2, t_ray ray);
 static void			put_pixel(t_mlx *mlx, t_fvector2 v, t_rgb rgb);
+static t_rgb		get_color(t_object *object);
 /* -------------------------------------------------------------------------- */
-
-// la nouvelle fov permet d'etre adapte a cette normalisation.
-void	init_cam_and_plane(void)
-{
-	t_minirt		*mrt;
-	t_fvector3		pos;
-	t_fvector3		norm;
-	t_rgb			rgb;
-
-	mrt = minirt();
-	pos = ft_fvector3(-50.0f, 10.0f, 20.0f);
-	norm = ft_fvector3(0.0f, 0.0f, 1.0f);
-	mrt->camera = camera(pos, norm, 70);
-	mrt->camera->norm_fov = tan((mrt->camera->fov / 2) * (M_PI / 180.0f));
-	pos = ft_fvector3(0.0f, 0.0f, 10.0f);
-	norm = ft_fvector3(0.0f, 1.0f, 0.0f);
-	rgb = ft_rgb(255, 0, 0);
-	mrt->plane = plane(pos, norm, rgb);
-	pos = ft_fvector3(-50.0f, 7.0f, 40.0f);
-	rgb = ft_rgb(0, 255, 0);
-	mrt->sphere = sphere(pos, 10, rgb);
-	mrt->sphere->radius = mrt->sphere->diameter / 2.0f;
-}
 
 void	render_scene(t_minirt *mrt)
 {
 	t_fvector2		v;
 	t_ray			ray;
-	float			iplane;
-	float			isphere;
 
 	v.y = 0;
 	ray.origin = mrt->camera->position;
@@ -57,18 +33,49 @@ void	render_scene(t_minirt *mrt)
 		while (v.x < WIN_WIDTH)
 		{
 			ray.direction = ray_tracer(mrt->camera, v);
-			iplane = intersection_plane(ray, mrt->plane);
-			isphere = intersection_sphere(ray, mrt->sphere);
-			if (isphere > 0)
-				put_pixel(mrt->mlx, v, (t_rgb){0, 255, 0});
-			else if (iplane > 0)
-				put_pixel(mrt->mlx, v, (t_rgb){255, 0, 0});
-			else
-				put_pixel(mrt->mlx, v, (t_rgb){0, 0, 0});
+			intercept(mrt, v, ray);
 			v.x++;
 		}
 		v.y++;
 	}
+}
+
+static void	intercept(t_minirt *mrt, t_fvector2 v, t_ray ray)
+{
+	t_object		*cur;
+	float			(*render)(t_ray, t_object *);
+	float			t;
+	float			prev_t;
+
+	(void)prev_t;
+	prev_t = -1;
+	cur = mrt->objects;
+	while (cur)
+	{
+		render = get_render_by_id(cur->id);
+		if (render)
+		{
+			t = render(ray, cur);
+			if (t > 0)
+				put_pixel(mrt->mlx, v, get_color(cur));
+			prev_t = t;
+		}
+		cur = cur->next;
+	}
+}
+
+static t_rgb	get_color(t_object *object)
+{
+	char		*id;
+	int			len;
+
+	id = ((t_object *)object)->id;
+	len = ft_strlen(id) + 1;
+	if (ft_strncmp(SPHERE_ID, id, len) == 0)
+		return (((t_sphere *)object)->color);
+	if (ft_strncmp(PLANE_ID, id, len) == 0)
+		return (((t_plane *)object)->color);
+	return (ft_rgb(0, 0, 0));
 }
 
 static void	put_pixel(t_mlx *mlx, t_fvector2 v, t_rgb rgb)

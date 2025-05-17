@@ -13,7 +13,7 @@
 #include "miniRT.h"
 
 int	register_type(char *id, void *(*parser)(char **),
-	void (*render)(t_object *))
+	float (*render)(t_ray, t_object *))
 {
 	t_type		*type;
 	t_minirt	*mrt;
@@ -59,6 +59,22 @@ void	*get_parser_by_id(char *id)
 	{
 		if (ft_strncmp(types->id, id, len) == 0)
 			return (types->parser);
+		types = types->next;
+	}
+	return (NULL);
+}
+
+void	*get_render_by_id(char *id)
+{
+	t_type	*types;
+	int		len;
+
+	types = minirt()->types;
+	len = ft_strlen(id) + 1;
+	while (types)
+	{
+		if (ft_strncmp(types->id, id, len) == 0)
+			return (types->render);
 		types = types->next;
 	}
 	return (NULL);

@@ -23,6 +23,7 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 	sp->id = SPHERE_ID;
 	sp->position = position;
 	sp->diameter = diameter;
+	sp->radius = diameter / 2.0f;
 	sp->color = color;
 	return (sp);
 }
@@ -45,4 +46,30 @@ void	*parse_sphere(char **values)
 	if (!parse_color(values[2], &color, SP_RGB_E))
 		return (NULL);
 	return (sphere(position, diameter, color));
+}
+
+// discriminant = b^2 - 4c
+// t1 = (-b - sqrt(discriminant)) / 2.0f;
+// t2 = (-b + sqrt(discriminant)) / 2.0f;
+float	intersection_sphere(t_ray ray, t_sphere *sphere)
+{
+	t_fvector3		oc;
+	float			b;
+	float			discriminant;
+	float			t1;
+	float			t2;
+
+	oc = sub_vectors(ray.origin, sphere->position);
+	b = 2.0f * dot(oc, ray.direction);
+	discriminant = b * b - 4.0f
+		* (dot(oc, oc) - (sphere->radius * sphere->radius));
+	if (discriminant < 0)
+		return (-1.0f);
+	t1 = (-b - sqrtf(discriminant)) / 2.0f;
+	t2 = (-b + sqrtf(discriminant)) / 2.0f;
+	if (t1 > 0.001f)
+		return (t1);
+	if (t2 > 0.001f)
+		return (t2);
+	return (-1.0f);
 }

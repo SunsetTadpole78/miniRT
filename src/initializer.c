@@ -26,8 +26,6 @@ t_minirt	*minirt(void)
 		mrt->lights = NULL;
 		mrt->ambiant = NULL;
 		mrt->camera = NULL;
-		mrt->plane = NULL;
-		mrt->sphere = NULL;
 		mrt->mlx = malloc(sizeof(t_mlx));
 		if (!mrt->mlx)
 			return (NULL);
@@ -35,8 +33,10 @@ t_minirt	*minirt(void)
 		register_type(CAMERA_ID, parse_camera, NULL);
 		register_type(CYLINDER_ID, parse_cylinder, NULL);
 		register_type(LIGHT_ID, parse_light, NULL);
-		register_type(PLANE_ID, parse_plane, NULL);
-		register_type(SPHERE_ID, parse_sphere, NULL);
+		register_type(PLANE_ID, parse_plane,
+			(float (*)(t_ray, t_object *))intersection_plane);
+		register_type(SPHERE_ID, parse_sphere,
+			(float (*)(t_ray, t_object *))intersection_sphere);
 	}
 	return (mrt);
 }

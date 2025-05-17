@@ -12,7 +12,7 @@ LIBFTI = $(LIBFT)
 MLX_X11 = mlx/x11
 MLX_X11A = $(MLX_X11)/libmlx.a
 MLX_X11I = $(MLX_X11)
-MLX_X11F = -lX11 -lXext
+MLX_X11F = -lX11 -lXext -lm
 
 MLX_OPENGL = mlx/opengl
 MLX_OPENGLA = $(MLX_OPENGL)/libmlx.a
@@ -23,7 +23,6 @@ FILES =		JusteTest.c			\
 		destructor.c		\
 		func_math_fvector3.c		\
 		initializer.c		\
-		intersection.c			\
 		main.c				\
 		mlx/mlx.c			\
 		objects/ambiant.c		\
