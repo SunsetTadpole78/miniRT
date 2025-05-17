@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/17 18:50:12 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 19:03:25 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ typedef struct s_camera
 	t_fvector3	position;
 	t_fvector3	normal;
 	int			fov;
-	float		image_plane_scale;
+	float		iplane_scale;
 	t_fmatrix	world;
 }	t_camera;
 
