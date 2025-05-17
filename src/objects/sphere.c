@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/17 10:06:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 21:40:07 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,6 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 	sp->diameter = diameter;
 	sp->radius = diameter / 2.0f;
 	sp->color = color;
-	sp->model = mat4_mul(
-			mat4_scaling(ft_fvector3(sp->radius, sp->radius, sp->radius)),
-			mat4_translation(position));
 	return (sp);
 }
 

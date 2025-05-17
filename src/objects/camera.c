@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:06:06 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/17 19:03:36 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 21:39:14 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov)
 	c->normal = ft_fnormalize(normal);
 	c->fov = fov;
 	c->iplane_scale = tan((fov / 2) * (M_PI / 180.0f));
-	c->world = mat4_look_at(position,
-			ft_fvector3_diff(position, c->normal), (t_fvector3){0, 1, 0});
 	return (c);
 }
 

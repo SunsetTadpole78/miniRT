@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/17 19:03:25 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 21:38:26 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,6 @@
 
 // Structures
 
-typedef struct s_fmatrix
-{
-	float		m[4][4];
-}	t_fmatrix;
-
 typedef struct s_object
 {
 	char			*id;
@@ -77,7 +72,6 @@ typedef struct s_camera
 	t_fvector3	normal;
 	int			fov;
 	float		iplane_scale;
-	t_fmatrix	world;
 }	t_camera;
 
 typedef struct s_light
@@ -97,7 +91,6 @@ typedef struct s_sphere
 	float		diameter;
 	float		radius;
 	t_rgb		color;
-	t_fmatrix	model;
 }	t_sphere;
 
 typedef struct s_plane
@@ -107,7 +100,6 @@ typedef struct s_plane
 	t_fvector3	position;
 	t_fvector3	normal;
 	t_rgb		color;
-	t_fmatrix	model;
 }	t_plane;
 
 typedef struct s_cylinder
@@ -156,17 +148,6 @@ void		init_mlx(t_mlx *mlx);
 void		destruct_mlx(t_mlx *mlx);
 
 void		render_scene(t_minirt *mrt);
-
-// func_fmatrix.c
-t_fmatrix	mat4_identity(void);
-t_fmatrix	mat4_mul(t_fmatrix a, t_fmatrix b);
-t_fvector3	mat4_mult_point(t_fmatrix m, t_fvector3 p);
-t_fvector3	mat4_mult_dir(t_fmatrix m, t_fvector3 d);
-t_fmatrix	mat4_look_at(t_fvector3 eye, t_fvector3 target, t_fvector3 up);
-// func_fmatrix_2.c
-t_fmatrix	mat4_translation(t_fvector3 pos);
-t_fmatrix	mat4_scaling(t_fvector3 scale);
-t_ray		ray_to_space_object(t_fmatrix mat, t_ray ray);
 
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);
