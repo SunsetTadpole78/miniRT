@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:06:06 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 10:46:23 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:59:16 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,21 @@ void	*parse_camera(char **values)
 	if (fov < 0 || fov > 180)
 		return (error_and_null(C_FOV_E));
 	return (camera(position, normal, fov));
+}
+
+void	add_fov(t_minirt *mrt, int incrementation)
+{
+	int	fov;
+
+	fov = mrt->camera->fov;
+	if ((fov == 0 && incrementation == -1)
+		|| (fov == 180 && incrementation == 1))
+		return ;
+	mrt->camera->fov += incrementation;
+}
+
+void	move(t_minirt *mrt, float *coordinate, float incrementation)
+{
+	(void)mrt;
+	*coordinate += incrementation;
 }

@@ -6,11 +6,12 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/16 13:57:44 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:53:30 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
+#include "keys.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static int		key_hook(int keycode, t_minirt *mrt);
@@ -32,8 +33,24 @@ void	init_mlx(t_mlx *mlx)
 
 static int	key_hook(int keycode, t_minirt *mrt)
 {
-	if (keycode == OPENGL_ESC_KEY || keycode == X11_ESC_KEY)
+	if (keycode == OGLK_ESC || keycode == XK_ESC)
 		close_window(mrt);
+	else if (keycode == OGLK_FOVP || keycode == XK_FOVP)
+		add_fov(mrt, 1);
+	else if (keycode == OGLK_FOVM || keycode == XK_FOVM)
+		add_fov(mrt, -1);
+	else if (keycode == OGLK_LEFT || keycode == XK_LEFT)
+		move(mrt, &mrt->camera->position.x, 1.0f);
+	else if (keycode == OGLK_RIGHT || keycode == XK_RIGHT)
+		move(mrt, &mrt->camera->position.x, -1.0f);
+	else if (keycode == OGLK_UP || keycode == XK_UP)
+		move(mrt, &mrt->camera->position.y, 1.0f);
+	else if (keycode == OGLK_DOWN || keycode == XK_DOWN)
+		move(mrt, &mrt->camera->position.y, -1.0f);
+	else if (keycode == OGLK_FORWARD || keycode == XK_FORWARD)
+		move(mrt, &mrt->camera->position.z, 1.0f);
+	else if (keycode == OGLK_BACKWARD || keycode == XK_BACKWARD)
+		move(mrt, &mrt->camera->position.z, -1.0f);
 	return (0);
 }
 

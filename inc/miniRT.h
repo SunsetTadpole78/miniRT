@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 13:53:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 20:53:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,6 @@
 # define WIN_WIDTH 900
 
 # define WINDOW_NAME "miniRT"
-
-# define OPENGL_ESC_KEY 53
-# define X11_ESC_KEY 65307
 
 // Structures
 
@@ -139,6 +136,8 @@ void		*parse_ambiant(char **values);
 
 t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
 void		*parse_camera(char **values);
+void		add_fov(t_minirt *mrt, int incrementation);
+void		move(t_minirt *mrt, float *coordinate, float incrementation);
 
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_rgb color);
