@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   camera.c                                           :+:      :+:    :+:   */
+/*   JusteTest.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated:   by Juste                              ###   ########.fr       */
+/*   Updated: 2025/05/17 09:55:55 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 void				render_scene(t_minirt *mrt);
 static t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v);
 static void			intercept(t_minirt *mrt, t_fvector2, t_ray ray);
-static void			put_pixel(t_mlx *mlx, t_fvector2 v, t_rgb rgb);
-static t_rgb		get_color(t_object *object);
 /* -------------------------------------------------------------------------- */
 
 void	render_scene(t_minirt *mrt)
@@ -43,42 +41,19 @@ void	render_scene(t_minirt *mrt)
 static void	intercept(t_minirt *mrt, t_fvector2 v, t_ray ray)
 {
 	t_object		*cur;
-	float			(*render)(t_ray, t_object *);
-	float			t;
-	float			prev_t;
+	void			(*render)(t_ray, t_fvector2, t_object *);
 
-	(void)prev_t;
-	prev_t = -1;
 	cur = mrt->objects;
 	while (cur)
 	{
 		render = get_render_by_id(cur->id);
 		if (render)
-		{
-			t = render(ray, cur);
-			if (t > 0)
-				put_pixel(mrt->mlx, v, get_color(cur));
-			prev_t = t;
-		}
+			render(ray, v, cur);
 		cur = cur->next;
 	}
 }
 
-static t_rgb	get_color(t_object *object)
-{
-	char		*id;
-	int			len;
-
-	id = ((t_object *)object)->id;
-	len = ft_strlen(id) + 1;
-	if (ft_strncmp(SPHERE_ID, id, len) == 0)
-		return (((t_sphere *)object)->color);
-	if (ft_strncmp(PLANE_ID, id, len) == 0)
-		return (((t_plane *)object)->color);
-	return (ft_rgb(0, 0, 0));
-}
-
-static void	put_pixel(t_mlx *mlx, t_fvector2 v, t_rgb rgb)
+void	put_pixel(t_mlx *mlx, t_fvector2 v, t_rgb rgb)
 {
 	if (v.x < 0 || v.x >= WIN_WIDTH || v.y < 0 || v.y >= WIN_HEIGHT)
 		return ;

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 02:55:50 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 10:06:41 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	*parse_sphere(char **values)
 // discriminant = b^2 - 4c
 // t1 = (-b - sqrt(discriminant)) / 2.0f;
 // t2 = (-b + sqrt(discriminant)) / 2.0f;
-float	intersection_sphere(t_ray ray, t_sphere *sphere)
+static float	intersection_sphere(t_ray ray, t_sphere *sphere)
 {
 	t_fvector3		oc;
 	float			b;
@@ -72,4 +72,15 @@ float	intersection_sphere(t_ray ray, t_sphere *sphere)
 	if (t2 > 0.001f)
 		return (t2);
 	return (-1.0f);
+}
+
+void	render_sphere(t_ray ray, t_fvector2 pixelpos, t_object *object)
+{
+	float		t;
+	t_sphere	*sphere;
+
+	sphere = (t_sphere *)object;
+	t = intersection_sphere(ray, sphere);
+	if (t > 0)
+		put_pixel(minirt()->mlx, pixelpos, sphere->color);
 }

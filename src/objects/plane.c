@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 11:42:17 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 10:06:58 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	*parse_plane(char **values)
 // t = ((P - O) * N) / D * N
 // P = point du plan.		O = origin du rayon.
 // D = direction du rayon.	N = normal du plan.
-float	intersection_plane(t_ray ray, t_plane *plane)
+static float	intersection_plane(t_ray ray, t_plane *plane)
 {
 	t_fvector3		vec;
 	float			denominator;
@@ -59,4 +59,15 @@ float	intersection_plane(t_ray ray, t_plane *plane)
 	if (t >= 0)
 		return (t);
 	return (-1.0f);
+}
+
+void	render_plane(t_ray ray, t_fvector2 pixelpos, t_object *object)
+{
+	float	t;
+	t_plane	*plane;
+
+	plane = (t_plane *)object;
+	t = intersection_plane(ray, plane);
+	if (t > 0)
+		put_pixel(minirt()->mlx, pixelpos, plane->color);
 }

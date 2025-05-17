@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 18:26:31 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 09:56:39 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,8 @@ t_minirt	*minirt(void)
 		register_type(CAMERA_ID, parse_camera, NULL);
 		register_type(CYLINDER_ID, parse_cylinder, NULL);
 		register_type(LIGHT_ID, parse_light, NULL);
-		register_type(PLANE_ID, parse_plane,
-			(float (*)(t_ray, t_object *))intersection_plane);
-		register_type(SPHERE_ID, parse_sphere,
-			(float (*)(t_ray, t_object *))intersection_sphere);
+		register_type(PLANE_ID, parse_plane, render_plane);
+		register_type(SPHERE_ID, parse_sphere, render_sphere);
 	}
 	return (mrt);
 }

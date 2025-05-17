@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 13:53:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 10:05:39 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ typedef struct s_type
 {
 	char			*id;
 	void			*(*parser)(char **);
-	float			(*render)(t_ray, t_object *);
+	void			(*render)(t_ray, t_fvector2, t_object *);
 	struct s_type	*next;
 }	t_type;
 
@@ -171,11 +171,11 @@ void		*parse_light(char **values);
 
 t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
 void		*parse_plane(char **values);
-float		intersection_plane(t_ray ray, t_plane *plane);
+void		render_plane(t_ray ray, t_fvector2 pixelpos, t_object *object);
 
 t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color);
 void		*parse_sphere(char **values);
-float		intersection_sphere(t_ray ray, t_sphere *sphere);
+void		render_sphere(t_ray ray, t_fvector2 pixelpos, t_object *object);
 
 int			register_object(void *object);
 int			register_light(t_light *light);
@@ -183,7 +183,7 @@ int			set_ambiant(t_ambiant *ambiant);
 int			set_camera(t_camera *camera);
 
 int			register_type(char *id, void *(*parser)(char **),
-				float (*render)(t_ray, t_object *));
+				void (*render)(t_ray, t_fvector2, t_object *));
 int			exist_type(char *id);
 void		*get_parser_by_id(char *id);
 void		*get_render_by_id(char *id);
@@ -196,5 +196,8 @@ int			parse_normal(char *value, t_fvector3 *normal,
 				char *invalid_format_error);
 int			parse_color(char *value, t_rgb *rgb, char *invalid_format_error);
 void		*error_and_null(char *error);
+
+//TESTS
+void		put_pixel(t_mlx *mlx, t_fvector2 v, t_rgb rgb);
 
 #endif
