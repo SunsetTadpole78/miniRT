@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/17 10:05:39 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 18:50:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ typedef struct s_fmatrix
 	float		m[4][4];
 }	t_fmatrix;
 
-
 typedef struct s_object
 {
 	char			*id;
@@ -78,7 +77,7 @@ typedef struct s_camera
 	t_fvector3	position;
 	t_fvector3	normal;
 	int			fov;
-	float		rad_fov;
+	float		image_plane_scale;
 	t_fmatrix	world;
 }	t_camera;
 

@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/17 09:55:55 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 18:47:09 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ static t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v)
 	float			norm_y;
 
 	norm_x = (2 * ((v.x + 0.5f) / WIN_WIDTH) - 1)
-		* ((float)WIN_WIDTH / (float)WIN_HEIGHT) * cam->rad_fov;
-	norm_y = (1 - 2 * ((v.y + 0.5f) / WIN_HEIGHT)) * cam->rad_fov;
+		* ((float)WIN_WIDTH / (float)WIN_HEIGHT) * cam->image_plane_scale;
+	norm_y = (1 - 2 * ((v.y + 0.5f) / WIN_HEIGHT)) * cam->image_plane_scale;
 	ray_dir = normalize(ft_fvector3(norm_x, norm_y, 1.0f));
 	ray_world = normalize(mat4_mult_dir(cam->world, ray_dir));
 	return (ray_world);
