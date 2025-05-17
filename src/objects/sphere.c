@@ -58,18 +58,18 @@ static float	intersection_sphere(t_ray ray, t_sphere *sphere)
 {
 	t_fvector3		oc;
 	float			b;
-	float			discriminant;
+	float			delta;
 	float			x1;
 	float			x2;
 
 	oc = ft_fvector3_diff(ray.origin, sphere->position);
 	b = 2.0f * ft_fdot_product(oc, ray.direction);
-	discriminant = b * b - 4.0f
+	delta = b * b - 4.0f
 		* (ft_fdot_product(oc, oc) - (sphere->radius * sphere->radius));
-	if (discriminant < 0)
+	if (delta < 0)
 		return (-1.0f);
-	x1 = (-b - sqrtf(discriminant)) / 2.0f;
-	x2 = (-b + sqrtf(discriminant)) / 2.0f;
+	x1 = (-b - sqrtf(delta)) / 2.0f;
+	x2 = (-b + sqrtf(delta)) / 2.0f;
 	if (x1 > 0.001f)
 		return (x1);
 	if (x2 > 0.001f)
