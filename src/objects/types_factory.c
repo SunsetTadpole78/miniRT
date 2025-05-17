@@ -6,14 +6,14 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:11:12 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/14 12:40:38 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/17 09:55:08 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 int	register_type(char *id, void *(*parser)(char **),
-	void (*render)(t_object *))
+	void (*render)(t_mlx *, t_ray *, t_fvector2, t_object *))
 {
 	t_type		*type;
 	t_minirt	*mrt;
@@ -59,6 +59,22 @@ void	*get_parser_by_id(char *id)
 	{
 		if (ft_strncmp(types->id, id, len) == 0)
 			return (types->parser);
+		types = types->next;
+	}
+	return (NULL);
+}
+
+void	*get_render_by_id(char *id)
+{
+	t_type	*types;
+	int		len;
+
+	types = minirt()->types;
+	len = ft_strlen(id) + 1;
+	while (types)
+	{
+		if (ft_strncmp(types->id, id, len) == 0)
+			return (types->render);
 		types = types->next;
 	}
 	return (NULL);

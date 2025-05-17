@@ -19,10 +19,10 @@ MLX_OPENGLA = $(MLX_OPENGL)/libmlx.a
 MLX_OPENGLI = $(MLX_OPENGL)
 MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 
-FILES =	destructor.c			\
+FILES =		destructor.c			\
 		initializer.c			\
-		main.c					\
-		mlx/mlx.c				\
+		main.c				\
+		mlx/mlx.c			\
 		objects/ambiant.c		\
 		objects/camera.c		\
 		objects/cylinder.c		\
@@ -30,10 +30,11 @@ FILES =	destructor.c			\
 		objects/light.c			\
 		objects/plane.c			\
 		objects/sphere.c		\
-		objects/types_factory.c	\
+		objects/types_factory.c		\
 		parsing/elements.c		\
 		parsing/parser.c		\
 		parsing/utils.c			\
+		render/render.c
 
 ifeq ($(shell uname), Darwin)
 FILES += mlx/opengl.c
@@ -55,7 +56,7 @@ ifeq ($(shell uname), Darwin)
 	$(COMPILATOR) $(FLAGS) $(OFILES) $(LIBFTA) $(MLX_OPENGLA) -o $(NAME) -I $(INC) -I $(LIBFTI) -I $(MLX_OPENGLI) $(EXTRA_FLAGS) $(MLX_OPENGLF)
 else
 	make -C $(MLX_X11) > /dev/null 2>&1
-	$(COMPILATOR) $(FLAGS) $(OFILES) $(LIBFTA) $(MLX_X11A) -o $(NAME) -I $(INC) -I $(LIBFTI) -I $(MLX_X11I) $(EXTRA_FLAGS) $(MLX_X11F)
+	$(COMPILATOR) $(FLAGS) $(OFILES) $(LIBFTA) $(MLX_X11A) -o $(NAME) -I $(INC) -I $(LIBFTI) -I $(MLX_X11I) $(EXTRA_FLAGS) $(MLX_X11F) -lm
 endif
 
 $(LIBFTA):
@@ -80,7 +81,7 @@ $(OBJS)/%.o: $(SRC)/%.c
 ifeq ($(shell uname), Darwin)
 	$(COMPILATOR) $(FLAGS) $< -c -o $@ -I $(INC) -I $(LIBFTI) -I $(MLX_OPENGLI) $(EXTRA_FLAGS)
 else
-	$(COMPILATOR) $(FLAGS) $< -c -o $@ -I $(INC) -I $(LIBFTI) -I $(MLX_X11I) $(EXTRA_FLAGS)
+	$(COMPILATOR) $(FLAGS) $< -c -o $@ -I $(INC) -I $(LIBFTI) -I $(MLX_X11I) $(EXTRA_FLAGS) -lm
 endif
 
 submodules:
