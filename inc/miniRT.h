@@ -18,7 +18,6 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
-# include <float.h>
 
 # include "libft.h"
 # include "mlx.h"
@@ -185,11 +184,13 @@ void		*parse_light(char **values);
 
 t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
 void		*parse_plane(char **values);
-void		render_plane(t_mlx *mlx, t_ray *ray, t_fvector2 pixel, t_object *object);
+void		render_plane(t_mlx *mlx, t_ray *ray,
+				t_fvector2 pixel, t_object *object);
 
 t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color);
 void		*parse_sphere(char **values);
-void		render_sphere(t_mlx *mlx, t_ray *ray, t_fvector2 pixel, t_object *object);
+void		render_sphere(t_mlx *mlx, t_ray *ray,
+				t_fvector2 pixel, t_object *object);
 
 int			register_object(void *object);
 int			register_light(t_light *light);
