@@ -22,8 +22,9 @@ t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov)
 		return (NULL);
 	c->id = CAMERA_ID;
 	c->position = position;
-	c->normal = normal;
+	c->normal = ft_fnormalize(normal);
 	c->fov = fov;
+	c->iplane_scale = tan((fov / 2) * (M_PI / 180.0f));
 	return (c);
 }
 
