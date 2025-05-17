@@ -19,12 +19,10 @@ MLX_OPENGLA = $(MLX_OPENGL)/libmlx.a
 MLX_OPENGLI = $(MLX_OPENGL)
 MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 
-FILES =		JusteTest.c			\
-		destructor.c		\
-		func_math_fvector3.c		\
-		func_fmatrix.c			\
-		func_fmatrix_2.c		\
-		initializer.c		\
+FILES =		destructor.c			\
+		matrix/func_fmatrix.c		\
+		matrix/func_fmatrix_2.c		\
+		initializer.c			\
 		main.c				\
 		mlx/mlx.c			\
 		objects/ambiant.c		\
@@ -34,10 +32,11 @@ FILES =		JusteTest.c			\
 		objects/light.c			\
 		objects/plane.c			\
 		objects/sphere.c		\
-		objects/types_factory.c	\
+		objects/types_factory.c		\
 		parsing/elements.c		\
 		parsing/parser.c		\
 		parsing/utils.c			\
+		render/render.c
 
 ifeq ($(shell uname), Darwin)
 FILES += mlx/opengl.c

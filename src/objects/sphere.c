@@ -62,10 +62,10 @@ static float	intersection_sphere(t_ray ray, t_sphere *sphere)
 	float			t1;
 	float			t2;
 
-	oc = sub_vectors(ray.origin, sphere->position);
-	b = 2.0f * dot(oc, ray.direction);
+	oc = ft_fvector3_diff(ray.origin, sphere->position);
+	b = 2.0f * ft_fdot_product(oc, ray.direction);
 	discriminant = b * b - 4.0f
-		* (dot(oc, oc) - (sphere->radius * sphere->radius));
+		* (ft_fdot_product(oc, oc) - (sphere->radius * sphere->radius));
 	if (discriminant < 0)
 		return (-1.0f);
 	t1 = (-b - sqrtf(discriminant)) / 2.0f;

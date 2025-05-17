@@ -159,13 +159,6 @@ void		destruct_mlx(t_mlx *mlx);
 
 void		render_scene(t_minirt *mrt);
 
-//func_math_fvector3.c
-t_fvector3	normalize(t_fvector3 v);
-t_fvector3	cross(t_fvector3 v1, t_fvector3 v2);
-t_fvector3	add_vectors(t_fvector3 v1, t_fvector3 v2);
-t_fvector3	sub_vectors(t_fvector3 v1, t_fvector3 v2);
-float		dot(t_fvector3 v1, t_fvector3 v2);
-
 // func_fmatrix.c
 t_fmatrix	mat4_identity(void);
 t_fmatrix	mat4_mul(t_fmatrix a, t_fmatrix b);

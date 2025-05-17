@@ -114,21 +114,21 @@ t_fmatrix	mat4_look_at(t_fvector3 eye, t_fvector3 target, t_fvector3 up)
 	t_fvector3		yaxis;
 	t_fmatrix		view;
 
-	zaxis = normalize(sub_vectors(eye, target));
-	xaxis = normalize(cross(up, zaxis));
-	yaxis = cross(zaxis, xaxis);
+	zaxis = ft_fnormalize(ft_fvector3_diff(eye, target));
+	xaxis = ft_fnormalize(ft_fcross_product(up, zaxis));
+	yaxis = ft_fcross_product(zaxis, xaxis);
 	view = mat4_identity();
 	view.m[0][0] = xaxis.x;
 	view.m[0][1] = xaxis.y;
 	view.m[0][2] = xaxis.z;
-	view.m[0][3] = -dot(xaxis, eye);
+	view.m[0][3] = -ft_fdot_product(xaxis, eye);
 	view.m[1][0] = yaxis.x;
 	view.m[1][1] = yaxis.y;
 	view.m[1][2] = yaxis.z;
-	view.m[1][3] = -dot(yaxis, eye);
+	view.m[1][3] = -ft_fdot_product(yaxis, eye);
 	view.m[2][0] = zaxis.x;
 	view.m[2][1] = zaxis.y;
 	view.m[2][2] = zaxis.z;
-	view.m[2][3] = -dot(zaxis, eye);
+	view.m[2][3] = -ft_fdot_product(zaxis, eye);
 	return (view);
 }

@@ -65,7 +65,7 @@ static t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v)
 	norm_x = (2 * ((v.x + 0.5f) / WIN_WIDTH) - 1)
 		* ((float)WIN_WIDTH / (float)WIN_HEIGHT) * cam->rad_fov;
 	norm_y = (1 - 2 * ((v.y + 0.5f) / WIN_HEIGHT)) * cam->rad_fov;
-	ray_dir = normalize(ft_fvector3(norm_x, norm_y, 1.0f));
-	ray_world = normalize(mat4_mult_dir(cam->world, ray_dir));
+	ray_dir = ft_fnormalize(ft_fvector3(norm_x, norm_y, 1.0f));
+	ray_world = ft_fnormalize(mat4_mult_dir(cam->world, ray_dir));
 	return (ray_world);
 }

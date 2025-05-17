@@ -22,7 +22,7 @@ t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
 		return (NULL);
 	pl->id = PLANE_ID;
 	pl->position = position;
-	pl->normal = normalize(normal);
+	pl->normal = ft_fnormalize(normal);
 	pl->color = color;
 	pl->model = mat4_translation(position);
 	return (pl);
@@ -52,11 +52,11 @@ static float	intersection_plane(t_ray ray, t_plane *plane)
 	float			denominator;
 	float			t;
 
-	denominator = dot(ray.direction, plane->normal);
+	denominator = ft_fdot_product(ray.direction, plane->normal);
 	if (fabs(denominator) < 0.000001)
 		return (-1.0f);
-	vec = sub_vectors(plane->position, ray.origin);
-	t = dot(vec, plane->normal) / denominator;
+	vec = ft_fvector3_diff(plane->position, ray.origin);
+	t = ft_fdot_product(vec, plane->normal) / denominator;
 	if (t >= 0)
 		return (t);
 	return (-1.0f);
