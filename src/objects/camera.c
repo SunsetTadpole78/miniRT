@@ -22,9 +22,11 @@ t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov)
 		return (NULL);
 	c->id = CAMERA_ID;
 	c->position = position;
-	c->normal = normal;
+	c->normal = normalize(normal);
 	c->fov = fov;
-	c->norm_fov = fov;
+	c->rad_fov = tan((fov / 2) * (M_PI / 180.0f));
+	c->world = mat4_look_at(position,
+			sub_vectors(position, c->normal), (t_fvector3){0, 1, 0});
 	return (c);
 }
 

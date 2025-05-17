@@ -22,6 +22,8 @@ MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 FILES =		JusteTest.c			\
 		destructor.c		\
 		func_math_fvector3.c		\
+		func_fmatrix.c			\
+		func_fmatrix_2.c		\
 		initializer.c		\
 		main.c				\
 		mlx/mlx.c			\

@@ -44,6 +44,12 @@
 
 // Structures
 
+typedef struct s_fmatrix
+{
+	float		m[4][4];
+}	t_fmatrix;
+
+
 typedef struct s_object
 {
 	char			*id;
@@ -72,7 +78,8 @@ typedef struct s_camera
 	t_fvector3	position;
 	t_fvector3	normal;
 	int			fov;
-	float		norm_fov;
+	float		rad_fov;
+	t_fmatrix	world;
 }	t_camera;
 
 typedef struct s_light
@@ -92,6 +99,7 @@ typedef struct s_sphere
 	float		diameter;
 	float		radius;
 	t_rgb		color;
+	t_fmatrix	model;
 }	t_sphere;
 
 typedef struct s_plane
@@ -101,6 +109,7 @@ typedef struct s_plane
 	t_fvector3	position;
 	t_fvector3	normal;
 	t_rgb		color;
+	t_fmatrix	model;
 }	t_plane;
 
 typedef struct s_cylinder
@@ -156,6 +165,17 @@ t_fvector3	cross(t_fvector3 v1, t_fvector3 v2);
 t_fvector3	add_vectors(t_fvector3 v1, t_fvector3 v2);
 t_fvector3	sub_vectors(t_fvector3 v1, t_fvector3 v2);
 float		dot(t_fvector3 v1, t_fvector3 v2);
+
+// func_fmatrix.c
+t_fmatrix	mat4_identity(void);
+t_fmatrix	mat4_mul(t_fmatrix a, t_fmatrix b);
+t_fvector3	mat4_mult_point(t_fmatrix m, t_fvector3 p);
+t_fvector3	mat4_mult_dir(t_fmatrix m, t_fvector3 d);
+t_fmatrix	mat4_look_at(t_fvector3 eye, t_fvector3 target, t_fvector3 up);
+// func_fmatrix_2.c
+t_fmatrix	mat4_translation(t_fvector3 pos);
+t_fmatrix	mat4_scaling(t_fvector3 scale);
+t_ray		ray_to_space_object(t_fmatrix mat, t_ray ray);
 
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);

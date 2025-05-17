@@ -25,6 +25,9 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 	sp->diameter = diameter;
 	sp->radius = diameter / 2.0f;
 	sp->color = color;
+	sp->model = mat4_mul(
+			mat4_scaling(ft_fvector3(sp->radius, sp->radius, sp->radius)),
+			mat4_translation(position));
 	return (sp);
 }
 

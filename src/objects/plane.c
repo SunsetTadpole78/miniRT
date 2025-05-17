@@ -22,8 +22,9 @@ t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
 		return (NULL);
 	pl->id = PLANE_ID;
 	pl->position = position;
-	pl->normal = normal;
+	pl->normal = normalize(normal);
 	pl->color = color;
+	pl->model = mat4_translation(position);
 	return (pl);
 }
 

@@ -37,3 +37,12 @@ int	main(int argc, char **argv)
 	mlx_loop(mlx->mlx_ptr);
 	return (0);
 }
+
+void	put_pixel(t_mlx *mlx, t_fvector2 v, t_rgb rgb)
+{
+	if (v.x < 0 || v.x >= WIN_WIDTH || v.y < 0 || v.y >= WIN_HEIGHT)
+		return ;
+	*((unsigned int *)
+			(mlx->data + (int)(v.y * mlx->size_line + v.x * (mlx->bpp / 8))))
+		= (rgb.r << 16 | rgb.g << 8 | rgb.b);
+}
