@@ -48,30 +48,29 @@ void	*parse_plane(char **values)
 // D = direction du rayon.	N = normal du plan.
 static float	intersection_plane(t_ray ray, t_plane *plane)
 {
-	t_fvector3		vec;
 	float			denominator;
 	float			t;
 
 	denominator = ft_fdot_product(ray.direction, plane->normal);
-	if (fabs(denominator) < 0.000001)
+	if (fabs(denominator) < 0.000001f)
 		return (-1.0f);
-	vec = ft_fvector3_diff(plane->position, ray.origin);
-	t = ft_fdot_product(vec, plane->normal) / denominator;
-	if (t >= 0)
+	t = ft_fdot_product(ft_fvector3_diff(plane->position, ray.origin),
+			plane->normal) / denominator;
+	if (t >= 0.0f)
 		return (t);
 	return (-1.0f);
 }
 
 void	render_plane(t_ray *ray, t_fvector2 pixelpos, t_object *object)
 {
-	float	t;
-	t_plane	*plane;
+	float		dist;
+	t_plane		*plane;
 
 	plane = (t_plane *)object;
-	t = intersection_plane(*ray, plane);
-	if (t > 0 && t <= ray->t)
+	dist = intersection_plane(*ray, plane);
+	if (dist > 0 && dist <= ray->dist)
 	{
 		put_pixel(minirt()->mlx, pixelpos, plane->color);
-		ray->t = t;
+		ray->dist = dist;
 	}
 }

@@ -47,6 +47,6 @@ t_ray	ray_to_space_object(t_fmatrix mat, t_ray ray)
 
 	res.origin = mat4_mult_point(mat, ray.origin);
 	res.direction = ft_fnormalize(mat4_mult_dir(mat, ray.direction));
-	res.t = ray.t;
+	res.dist = ray.dist;
 	return (res);
 }

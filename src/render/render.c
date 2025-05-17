@@ -13,7 +13,6 @@
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-void				render_scene(t_minirt *mrt);
 static t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v);
 static void			intercept(t_minirt *mrt, t_fvector2, t_ray ray);
 /* -------------------------------------------------------------------------- */
@@ -43,7 +42,7 @@ static void	intercept(t_minirt *mrt, t_fvector2 v, t_ray ray)
 	t_object		*cur;
 	void			(*render)(t_ray *, t_fvector2, t_object *);
 
-	ray.t = FLT_MAX;
+	ray.dist = FLT_MAX;
 	cur = mrt->objects;
 	while (cur)
 	{
@@ -57,15 +56,21 @@ static void	intercept(t_minirt *mrt, t_fvector2 v, t_ray ray)
 // normalisation sur [-1, 1]; Normalized Device Coordinates
 static t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v)
 {
-	t_fvector3		ray_dir;
-	t_fvector3		ray_world;
-	float			norm_x;
-	float			norm_y;
+	return (ft_fnormalize(
+			mat4_mult_dir(cam->world,
+				ft_fnormalize(
+					ft_fvector3((2 * ((v.x + 0.5f) / WIN_WIDTH) - 1)
+						* ((float)WIN_WIDTH / (float)WIN_HEIGHT)
+						* cam->iplane_scale,
+						(1 - 2 * ((v.y + 0.5f) / WIN_HEIGHT))
+						* cam->iplane_scale, 1.0f)))));
+}
 
-	norm_x = (2 * ((v.x + 0.5f) / WIN_WIDTH) - 1)
-		* ((float)WIN_WIDTH / (float)WIN_HEIGHT) * cam->iplane_scale;
-	norm_y = (1 - 2 * ((v.y + 0.5f) / WIN_HEIGHT)) * cam->iplane_scale;
-	ray_dir = ft_fnormalize(ft_fvector3(norm_x, norm_y, 1.0f));
-	ray_world = ft_fnormalize(mat4_mult_dir(cam->world, ray_dir));
-	return (ray_world);
+void	put_pixel(t_mlx *mlx, t_fvector2 v, t_rgb rgb)
+{
+	if (v.x < 0 || v.x >= WIN_WIDTH || v.y < 0 || v.y >= WIN_HEIGHT)
+		return ;
+	*((unsigned int *)
+			(mlx->data + (int)(v.y * mlx->size_line + v.x * (mlx->bpp / 8))))
+		= (rgb.r << 16 | rgb.g << 8 | rgb.b);
 }

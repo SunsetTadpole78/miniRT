@@ -67,7 +67,7 @@ typedef struct s_ray
 {
 	t_fvector3		origin;
 	t_fvector3		direction;
-	float			t;
+	float			dist;
 }	t_ray;
 
 typedef struct s_camera
