@@ -57,13 +57,11 @@ static void	intercept(t_minirt *mrt, t_fvector2 v, t_ray ray)
 static t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v)
 {
 	return (ft_fnormalize(
-			mat4_mult_dir(cam->world,
-				ft_fnormalize(
-					ft_fvector3((2 * ((v.x + 0.5f) / WIN_WIDTH) - 1)
-						* ((float)WIN_WIDTH / (float)WIN_HEIGHT)
-						* cam->iplane_scale,
-						(1 - 2 * ((v.y + 0.5f) / WIN_HEIGHT))
-						* cam->iplane_scale, 1.0f)))));
+			ft_fvector3((2 * ((v.x + 0.5f) / WIN_WIDTH) - 1)
+				* ((float)WIN_WIDTH / (float)WIN_HEIGHT)
+				* cam->iplane_scale,
+				(1 - 2 * ((v.y + 0.5f) / WIN_HEIGHT))
+				* cam->iplane_scale, 1.0f)));
 }
 
 void	put_pixel(t_mlx *mlx, t_fvector2 v, t_rgb rgb)
