@@ -14,14 +14,14 @@
 # define KEYS_H
 
 # define OGLK_ESC 53
-# define OGLK_FOVP 0
-# define OGLK_FOVM 0
-# define OGLK_FORWARD 0
-# define OGLK_BACKWARD 0
+# define OGLK_FOVP 24
+# define OGLK_FOVM 27
+# define OGLK_FORWARD 13
+# define OGLK_BACKWARD 1
 # define OGLK_LEFT 0
-# define OGLK_RIGHT 0
-# define OGLK_UP 0
-# define OGLK_DOWN 0
+# define OGLK_RIGHT 2
+# define OGLK_UP 126
+# define OGLK_DOWN 125
 
 # define XK_ESC 65307
 # define XK_FOVP '='

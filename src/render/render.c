@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   JusteTest.c                                        :+:      :+:    :+:   */
+/*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -19,6 +19,7 @@ static void			intercept(t_minirt *mrt, t_fvector2, t_ray ray);
 
 void	render_scene(t_minirt *mrt)
 {
+	t_mlx			*mlx;
 	t_fvector2		v;
 	t_ray			ray;
 
@@ -35,6 +36,8 @@ void	render_scene(t_minirt *mrt)
 		}
 		v.y++;
 	}
+	mlx = mrt->mlx;
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img_ptr, 0, 0);
 }
 
 static void	intercept(t_minirt *mrt, t_fvector2 v, t_ray ray)
@@ -44,6 +47,7 @@ static void	intercept(t_minirt *mrt, t_fvector2 v, t_ray ray)
 
 	ray.dist = 3.4E+38;
 	cur = mrt->objects;
+	put_pixel(mrt->mlx, v, (t_rgb){0, 0, 0});
 	while (cur)
 	{
 		render = get_render_by_id(cur->id);

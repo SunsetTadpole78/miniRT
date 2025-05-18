@@ -141,8 +141,13 @@ typedef struct s_minirt
 t_minirt	*minirt(void);
 void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
+// mlx
 void		init_mlx(t_mlx *mlx);
 void		destruct_mlx(t_mlx *mlx);
+int			key_hook(int keycode, t_minirt *mrt);
+int			loop_hook(t_minirt *mrt);
+int			close_window(t_minirt *mrt);
+void		handle_events(t_minirt *mrt);
 
 void		render_scene(t_minirt *mrt);
 

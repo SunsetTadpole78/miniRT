@@ -56,10 +56,5 @@ void	add_fov(t_minirt *mrt, int incrementation)
 		|| (fov == 180 && incrementation == 1))
 		return ;
 	mrt->camera->fov += incrementation;
-}
-
-void	move(t_minirt *mrt, float *coordinate, float incrementation)
-{
-	(void)mrt;
-	*coordinate += incrementation;
+	mrt->camera->iplane_scale = tan((mrt->camera->fov / 2) * (M_PI / 180.0f));
 }
