@@ -25,6 +25,9 @@ t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov)
 	c->normal = ft_fnormalize(normal);
 	c->fov = fov;
 	c->iplane_scale = tan((fov / 2) * (M_PI / 180.0f));
+	c->right = ft_fnormalize(ft_fcross_product(c->normal,
+				(t_fvector3){0, 1, 0}));
+	c->up = ft_fcross_product(c->right, c->normal);
 	return (c);
 }
 
@@ -45,6 +48,23 @@ void	*parse_camera(char **values)
 	if (fov < 0 || fov > 180)
 		return (error_and_null(C_FOV_E));
 	return (camera(position, normal, fov));
+}
+
+void	rotate_camera_y(t_camera *cam, float theta)
+{
+	t_fvector3		new;
+	float			cos_t;
+	float			sin_t;
+
+	cos_t = cosf(theta);
+	sin_t = sinf(theta);
+	new.x = cam->normal.x * cos_t - cam->normal.z * sin_t;
+	new.y = cam->normal.y;
+	new.z = cam->normal.x * sin_t + cam->normal.z * cos_t;
+	cam->normal = ft_fnormalize(new);
+	cam->right = ft_fnormalize(ft_fcross_product(cam->normal,
+				(t_fvector3){0, 1, 0}));
+	cam->up = ft_fcross_product(cam->right, cam->normal);
 }
 
 void	add_fov(t_minirt *mrt, int incrementation)

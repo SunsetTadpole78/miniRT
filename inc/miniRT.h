@@ -40,6 +40,11 @@
 
 // Structures
 
+typedef struct s_fmatrix
+{
+	float		m[4][4];
+}	t_fmatrix;
+
 typedef struct s_object
 {
 	char			*id;
@@ -61,12 +66,18 @@ typedef struct s_ray
 	float			dist;
 }	t_ray;
 
+// position dans l'espace monde.
+// normal = le regarde de la caméra.
+// right: vecteur horizontal
+// up: vecteur vertical
 typedef struct s_camera
 {
 	char		*id;
 	t_object	*next;
 	t_fvector3	position;
 	t_fvector3	normal;
+	t_fvector3	right;
+	t_fvector3	up;
 	int			fov;
 	float		iplane_scale;
 }	t_camera;
@@ -151,12 +162,16 @@ void		handle_events(t_minirt *mrt);
 
 void		render_scene(t_minirt *mrt);
 
+// vector
+t_fvector3	ft_fvector3_scale(t_fvector3 v, float s);
+
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);
 void		*parse_ambiant(char **values);
 
 t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
 void		*parse_camera(char **values);
+void		rotate_camera_y(t_camera *cam, float theta);
 void		add_fov(t_minirt *mrt, int incrementation);
 void		move(t_minirt *mrt, float *coordinate, float incrementation);
 
