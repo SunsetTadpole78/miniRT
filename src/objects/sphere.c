@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/19 10:36:49 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/19 11:50:26 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 	sp->diameter = diameter;
 	sp->radius = diameter / 2.0f;
 	sp->color = color;
+	sp->render = get_render_by_id(SPHERE_ID);
 	return (sp);
 }
 
@@ -95,7 +96,7 @@ static float	get_intensity(t_ray *ray, t_ambiant *ambiant, t_sphere *sphere,
 }
 
 void	render_sphere(t_minirt *mrt, t_ray *ray,
-		t_fvector2 pixel, t_object *object)
+		t_vector2 pixel, t_object *object)
 {
 	float		dist;
 	t_sphere	*sphere;
