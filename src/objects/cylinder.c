@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/19 18:15:20 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 00:47:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,22 +57,21 @@ void	*parse_cylinder(char **values)
 	return (cylinder(position, normal, size, color));
 }
 
-float	intersect_cap(t_ray ray, t_fvector3 center, float radius, float y_plane)
+float	intersect_cap(t_fvector3 local_origin, t_fvector3 local_dir,
+	float radius, float half_height)
 {
-	float		t;
-	float		dx;
-	float		dz;
-	t_fvector3	p;
+	float	t;
+	float	x;
+	float	z;
 
-	if (fabs(ray.direction.y) < 1e-6)
+	if (fabs(local_dir.y) < 1e-6)
 		return (-1);
-	t = (y_plane - ray.origin.y) / ray.direction.y;
+	t = (half_height - local_origin.y) / local_dir.y;
 	if (t < 0.001f)
 		return (-1);
-	p = ft_fvector3_sum(ray.origin, ft_fvector3_scale(ray.direction, t));
-	dx = p.x - center.x;
-	dz = p.z - center.z;
-	if ((dx * dx + dz * dz) <= (radius * radius))
+	x = local_origin.x + t * local_dir.x;
+	z = local_origin.z + t * local_dir.z;
+	if ((x * x + z * z) <= (radius * radius))
 		return (t);
 	return (-1);
 }
@@ -83,45 +82,70 @@ float	intersection_cylinder(t_ray ray, t_cylinder *cylinder)
 	float		a;
 	float		b;
 	float		c;
-	float		x1;
-	float		x2;
 	float		delta;
 	float		t;
-	float		v;
-	float		y;
-	float		b1;
-	float		b2;
 	float		t_cap1;
 	float		t_cap2;
+	float		half_height;
+	t_fvector3	up;
+	t_fvector3	right;
+	t_fvector3	forward;
+	float		sqrt_delta;
+	float		t1;
+	float		t2;
+	float		t_candidate;
+	float		y_hit;
+	t_fvector3	local_origin;
+	t_fvector3	local_dir;
 
+	half_height = cylinder->size.y / 2.0f;
 	oc = ft_fvector3_diff(ray.origin, cylinder->position);
-	a = ray.direction.x * ray.direction.x + ray.direction.z * ray.direction.z;
-	b = 2 * (oc.x * ray.direction.x + oc.z * ray.direction.z);
-	c = oc.x * oc.x + oc.z * oc.z - ((cylinder->size.x / 2)
-			* (cylinder->size.x / 2));
+	up = ft_fnormalize(cylinder->normal);
+	if (fabsf(up.y) < 0.999f)
+		right = ft_fnormalize(
+				ft_fcross_product(ft_fvector3(0.0f, 1.0f, 0.0f), up));
+	else
+		right = ft_fnormalize(
+				ft_fcross_product(ft_fvector3(1.0f, 0.0f, 0.0f), up));
+	forward = ft_fcross_product(up, right);
+	local_origin = (t_fvector3){
+		ft_fdot_product(oc, right),
+		ft_fdot_product(oc, up),
+		ft_fdot_product(oc, forward)
+	};
+	local_dir = ft_fvector3(
+			ft_fdot_product(ray.direction, right),
+			ft_fdot_product(ray.direction, up),
+			ft_fdot_product(ray.direction, forward)
+			);
+	a = local_dir.x * local_dir.x + local_dir.z * local_dir.z;
+	b = 2 * (local_origin.x * local_dir.x + local_origin.z * local_dir.z);
+	c = local_origin.x * local_origin.x + local_origin.z * local_origin.z
+		- (cylinder->size.x / 2) * (cylinder->size.x / 2);
 	delta = b * b - 4 * a * c;
-	if (delta < 0)
-		return (-1.0f);
-	x1 = (-b - sqrtf(delta)) / (2.0f * a);
-	x2 = (-b + sqrtf(delta)) / (2.0f * a);
-	v = -1;
-	if (x1 > 0.001f)
-		v = x1;
-	else if (x2 > 0.001f)
-		v = x2;
 	t = -1;
-	if (v > 0.001f)
+	if (delta >= 0.0f)
 	{
-		y = ray.origin.y + v * ray.direction.y;
-		b1 = cylinder->position.y - (cylinder->size.y / 2);
-		b2 = cylinder->position.y + (cylinder->size.y / 2);
-		if (y >= b1 && y <= b2)
-			t = v;
+		sqrt_delta = sqrtf(delta);
+		t1 = (-b - sqrt_delta) / (2.0f * a);
+		t2 = (-b + sqrt_delta) / (2.0f * a);
+		if (t1 > 0.001f)
+			t_candidate = t1;
+		else if (t2 > 0.001f)
+			t_candidate = t2;
+		else
+			t_candidate = -1.0f;
+		if (t_candidate > 0.001f)
+		{
+			y_hit = local_origin.y + t_candidate * local_dir.y;
+			if (y_hit >= -half_height && y_hit <= half_height)
+				t = t_candidate;
+		}
 	}
-	t_cap1 = intersect_cap(ray, cylinder->position, cylinder->size.x / 2,
-			cylinder->position.y - cylinder->size.y / 2);
-	t_cap2 = intersect_cap(ray, cylinder->position, cylinder->size.x / 2,
-			cylinder->position.y + cylinder->size.y / 2);
+	t_cap1 = intersect_cap(local_origin, local_dir, cylinder->size.x / 2,
+			-(cylinder->size.y / 2));
+	t_cap2 = intersect_cap(local_origin, local_dir, cylinder->size.x / 2,
+			cylinder->size.y / 2);
 	if (t_cap1 > 0.001f && (t < 0 || t_cap1 < t))
 		t = t_cap1;
 	if (t_cap2 > 0.001f && (t < 0 || t_cap2 < t))
