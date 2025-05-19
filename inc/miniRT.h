@@ -173,8 +173,8 @@ void		*parse_ambiant(char **values);
 t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
 void		*parse_camera(char **values);
 void		rotate_camera_y(t_camera *cam, float theta);
+void		rotate_camera_pitch(t_camera *cam, float theta);
 void		add_fov(t_minirt *mrt, int incrementation);
-void		move(t_minirt *mrt, float *coordinate, float incrementation);
 
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_rgb color);

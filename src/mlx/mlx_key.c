@@ -31,9 +31,9 @@ int	key_hook(int keycode, t_minirt *mrt)
 	else if (keycode == OGLK_RIGHT || keycode == XK_RIGHT)
 		mrt->camera->position = ft_fvector3_sum(mrt->camera->position,
 				ft_fvector3_scale(mrt->camera->right, -1.0f));
-	else if (keycode == OGLK_ARROW_UP || keycode == XK_ARROW_UP)
+	else if (keycode == OGLK_SPACE || keycode == XK_SPACE)
 		mrt->camera->position.y += 1.0f;
-	else if (keycode == OGLK_ARROW_DOWN || keycode == XK_ARROW_DOWN)
+	else if (keycode == OGLK_SHIFT || keycode == XK_SHIFT)
 		mrt->camera->position.y -= 1.0f;
 	else if (keycode == OGLK_FORWARD || keycode == XK_FORWARD)
 		mrt->camera->position = ft_fvector3_sum(mrt->camera->position,
@@ -52,5 +52,9 @@ static int	key_hook_next(int keycode, t_minirt *mrt)
 		rotate_camera_y(mrt->camera, 0.1f);
 	else if (keycode == OGLK_ARROW_RIGHT || keycode == XK_ARROW_RIGHT)
 		rotate_camera_y(mrt->camera, -0.1f);
+	else if (keycode == OGLK_ARROW_UP || keycode == XK_ARROW_UP)
+		rotate_camera_pitch(mrt->camera, 0.1f);
+	else if (keycode == OGLK_ARROW_DOWN || keycode == XK_ARROW_DOWN)
+		rotate_camera_pitch(mrt->camera, -0.1f);
 	return (0);
 }

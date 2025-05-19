@@ -74,8 +74,7 @@ static t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v)
 					cam->right.y * ndc_vec.x, cam->right.z * ndc_vec.x},
 				(t_fvector3){cam->up.x * ndc_vec.y,
 				cam->up.y * ndc_vec.y, cam->up.z * ndc_vec.y}),
-		(t_fvector3){cam->normal.x * ndc_vec.z,
-		cam->normal.y * ndc_vec.z, cam->normal.z * ndc_vec.z})));
+		cam->normal)));
 }
 
 void	put_pixel(t_mlx *mlx, t_fvector2 v, t_rgb rgb)

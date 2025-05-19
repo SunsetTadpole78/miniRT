@@ -68,6 +68,21 @@ void	rotate_camera_y(t_camera *cam, float theta)
 	cam->up = ft_fcross_product(cam->right, cam->normal);
 }
 
+void	rotate_camera_pitch(t_camera *cam, float theta)
+{
+	t_fvector3		new;
+	float			cos_t;
+	float			sin_t;
+
+	cos_t = cosf(theta);
+	sin_t = sinf(theta);
+	new.x = cam->normal.x * cos_t + cam->up.x * sin_t;
+	new.y = cam->normal.y * cos_t + cam->up.y * sin_t;
+	new.z = cam->normal.z * cos_t + cam->up.z * sin_t;
+	cam->normal = ft_fnormalize(new);
+	cam->up = ft_fnormalize(ft_fcross_product(cam->right, cam->normal));
+}
+
 void	add_fov(t_minirt *mrt, int incrementation)
 {
 	int	fov;
