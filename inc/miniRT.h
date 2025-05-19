@@ -80,6 +80,7 @@ typedef struct s_camera
 	t_fvector3	up;
 	int			fov;
 	float		iplane_scale;
+	float		wid_height;
 }	t_camera;
 
 typedef struct s_light

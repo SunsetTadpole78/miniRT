@@ -15,7 +15,6 @@
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v);
 static void			intercept(t_minirt *mrt, t_fvector2, t_ray ray);
-static t_fvector3	ndc_vector(t_camera *cam, t_fvector2 v);
 t_fvector3			ft_fvector3_scale(t_fvector3 v, float s);
 /* -------------------------------------------------------------------------- */
 
@@ -63,22 +62,20 @@ static t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v)
 {
 	t_fvector3		ndc_vec;
 
-	ndc_vec = ndc_vector(cam, v);
+	ndc_vec = (t_fvector3){
+		-(2.0f * ((v.x + 0.5f) / WIN_WIDTH) - 1.0f)
+		* cam->wid_height * cam->iplane_scale,
+		-(2.0f * ((v.y + 0.5f) / WIN_HEIGHT) - 1.0f)
+		* cam->iplane_scale, 1.0f};
 	return (ft_fnormalize(
 			ft_fvector3_sum(
 				ft_fvector3_sum(
-					ft_fvector3_scale(cam->right, ndc_vec.x),
-					ft_fvector3_scale(cam->up, ndc_vec.y)),
-				ft_fvector3_scale(cam->normal, ndc_vec.z))));
-}
-
-static t_fvector3	ndc_vector(t_camera *cam, t_fvector2 v)
-{
-	return (ft_fvector3(-(2.0f * ((v.x + 0.5f) / WIN_WIDTH) - 1.0f)
-			* ((float)WIN_WIDTH / (float)WIN_HEIGHT)
-			* cam->iplane_scale,
-			-(2.0f * ((v.y + 0.5f) / WIN_HEIGHT) - 1.0f)
-			* cam->iplane_scale, 1.0f));
+					(t_fvector3){cam->right.x * ndc_vec.x,
+					cam->right.y * ndc_vec.x, cam->right.z * ndc_vec.x},
+				(t_fvector3){cam->up.x * ndc_vec.y,
+				cam->up.y * ndc_vec.y, cam->up.z * ndc_vec.y}),
+		(t_fvector3){cam->normal.x * ndc_vec.z,
+		cam->normal.y * ndc_vec.z, cam->normal.z * ndc_vec.z})));
 }
 
 void	put_pixel(t_mlx *mlx, t_fvector2 v, t_rgb rgb)

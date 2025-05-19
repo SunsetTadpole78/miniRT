@@ -12,6 +12,7 @@
 
 #include "miniRT.h"
 
+// can be usefull
 t_fvector3	ft_fvector3_scale(t_fvector3 v, float s)
 {
 	return ((t_fvector3){v.x * s, v.y * s, v.z * s});

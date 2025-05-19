@@ -28,8 +28,8 @@ int	parse_fvector3(char *value, t_fvector3 *v3,
 		valid = ft_error(invalid_format_error, ERR_PREFIX, 0);
 	else
 	{
-		*v3 = ft_fvector3(ft_atof(splited[0]), ft_atof(splited[1]),
-				ft_atof(splited[2]));
+		*v3 = (t_fvector3){ft_atof(splited[0]), ft_atof(splited[1]),
+			ft_atof(splited[2])};
 		valid = 1;
 	}
 	ft_free_str_array(splited);

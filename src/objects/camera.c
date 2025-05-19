@@ -23,11 +23,12 @@ t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov)
 	c->id = CAMERA_ID;
 	c->position = position;
 	c->normal = ft_fnormalize(normal);
-	c->fov = fov;
-	c->iplane_scale = tan((fov / 2) * (M_PI / 180.0f));
 	c->right = ft_fnormalize(ft_fcross_product(c->normal,
 				(t_fvector3){0, 1, 0}));
 	c->up = ft_fcross_product(c->right, c->normal);
+	c->fov = fov;
+	c->iplane_scale = tan((fov / 2) * (M_PI / 180.0f));
+	c->wid_height = (float)WIN_WIDTH / (float)WIN_HEIGHT;
 	return (c);
 }
 
