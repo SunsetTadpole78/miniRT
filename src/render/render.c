@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/19 12:00:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 01:15:56 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ static t_fvector3	ray_tracer(t_camera *cam, t_vector2 v, float ratio)
 
 void	put_pixel(t_mlx *mlx, t_vector2 v, t_rgb rgb)
 {
-	char	*dst;
-
-	dst = mlx->data + v.y * mlx->size_line + v.x * mlx->x_offset;
-	*(int *)dst = (rgb.r << 16 | rgb.g << 8 | rgb.b);
+	*((unsigned int *)(mlx->data + (v.y * mlx->ll + v.x * mlx->cl)))
+		= (rgb.r << 16 | rgb.g << 8 | rgb.b);
 }

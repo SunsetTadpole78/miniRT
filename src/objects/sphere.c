@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/19 11:50:26 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 01:06:09 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,27 @@ static float	intersection_sphere(t_ray ray, t_sphere *sphere)
 static float	get_intensity(t_ray *ray, t_ambiant *ambiant, t_sphere *sphere,
 	float dist)
 {
-	t_fvector3	hit_point;
-	t_fvector3	normal;
-	t_fvector3	view_dir;
-	float		view_factor;
 	float		intensity;
+	float		level;
+	t_fvector3	direction;
 
-	hit_point = ft_fvector3_sum(ray->origin,
-			ft_fvector3_scale(ray->direction, dist));
-	normal = ft_fnormalize(ft_fvector3_diff(hit_point, sphere->position));
-	view_dir = ft_fnormalize(ft_fvector3_scale(ray->direction, -1.0f));
-	view_factor = fmax(ft_fdot_product(normal, view_dir), 0.0f);
-	intensity = (ambiant->level + (1 - ambiant->level) * view_factor);
+	level = ambiant->level;
+	direction = ray->direction;
+	intensity = level + (1 - level) * fmax(ft_fdot_product(
+				ft_fnormalize(ft_fvector3_diff(
+						ft_fvector3_sum(
+							ray->origin,
+							ft_fvector3_scale(direction, dist)
+							),
+						sphere->position
+						)),
+				ft_fnormalize(ft_fvector3_scale(
+						direction,
+						-1.0f
+						))
+				),
+			0.0f
+			);
 	if (intensity > 1.0f)
 		intensity = 1.0f;
 	return (intensity);
@@ -101,7 +110,6 @@ void	render_sphere(t_minirt *mrt, t_ray *ray,
 	float		dist;
 	t_sphere	*sphere;
 	t_mlx		*mlx;
-	t_rgb		color;
 	float		intensity;
 
 	sphere = (t_sphere *)object;
@@ -110,10 +118,11 @@ void	render_sphere(t_minirt *mrt, t_ray *ray,
 	if (dist > 0 && dist <= ray->dist)
 	{
 		intensity = get_intensity(ray, mrt->ambiant, sphere, dist);
-		color.r = sphere->color.r * intensity;
-		color.g = sphere->color.g * intensity;
-		color.b = sphere->color.b * intensity;
-		put_pixel(mlx, pixel, color);
+		put_pixel(mlx, pixel, ft_rgb(
+				sphere->color.r * intensity,
+				sphere->color.g * intensity,
+				sphere->color.b * intensity
+				));
 		ray->dist = dist;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/19 12:01:53 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 01:15:24 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,8 @@ typedef struct s_mlx
 	void	*img_ptr;
 	char	*data;
 	int		bpp;
-	int		x_offset;
-	int		size_line;
+	int		ll;
+	int		cl;
 	int		endian;
 }	t_mlx;
 

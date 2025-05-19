@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/19 11:55:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 01:15:41 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	init_mlx(t_mlx *mlx)
 			WIN_WIDTH, WIN_HEIGHT, WINDOW_NAME);
 	mlx->img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	mlx->data = mlx_get_data_addr(mlx->img_ptr, &mlx->bpp,
-			&mlx->size_line, &mlx->endian);
-	mlx->x_offset = mlx->bpp / 8;
+			&mlx->ll, &mlx->endian);
+	mlx->cl = mlx->bpp / 8;
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_hook, mrt);
 	mlx_hook(mlx->win_ptr, 17, 1L << 17, close_window, mrt);
 }

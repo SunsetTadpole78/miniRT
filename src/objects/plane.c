@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/19 11:50:05 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 00:51:19 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,12 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_vector2 pixel,
 {
 	float		dist;
 	t_plane		*plane;
-	t_mlx		*mlx;
 
 	plane = (t_plane *)object;
 	dist = intersection_plane(*ray, plane);
-	mlx = mrt->mlx;
 	if (dist > 0 && dist <= ray->dist)
 	{
-		put_pixel(mlx, pixel, plane->color);
+		put_pixel(mrt->mlx, pixel, plane->color);
 		ray->dist = dist;
 	}
 }
