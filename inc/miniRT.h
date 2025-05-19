@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/17 23:44:20 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/19 10:34:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,19 @@ typedef struct s_object
 	struct s_object	*next;
 }	t_object;
 
+typedef struct s_color_object
+{
+	char			*id;
+	struct s_object	*next;
+	t_rgb			color;
+}	t_color_object;
+
 typedef struct s_ambiant
 {
 	char		*id;
 	t_object	*next;
-	float		level;
 	t_rgb		color;
+	float		level;
 }	t_ambiant;
 
 typedef struct s_ray
@@ -80,38 +87,38 @@ typedef struct s_light
 {
 	char		*id;
 	t_object	*next;
+	t_rgb		color;
 	t_fvector3	position;
 	float		level;
-	t_rgb		color;
 }	t_light;
 
 typedef struct s_sphere
 {
 	char		*id;
 	t_object	*next;
+	t_rgb		color;
 	t_fvector3	position;
 	float		diameter;
 	float		radius;
-	t_rgb		color;
 }	t_sphere;
 
 typedef struct s_plane
 {
 	char		*id;
 	t_object	*next;
+	t_rgb		color;
 	t_fvector3	position;
 	t_fvector3	normal;
-	t_rgb		color;
 }	t_plane;
 
 typedef struct s_cylinder
 {
 	char		*id;
 	t_object	*next;
+	t_rgb		color;
 	t_fvector3	position;
 	t_fvector3	normal;
 	t_fvector2	size;
-	t_rgb		color;
 }	t_cylinder;
 
 typedef struct s_mlx
@@ -130,6 +137,7 @@ typedef struct s_type
 	char			*id;
 	void			*(*parser)(char **);
 	void			(*render)(t_minirt *, t_ray *, t_fvector2, t_object *);
+	void			(*updater)(t_minirt *, t_object *);
 	struct s_type	*next;
 }	t_type;
 
@@ -181,10 +189,15 @@ int			set_ambiant(t_ambiant *ambiant);
 int			set_camera(t_camera *camera);
 
 int			register_type(char *id, void *(*parser)(char **),
-				void (*render)(t_minirt *, t_ray *, t_fvector2, t_object *));
+				void (*render)(t_minirt *, t_ray *, t_fvector2, t_object *),
+				void (*updater)(t_minirt *, t_object *));
 int			exist_type(char *id);
 void		*get_parser_by_id(char *id);
 void		*get_render_by_id(char *id);
+void		*get_updater_by_id(char *id);
+
+void		update_values(t_minirt *mrt);
+void		update_object_colors(t_minirt *mrt, t_object *object);
 
 //parsing
 int			parse_map(char *path);

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/17 22:43:18 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/19 10:05:10 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,8 @@ int	main(int argc, char **argv)
 		return (2 + code);
 	}
 	mlx = mrt->mlx;
+	update_values(mrt);
 	init_mlx(mlx);
-	if (!mrt->ambiant)
-		mrt->ambiant = ambiant(0, ft_rgb(0, 0, 0));
 	render_scene(mrt);
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img_ptr, 0, 0);
 	mlx_loop(mlx->mlx_ptr);
