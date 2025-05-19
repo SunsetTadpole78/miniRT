@@ -154,16 +154,13 @@ void		handle_events(t_minirt *mrt);
 
 void		render_scene(t_minirt *mrt);
 
-// vector
-t_fvector3	ft_fvector3_scale(t_fvector3 v, float s);
-
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);
 void		*parse_ambiant(char **values);
 
 t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
 void		*parse_camera(char **values);
-void		rotate_camera_y(t_camera *cam, float theta);
+void		rotate_camera_yaw(t_camera *cam, float theta);
 void		rotate_camera_pitch(t_camera *cam, float theta);
 void		add_fov(t_minirt *mrt, int incrementation);
 

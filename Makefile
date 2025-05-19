@@ -36,7 +36,6 @@ FILES =		destructor.c			\
 		parsing/parser.c		\
 		parsing/utils.c			\
 		render/render.c			\
-		vector.c			\
 
 ifeq ($(shell uname), Darwin)
 FILES += mlx/opengl.c

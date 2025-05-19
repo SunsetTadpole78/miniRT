@@ -51,7 +51,7 @@ void	*parse_camera(char **values)
 	return (camera(position, normal, fov));
 }
 
-void	rotate_camera_y(t_camera *cam, float theta)
+void	rotate_camera_yaw(t_camera *cam, float theta)
 {
 	t_fvector3		new;
 	float			cos_t;
