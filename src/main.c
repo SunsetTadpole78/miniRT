@@ -16,6 +16,7 @@
 int	main(int argc, char **argv)
 {
 	t_minirt	*mrt;
+	t_mlx		*mlx;
 	int			code;
 
 	if (argc != 2)
@@ -29,10 +30,11 @@ int	main(int argc, char **argv)
 		destruct_minirt(mrt, 0);
 		return (2 + code);
 	}
-	init_mlx(mrt->mlx);
+	mlx = mrt->mlx;
+	init_mlx(mlx);
 	render_scene(mrt);
 	handle_events(mrt);
-	mlx_loop_hook(mrt->mlx->mlx_ptr, loop_hook, mrt);
-	mlx_loop(mrt->mlx->mlx_ptr);
+	mlx_loop_hook(mlx->mlx_ptr, loop_hook, mrt);
+	mlx_loop(mlx->mlx_ptr);
 	return (0);
 }

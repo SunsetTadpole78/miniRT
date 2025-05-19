@@ -40,11 +40,6 @@
 
 // Structures
 
-typedef struct s_fmatrix
-{
-	float		m[4][4];
-}	t_fmatrix;
-
 typedef struct s_object
 {
 	char			*id;
@@ -66,10 +61,6 @@ typedef struct s_ray
 	float			dist;
 }	t_ray;
 
-// position dans l'espace monde.
-// normal = le regarde de la caméra.
-// right: vecteur horizontal
-// up: vecteur vertical
 typedef struct s_camera
 {
 	char		*id;
