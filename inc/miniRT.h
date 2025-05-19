@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/17 21:38:42 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/19 12:19:23 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,8 @@ void		*parse_camera(char **values);
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_rgb color);
 void		*parse_cylinder(char **values);
+void		render_cylinder(t_mlx *mlx, t_ray *ray,
+				t_fvector2 pixel, t_object *object);
 
 t_light		*light(t_fvector3 position, float level, t_rgb color);
 void		*parse_light(char **values);
