@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/19 12:19:23 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 03:04:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ typedef struct s_cylinder
 	t_fvector3	normal;
 	t_fvector2	size;
 	t_rgb		color;
+	float		radius;
+	float		half_height;
 }	t_cylinder;
 
 typedef struct s_mlx
@@ -161,6 +163,12 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 void		*parse_cylinder(char **values);
 void		render_cylinder(t_mlx *mlx, t_ray *ray,
 				t_fvector2 pixel, t_object *object);
+float		intersect_cap(t_fvector3 local_origin, t_fvector3 local_dir,
+				float radius, float half_height);
+void		normalize_side(t_fvector3 *local_origin, t_fvector3 *local_dir,
+				t_ray ray, t_cylinder *cylinder);
+float		apply_side_equation(t_fvector3 local_origin, t_fvector3 local_dir,
+				t_cylinder *cylinder);
 
 t_light		*light(t_fvector3 position, float level, t_rgb color);
 void		*parse_light(char **values);
