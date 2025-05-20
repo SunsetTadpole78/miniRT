@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/17 21:40:07 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 10:06:53 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,17 @@ static float	intersection_sphere(t_ray ray, t_sphere *sphere)
 	return (-1.0f);
 }
 
-void	render_sphere(t_mlx *mlx, t_ray *ray,
-		t_fvector2 pixel, t_object *object)
+void	render_sphere(t_mlx *mlx, t_ray *ray, t_object *object)
 {
 	float		dist;
 	t_sphere	*sphere;
 
+	(void)mlx;
 	sphere = (t_sphere *)object;
 	dist = intersection_sphere(*ray, sphere);
 	if (dist > 0 && dist <= ray->dist)
 	{
-		put_pixel(mlx, pixel, sphere->color);
+		ray->color = sphere->color;
 		ray->dist = dist;
 	}
 }

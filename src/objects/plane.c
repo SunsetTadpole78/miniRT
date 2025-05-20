@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/17 21:39:50 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 10:06:36 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,17 @@ static float	intersection_plane(t_ray ray, t_plane *plane)
 	return (-1.0f);
 }
 
-void	render_plane(t_mlx *mlx, t_ray *ray, t_fvector2 pixel, t_object *object)
+void	render_plane(t_mlx *mlx, t_ray *ray, t_object *object)
 {
 	float		dist;
 	t_plane		*plane;
 
+	(void)mlx;
 	plane = (t_plane *)object;
 	dist = intersection_plane(*ray, plane);
 	if (dist > 0 && dist <= ray->dist)
 	{
-		put_pixel(mlx, pixel, plane->color);
+		ray->color = plane->color;
 		ray->dist = dist;
 	}
 }

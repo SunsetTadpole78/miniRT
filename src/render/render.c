@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   JusteTest.c                                        :+:      :+:    :+:   */
+/*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/17 19:03:48 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 10:16:52 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,43 +14,46 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v);
-static void			intercept(t_minirt *mrt, t_fvector2, t_ray ray);
+static void			intercept(t_minirt *mrt, t_fvector2 position,
+						t_ray ray);
 /* -------------------------------------------------------------------------- */
 
 void	render_scene(t_minirt *mrt)
 {
-	t_fvector2		v;
+	t_fvector2		position;
 	t_ray			ray;
 
-	v.y = 0;
+	position.y = 0;
 	ray.origin = mrt->camera->position;
-	while (v.y < WIN_HEIGHT)
+	while (position.y < WIN_HEIGHT)
 	{
-		v.x = 0;
-		while (v.x < WIN_WIDTH)
+		position.x = 0;
+		while (position.x < WIN_WIDTH)
 		{
-			ray.direction = ray_tracer(mrt->camera, v);
-			intercept(mrt, v, ray);
-			v.x++;
+			ray.direction = ray_tracer(mrt->camera, position);
+			intercept(mrt, position, ray);
+			position.x++;
 		}
-		v.y++;
+		position.y++;
 	}
 }
 
-static void	intercept(t_minirt *mrt, t_fvector2 v, t_ray ray)
+static void	intercept(t_minirt *mrt, t_fvector2 position, t_ray ray)
 {
 	t_object		*cur;
-	void			(*render)(t_mlx *, t_ray *, t_fvector2, t_object *);
+	void			(*render)(t_mlx *, t_ray *, t_object *);
 
 	ray.dist = 3.4E+38;
+	ray.color = ft_rgb(0, 0, 0);
 	cur = mrt->objects;
 	while (cur)
 	{
 		render = get_render_by_id(cur->id);
 		if (render)
-			render(mrt->mlx, &ray, v, cur);
+			render(mrt->mlx, &ray, cur);
 		cur = cur->next;
 	}
+	put_pixel(mrt->mlx, position, ray.color);
 }
 
 // normalisation sur [-1, 1]; Normalized Device Coordinates
