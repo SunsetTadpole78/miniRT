@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/20 11:03:39 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:03:58 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,12 @@ static void	intercept(t_minirt *mrt, t_fvector2 position, t_ray ray)
 		render = get_render_by_id(cur->id);
 		if (render)
 			render(mrt, &ray, cur);
+		cur = cur->next;
+	}
+	cur = (t_object *)mrt->lights;
+	while (cur)
+	{
+	//	render_light(mrt, &ray, cur);
 		cur = cur->next;
 	}
 	put_pixel(mrt->mlx, position, ray.color);

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 12:01:42 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:00:08 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_light
 	t_rgb		color;
 	float		linear_at_coef;
 	float		quadratic_at_coef;
+	t_rgb		render_color;
 }	t_light;
 
 typedef struct s_sphere
@@ -170,6 +171,8 @@ void		*parse_cylinder(char **values);
 
 t_light		*light(t_fvector3 position, float level, t_rgb color);
 void		*parse_light(char **values);
+void		render_light(t_minirt *mrt, t_ray *ray,
+				t_object *object);
 
 t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
 void		*parse_plane(char **values);
