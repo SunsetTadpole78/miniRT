@@ -75,8 +75,8 @@ void	update_yaw(t_camera *cam, float theta)
 
 void	update_pitch(t_camera *cam, float theta)
 {
-	float		cos_t;
-	float		sin_t;
+	float	cos_t;
+	float	sin_t;
 
 	cos_t = cosf(theta);
 	sin_t = sinf(theta);
