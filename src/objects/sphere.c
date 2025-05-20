@@ -13,6 +13,10 @@
 #include "miniRT.h"
 #include "errors.h"
 
+/* ------------------------------- PROTOTYPE -------------------------------- */
+static inline float	intersection_sphere(t_ray ray, t_sphere *sphere);
+/* -------------------------------------------------------------------------- */
+
 t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 {
 	t_sphere	*sp;

@@ -46,13 +46,13 @@
 # define XK_BACKWARD 's'
 # define XK_LEFT 'a'
 # define XK_RIGHT 'd'
-# define XK_SPACE -1
-# define XK_SHIFT -1
+# define XK_SPACE ' '
+# define XK_SHIFT 65505
 
 // camera rotation
 # define XK_ARROW_UP 65362
 # define XK_ARROW_DOWN 65364
-# define XK_ARROW_LEFT -1
-# define XK_ARROW_RIGHT -1
+# define XK_ARROW_LEFT 65361
+# define XK_ARROW_RIGHT 65363
 
 #endif

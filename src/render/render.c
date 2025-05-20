@@ -13,9 +13,9 @@
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v,
-								float ratio);
 static inline void		intercept(t_minirt *mrt, t_fvector2, t_ray ray);
+static inline t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v,
+							float ratio);
 /* -------------------------------------------------------------------------- */
 
 void	render_scene(t_minirt *mrt)
@@ -27,7 +27,7 @@ void	render_scene(t_minirt *mrt)
 
 	v.y = 0;
 	mlx = mrt->mlx;
-	ratio = (float)WIN_WIDTH / (float)WIN_HEIGHT;
+	ratio = (float)WIN_WIDTH / (float)WIN_HEIGHT * mrt->camera->iplane_scale;
 	ft_bzero(mlx->data, WIN_HEIGHT * mlx->size_line);
 	ray.origin = mrt->camera->position;
 	while (v.y < WIN_HEIGHT)
@@ -65,8 +65,7 @@ static inline t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v, float ratio)
 	t_fvector3	ndc_vec;
 
 	ndc_vec = (t_fvector3){
-		-(2.0f * ((v.x + 0.5f) / WIN_WIDTH) - 1.0f)
-		* ratio * cam->iplane_scale,
+		-(2.0f * ((v.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
 		-(2.0f * ((v.y + 0.5f) / WIN_HEIGHT) - 1.0f)
 		* cam->iplane_scale, 1.0f};
 	return (ft_fnormalize(

@@ -13,6 +13,10 @@
 #include "miniRT.h"
 #include "errors.h"
 
+/* ------------------------------- PROTOTYPE -------------------------------- */
+static inline float	intersection_plane(t_ray ray, t_plane *plane);
+/* -------------------------------------------------------------------------- */
+
 t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
 {
 	t_plane	*pl;
