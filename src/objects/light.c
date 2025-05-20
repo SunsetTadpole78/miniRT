@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 15:03:50 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 17:04:51 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ t_light	*light(t_fvector3 position, float level, t_rgb color)
 	l->position = position;
 	l->level = level;
 	l->color = color;
+//	l->linear_at_coef = 0.0f;
+//	l->quadratic_at_coef = 0.0f;
 	l->linear_at_coef = 0.008f / level;
 	l->quadratic_at_coef = 0.0008f / level;
 	color.r += (255 - color.r) * (1 - level);
