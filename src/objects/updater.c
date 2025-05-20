@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:05:33 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/19 10:35:20 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:14:37 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	update_values(t_minirt *mrt)
 	void		(*updater)(t_minirt *, t_object *);
 
 	if (!mrt->ambiant)
-		mrt->ambiant = ambiant(0, ft_rgb(0, 0, 0));
+		mrt->ambiant = ambiant(0, (t_rgb){0, 0, 0});
 	object = mrt->objects;
 	while (object)
 	{

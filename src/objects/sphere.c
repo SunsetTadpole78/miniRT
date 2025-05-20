@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 01:06:09 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:14:03 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,11 @@ void	render_sphere(t_minirt *mrt, t_ray *ray,
 	if (dist > 0 && dist <= ray->dist)
 	{
 		intensity = get_intensity(ray, mrt->ambiant, sphere, dist);
-		put_pixel(mlx, pixel, ft_rgb(
+		put_pixel(mlx, pixel, (t_rgb){
 				sphere->color.r * intensity,
 				sphere->color.g * intensity,
 				sphere->color.b * intensity
-				));
+				});
 		ray->dist = dist;
 	}
 }

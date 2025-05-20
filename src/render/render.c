@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/20 01:15:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:15:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ static void	intercept(t_minirt *mrt, t_vector2 v, t_ray ray)
 static t_fvector3	ray_tracer(t_camera *cam, t_vector2 v, float ratio)
 {
 	return (ft_fnormalize(ft_fvector3(
-				(2.0f * ((v.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
-				(1.0f - 2.0f * ((v.y + 0.5f) / WIN_HEIGHT)) * cam->iplane_scale,
+				(2.0f * (((float)v.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
+				(1.0f - 2.0f * (((float)v.y + 0.5f) / WIN_HEIGHT)) * cam->iplane_scale,
 				1.0f
 			)));
 }
