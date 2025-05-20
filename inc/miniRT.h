@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 10:09:10 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 12:01:42 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@
 # define X11_ESC_KEY 65307
 
 // Structures
+
+typedef struct s_minirt	t_minirt;
 
 typedef struct s_object
 {
@@ -82,6 +84,8 @@ typedef struct s_light
 	t_fvector3	position;
 	float		level;
 	t_rgb		color;
+	float		linear_at_coef;
+	float		quadratic_at_coef;
 }	t_light;
 
 typedef struct s_sphere
@@ -128,7 +132,7 @@ typedef struct s_type
 {
 	char			*id;
 	void			*(*parser)(char **);
-	void			(*render)(t_mlx *, t_ray *, t_object *);
+	void			(*render)(t_minirt *, t_ray *, t_object *);
 	struct s_type	*next;
 }	t_type;
 
@@ -150,6 +154,9 @@ void		destruct_mlx(t_mlx *mlx);
 
 void		render_scene(t_minirt *mrt);
 
+t_rgb		calculate_brightness(t_minirt *mrt, t_fvector3 impact_point,
+				t_fvector3 normal, t_rgb rgb);
+
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);
 void		*parse_ambiant(char **values);
@@ -166,12 +173,12 @@ void		*parse_light(char **values);
 
 t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
 void		*parse_plane(char **values);
-void		render_plane(t_mlx *mlx, t_ray *ray,
+void		render_plane(t_minirt *mrt, t_ray *ray,
 				t_object *object);
 
 t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color);
 void		*parse_sphere(char **values);
-void		render_sphere(t_mlx *mlx, t_ray *ray,
+void		render_sphere(t_minirt *mrt, t_ray *ray,
 				t_object *object);
 
 int			register_object(void *object);
@@ -180,7 +187,7 @@ int			set_ambiant(t_ambiant *ambiant);
 int			set_camera(t_camera *camera);
 
 int			register_type(char *id, void *(*parser)(char **),
-				void (*render)(t_mlx *, t_ray *, t_object *));
+				void (*render)(t_minirt *, t_ray *, t_object *));
 int			exist_type(char *id);
 void		*get_parser_by_id(char *id);
 void		*get_render_by_id(char *id);

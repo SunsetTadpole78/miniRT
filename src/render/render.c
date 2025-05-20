@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/20 10:16:52 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 11:03:39 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	render_scene(t_minirt *mrt)
 static void	intercept(t_minirt *mrt, t_fvector2 position, t_ray ray)
 {
 	t_object		*cur;
-	void			(*render)(t_mlx *, t_ray *, t_object *);
+	void			(*render)(t_minirt *, t_ray *, t_object *);
 
 	ray.dist = 3.4E+38;
 	ray.color = ft_rgb(0, 0, 0);
@@ -50,7 +50,7 @@ static void	intercept(t_minirt *mrt, t_fvector2 position, t_ray ray)
 	{
 		render = get_render_by_id(cur->id);
 		if (render)
-			render(mrt->mlx, &ray, cur);
+			render(mrt, &ray, cur);
 		cur = cur->next;
 	}
 	put_pixel(mrt->mlx, position, ray.color);
