@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/17 20:53:30 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 01:15:41 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	init_mlx(t_mlx *mlx)
 			WIN_WIDTH, WIN_HEIGHT, WINDOW_NAME);
 	mlx->img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	mlx->data = mlx_get_data_addr(mlx->img_ptr, &mlx->bpp,
-			&mlx->size_line, &mlx->endian);
+			&mlx->ll, &mlx->endian);
+	mlx->cl = mlx->bpp / 8;
 	mlx->update = 0;
 }
 
@@ -30,14 +31,16 @@ void	handle_events(t_minirt *mrt)
 
 	mlx = mrt->mlx;
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_hook, mrt);
-	mlx_hook(mlx->win_ptr, 3, 1L << 1, release_key_hook, mrt);
 	mlx_hook(mlx->win_ptr, 17, 1L << 17, close_window, mrt);
 }
 
 int	loop_hook(t_minirt *mrt)
 {
 	if (mrt->mlx->update == 1)
+	{
 		render_scene(mrt);
+		mrt->mlx->update = 0;
+	}
 	return (0);
 }
 

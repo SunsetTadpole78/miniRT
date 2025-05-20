@@ -32,6 +32,7 @@ FILES =		destructor.c			\
 		objects/plane.c			\
 		objects/sphere.c		\
 		objects/types_factory.c		\
+		objects/updater.c		\
 		parsing/elements.c		\
 		parsing/parser.c		\
 		parsing/utils.c			\

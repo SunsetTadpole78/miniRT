@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 01:14:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/19 10:05:10 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	main(int argc, char **argv)
 		return (2 + code);
 	}
 	mlx = mrt->mlx;
+	update_values(mrt);
 	init_mlx(mlx);
 	render_scene(mrt);
 	handle_events(mrt);

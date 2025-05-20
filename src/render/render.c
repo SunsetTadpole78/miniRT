@@ -13,29 +13,31 @@
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline void		intercept(t_minirt *mrt, t_fvector2, t_ray ray);
-static inline t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v,
+static inline void		intercept(t_minirt *mrt, t_vector2, t_ray ray);
+static inline t_fvector3	ray_tracer(t_camera *cam, t_vector2 v,
 							float ratio);
 /* -------------------------------------------------------------------------- */
 
 void	render_scene(t_minirt *mrt)
 {
-	float		ratio;
-	t_mlx		*mlx;
-	t_fvector2	v;
+	t_vector2	v;
 	t_ray		ray;
+	t_camera	*camera;
+	t_mlx		*mlx;
+	float		ratio;
 
 	v.y = 0;
 	mlx = mrt->mlx;
-	ratio = (float)WIN_WIDTH / (float)WIN_HEIGHT * mrt->camera->iplane_scale;
-	ft_bzero(mlx->data, WIN_HEIGHT * mlx->size_line);
+	camera = mrt->camera;
+	ratio = ((float)WIN_WIDTH / (float)WIN_HEIGHT) * camera->iplane_scale;
+	ft_bzero(mlx->data, WIN_HEIGHT * mlx->ll);
 	ray.origin = mrt->camera->position;
 	while (v.y < WIN_HEIGHT)
 	{
 		v.x = 0;
 		while (v.x < WIN_WIDTH)
 		{
-			ray.direction = ray_tracer(mrt->camera, v, ratio);
+			ray.direction = ray_tracer(camera, v, ratio);
 			intercept(mrt, v, ray);
 			v.x++;
 		}
@@ -44,23 +46,23 @@ void	render_scene(t_minirt *mrt)
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img_ptr, 0, 0);
 }
 
-static inline void	intercept(t_minirt *mrt, t_fvector2 v, t_ray ray)
+static inline void	intercept(t_minirt *mrt, t_vector2 v, t_ray ray)
 {
 	t_object	*cur;
-	void		(*render)(t_mlx *, t_ray *, t_fvector2, t_object *);
+	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
 
 	ray.dist = 3.4E+38;
 	cur = mrt->objects;
 	while (cur)
 	{
-		render = get_render_by_id(cur->id);
+		render = cur->render;
 		if (render)
-			render(mrt->mlx, &ray, v, cur);
+			render(mrt, &ray, v, cur);
 		cur = cur->next;
 	}
 }
 
-static inline t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v, float ratio)
+static inline t_fvector3	ray_tracer(t_camera *cam, t_vector2 v, float ratio)
 {
 	t_fvector3	ndc_vec;
 

@@ -59,10 +59,3 @@ static int	rotation_key_hook(int keycode, t_minirt *mrt)
 		close_window(mrt);
 	return (0);
 }
-
-int	release_key_hook(int keycode, t_minirt *mrt)
-{
-	(void)keycode;
-	mrt->mlx->update = 0;
-	return (0);
-}
