@@ -27,7 +27,7 @@ void	init_mlx(t_mlx *mlx)
 
 void	handle_events(t_minirt *mrt)
 {
-	t_mlx		*mlx;
+	t_mlx	*mlx;
 
 	mlx = mrt->mlx;
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_hook, mrt);

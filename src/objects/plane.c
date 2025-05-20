@@ -52,8 +52,8 @@ void	*parse_plane(char **values)
 // D = direction du rayon.	N = normal du plan.
 static inline float	intersection_plane(t_ray ray, t_plane *plane)
 {
-	float		denominator;
-	float		x;
+	float	denominator;
+	float	x;
 
 	denominator = ft_fdot_product(ray.direction, plane->normal);
 	if (fabs(denominator) < 0.000001f)
@@ -68,9 +68,9 @@ static inline float	intersection_plane(t_ray ray, t_plane *plane)
 void	render_plane(t_minirt *mrt, t_ray *ray, t_vector2 pixel,
 			t_object *object)
 {
-	t_mlx		*mlx;
-	t_plane		*plane;
-	float		dist;
+	t_mlx	*mlx;
+	t_plane	*plane;
+	float	dist;
 
 	mlx = mrt->mlx;
 	plane = (t_plane *)object;
