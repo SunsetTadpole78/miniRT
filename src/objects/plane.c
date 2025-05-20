@@ -6,12 +6,16 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 18:42:32 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 20:03:16 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "errors.h"
+
+/* ------------------------------- PROTOTYPE -------------------------------- */
+static inline float	intersection_plane(t_ray ray, t_plane *plane);
+/* -------------------------------------------------------------------------- */
 
 t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
 {
@@ -43,28 +47,10 @@ void	*parse_plane(char **values)
 	return (plane(position, normal, color));
 }
 
-// t = ((P - O) * N) / D * N
-// P = point du plan.		O = origin du rayon.
-// D = direction du rayon.	N = normal du plan.
-static float	intersection_plane(t_ray ray, t_plane *plane)
-{
-	float			denominator;
-	float			x;
-
-	denominator = ft_fdot_product(ray.direction, plane->normal);
-	if (fabs(denominator) < 0.000001f)
-		return (-1.0f);
-	x = ft_fdot_product(ft_fvector3_diff(plane->position, ray.origin),
-			plane->normal) / denominator;
-	if (x >= 0.0f)
-		return (x);
-	return (-1.0f);
-}
-
 void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object)
 {
-	float		dist;
-	t_plane		*plane;
+	t_plane	*plane;
+	float	dist;
 	t_fvector3	impact_point;
 
 	plane = (t_plane *)object;
@@ -83,4 +69,22 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object)
 				);
 		ray->dist = dist;
 	}
+}
+
+// t = ((P - O) * N) / D * N
+// P = point du plan.		O = origin du rayon.
+// D = direction du rayon.	N = normal du plan.
+static inline float	intersection_plane(t_ray ray, t_plane *plane)
+{
+	float	denominator;
+	float	x;
+
+	denominator = ft_fdot_product(ray.direction, plane->normal);
+	if (fabs(denominator) < 0.000001f)
+		return (-1.0f);
+	x = ft_fdot_product(ft_fvector3_diff(plane->position, ray.origin),
+			plane->normal) / denominator;
+	if (x >= 0.0f)
+		return (x);
+	return (-1.0f);
 }

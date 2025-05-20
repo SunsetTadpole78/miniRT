@@ -6,15 +6,15 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/20 19:02:05 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 20:02:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static t_fvector3	ray_tracer(t_camera *cam, t_vector2 position, float ratio);
-static void			intercept(t_minirt *mrt, t_vector2 position, t_ray ray);
+static inline t_fvector3	ray_tracer(t_camera *cam, t_vector2 position, float ratio);
+static inline void			intercept(t_minirt *mrt, t_vector2 position, t_ray ray);
 /* -------------------------------------------------------------------------- */
 
 void	render_scene(t_minirt *mrt)
@@ -22,12 +22,14 @@ void	render_scene(t_minirt *mrt)
 	t_vector2		position;
 	t_ray			ray;
 	t_camera	*camera;
+	t_mlx		*mlx;
 	float		ratio;
 
 	position.y = 0;
-	ray.origin = mrt->camera->position;
+	mlx = mrt->mlx;
 	camera = mrt->camera;
 	ratio = ((float)WIN_WIDTH / (float)WIN_HEIGHT) * camera->iplane_scale;
+	ray.origin = mrt->camera->position;
 	while (position.y < WIN_HEIGHT)
 	{
 		position.x = 0;
@@ -39,9 +41,10 @@ void	render_scene(t_minirt *mrt)
 		}
 		position.y++;
 	}
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img_ptr, 0, 0);
 }
 
-static void	intercept(t_minirt *mrt, t_vector2 position, t_ray ray)
+static inline void	intercept(t_minirt *mrt, t_vector2 position, t_ray ray)
 {
 	t_object	*cur;
 	void		(*render)(t_minirt *, t_ray *, t_object *);
@@ -68,13 +71,19 @@ static void	intercept(t_minirt *mrt, t_vector2 position, t_ray ray)
 		= (ray.color.r << 16 | ray.color.g << 8 | ray.color.b);
 }
 
-// normalisation sur [-1, 1]; Normalized Device Coordinates
-static t_fvector3	ray_tracer(t_camera *cam, t_vector2 position, float ratio)
+static inline t_fvector3	ray_tracer(t_camera *cam, t_vector2 position, float ratio)
 {
-	return (ft_fnormalize(ft_fvector3(
-				(2.0f * (((float)position.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
-				(1.0f - 2.0f * (((float)position.y + 0.5f) / WIN_HEIGHT))
-				* cam->iplane_scale,
-				1.0f
-			)));
+	t_fvector3	ndc_vec;
+
+	ndc_vec = (t_fvector3){
+		-(2.0f * (((float)position.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
+		-(2.0f * (((float)position.y + 0.5f) / WIN_HEIGHT) - 1.0f) * cam->iplane_scale, 1.0f};
+	return (ft_fnormalize(
+			ft_fvector3_sum(
+				ft_fvector3_sum(
+					(t_fvector3){cam->right.x * ndc_vec.x,
+					cam->right.y * ndc_vec.x, cam->right.z * ndc_vec.x},
+				(t_fvector3){cam->up.x * ndc_vec.y,
+				cam->up.y * ndc_vec.y, cam->up.z * ndc_vec.y}),
+		cam->normal)));
 }

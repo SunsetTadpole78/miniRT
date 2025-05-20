@@ -23,6 +23,7 @@ FILES =		destructor.c			\
 		initializer.c			\
 		main.c				\
 		mlx/mlx.c			\
+		mlx/mlx_key.c			\
 		objects/ambiant.c		\
 		objects/camera.c		\
 		objects/cylinder.c		\
