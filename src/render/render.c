@@ -6,20 +6,20 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/20 18:54:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 19:02:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static t_fvector3	ray_tracer(t_camera *cam, t_vector2 v, float ratio);
-static void			intercept(t_minirt *mrt, t_vector2, t_ray ray);
+static t_fvector3	ray_tracer(t_camera *cam, t_vector2 position, float ratio);
+static void			intercept(t_minirt *mrt, t_vector2 position, t_ray ray);
 /* -------------------------------------------------------------------------- */
 
 void	render_scene(t_minirt *mrt)
 {
-	t_fvector2		position;
+	t_vector2		position;
 	t_ray			ray;
 	t_camera	*camera;
 	float		ratio;
@@ -33,8 +33,7 @@ void	render_scene(t_minirt *mrt)
 		position.x = 0;
 		while (position.x < WIN_WIDTH)
 		{
-			ray.direction = ray_tracer(camera, v, ratio);
-			intercept(mrt, v, ray);
+			ray.direction = ray_tracer(camera, position, ratio);
 			intercept(mrt, position, ray);
 			position.x++;
 		}
@@ -42,14 +41,16 @@ void	render_scene(t_minirt *mrt)
 	}
 }
 
-static void	intercept(t_minirt *mrt, t_vector2 v, t_ray ray)
+static void	intercept(t_minirt *mrt, t_vector2 position, t_ray ray)
 {
-	t_object		*cur;
-	void			(*render)(t_minirt *, t_ray *, t_object *);
+	t_object	*cur;
+	void		(*render)(t_minirt *, t_ray *, t_object *);
+	t_mlx	*mlx;
 
 	ray.dist = 3.4E+38;
 	ray.color = ft_rgb(0, 0, 0);
 	cur = mrt->objects;
+	mlx = mrt->mlx;
 	while (cur)
 	{
 		render = cur->render;
@@ -63,22 +64,17 @@ static void	intercept(t_minirt *mrt, t_vector2 v, t_ray ray)
 	//	render_light(mrt, &ray, cur);
 		cur = cur->next;
 	}
-	put_pixel(mrt->mlx, position, ray.color);
+	*((unsigned int *)(mlx->data + (position.y * mlx->ll + position.x * mlx->cl)))
+		= (ray.color.r << 16 | ray.color.g << 8 | ray.color.b);
 }
 
 // normalisation sur [-1, 1]; Normalized Device Coordinates
-static t_fvector3	ray_tracer(t_camera *cam, t_vector2 v, float ratio)
+static t_fvector3	ray_tracer(t_camera *cam, t_vector2 position, float ratio)
 {
 	return (ft_fnormalize(ft_fvector3(
-				(2.0f * (((float)v.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
-				(1.0f - 2.0f * (((float)v.y + 0.5f) / WIN_HEIGHT))
+				(2.0f * (((float)position.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
+				(1.0f - 2.0f * (((float)position.y + 0.5f) / WIN_HEIGHT))
 				* cam->iplane_scale,
 				1.0f
 			)));
-}
-
-void	put_pixel(t_mlx *mlx, t_vector2 v, t_rgb rgb)
-{
-	*((unsigned int *)(mlx->data + (v.y * mlx->ll + v.x * mlx->cl)))
-		= (rgb.r << 16 | rgb.g << 8 | rgb.b);
 }

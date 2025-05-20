@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 18:39:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 19:00:53 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ typedef struct s_object
 {
 	char		*id;
 	t_object	*next;
-	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	void		(*render)(t_minirt *, t_ray *,t_object *);
 }	t_object;
 
 typedef struct s_color_object
 {
 	char		*id;
 	t_object	*next;
-	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	void		(*render)(t_minirt *, t_ray *,t_object *);
 	t_rgb		color;
 }	t_color_object;
 
@@ -66,7 +66,7 @@ typedef struct s_ambiant
 {
 	char		*id;
 	t_object	*next;
-	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	void		(*render)(t_minirt *, t_ray *,t_object *);
 	t_rgb		color;
 	float		level;
 }	t_ambiant;
@@ -83,7 +83,7 @@ typedef struct s_camera
 {
 	char		*id;
 	t_object	*next;
-	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	void		(*render)(t_minirt *, t_ray *,t_object *);
 	t_fvector3	position;
 	t_fvector3	normal;
 	int			fov;
@@ -94,11 +94,10 @@ typedef struct s_light
 {
 	char		*id;
 	t_object	*next;
-	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	void		(*render)(t_minirt *, t_ray *,t_object *);
 	t_rgb		color;
 	t_fvector3	position;
 	float		level;
-	t_rgb		color;
 	float		linear_at_coef;
 	float		quadratic_at_coef;
 	t_rgb		render_color;
@@ -108,7 +107,7 @@ typedef struct s_sphere
 {
 	char		*id;
 	t_object	*next;
-	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	void		(*render)(t_minirt *, t_ray *,t_object *);
 	t_rgb		color;
 	t_fvector3	position;
 	float		diameter;
@@ -119,7 +118,7 @@ typedef struct s_plane
 {
 	char		*id;
 	t_object	*next;
-	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	void		(*render)(t_minirt *, t_ray *,t_object *);
 	t_rgb		color;
 	t_fvector3	position;
 	t_fvector3	normal;
@@ -129,7 +128,7 @@ typedef struct s_cylinder
 {
 	char		*id;
 	t_object	*next;
-	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	void		(*render)(t_minirt *, t_ray *,t_object *);
 	t_rgb		color;
 	t_fvector3	position;
 	t_fvector3	normal;
@@ -228,8 +227,5 @@ int			parse_normal(char *value, t_fvector3 *normal,
 				char *invalid_format_error);
 int			parse_color(char *value, t_rgb *rgb, char *invalid_format_error);
 void		*error_and_null(char *error);
-
-//TESTS
-void		put_pixel(t_mlx *mlx, t_vector2 v, t_rgb rgb);
 
 #endif
