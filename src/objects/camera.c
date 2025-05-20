@@ -53,7 +53,6 @@ void	*parse_camera(char **values)
 
 void	update_yaw(t_camera *cam, float theta)
 {
-	t_fvector3	new;
 	float		cos_t;
 	float		sin_t;
 	t_fvector3	world;
@@ -66,26 +65,25 @@ void	update_yaw(t_camera *cam, float theta)
 	}
 	cos_t = cosf(theta);
 	sin_t = sinf(theta);
-	new = (t_fvector3){cam->normal.x * cos_t - cam->normal.z * sin_t,
-		cam->normal.y,
-		cam->normal.x * sin_t + cam->normal.z * cos_t};
-	cam->normal = ft_fnormalize(new);
+	cam->normal = ft_fnormalize(
+			(t_fvector3){cam->normal.x * cos_t - cam->normal.z * sin_t,
+			cam->normal.y,
+			cam->normal.x * sin_t + cam->normal.z * cos_t});
 	cam->right = ft_fnormalize(ft_fcross_product(cam->normal, world));
 	cam->up = ft_fcross_product(cam->right, cam->normal);
 }
 
 void	update_pitch(t_camera *cam, float theta)
 {
-	t_fvector3	new;
 	float		cos_t;
 	float		sin_t;
 
 	cos_t = cosf(theta);
 	sin_t = sinf(theta);
-	new = (t_fvector3){cam->normal.x * cos_t + cam->up.x * sin_t,
-		cam->normal.y * cos_t + cam->up.y * sin_t,
-		cam->normal.z * cos_t + cam->up.z * sin_t};
-	cam->normal = ft_fnormalize(new);
+	cam->normal = ft_fnormalize(
+			(t_fvector3){cam->normal.x * cos_t + cam->up.x * sin_t,
+			cam->normal.y * cos_t + cam->up.y * sin_t,
+			cam->normal.z * cos_t + cam->up.z * sin_t});
 	cam->up = ft_fnormalize(ft_fcross_product(cam->right, cam->normal));
 }
 

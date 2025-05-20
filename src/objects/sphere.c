@@ -53,32 +53,6 @@ void	*parse_sphere(char **values)
 	return (sphere(position, diameter, color));
 }
 
-// discriminant = b^2 - 4c
-// t1 = (-b - sqrt(discriminant)) / 2.0f;
-// t2 = (-b + sqrt(discriminant)) / 2.0f;
-static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
-{
-	t_fvector3	oc;
-	float		b;
-	float		delta;
-	float		x1;
-	float		x2;
-
-	oc = ft_fvector3_diff(ray.origin, sphere->position);
-	b = 2.0f * ft_fdot_product(oc, ray.direction);
-	delta = b * b - 4.0f
-		* (ft_fdot_product(oc, oc) - (sphere->radius * sphere->radius));
-	if (delta < 0)
-		return (-1.0f);
-	x1 = (-b - sqrtf(delta)) / 2.0f;
-	x2 = (-b + sqrtf(delta)) / 2.0f;
-	if (x1 > 0.001f)
-		return (x1);
-	if (x2 > 0.001f)
-		return (x2);
-	return (-1.0f);
-}
-
 static float	get_intensity(t_ray *ray, t_ambiant *ambiant, t_sphere *sphere,
 	float dist)
 {
@@ -121,4 +95,30 @@ void	render_sphere(t_minirt *mrt, t_ray *ray,
 				| (int)(sphere->color.b * intensity));
 		ray->dist = dist;
 	}
+}
+
+// discriminant = b^2 - 4ac
+// t1 = (-b - sqrt(discriminant)) / 2.0f;
+// t2 = (-b + sqrt(discriminant)) / 2.0f;
+static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
+{
+	t_fvector3	oc;
+	float		b;
+	float		delta;
+	float		x1;
+	float		x2;
+
+	oc = ft_fvector3_diff(ray.origin, sphere->position);
+	b = 2.0f * ft_fdot_product(oc, ray.direction);
+	delta = b * b - 4.0f
+		* (ft_fdot_product(oc, oc) - (sphere->radius * sphere->radius));
+	if (delta < 0)
+		return (-1.0f);
+	x1 = (-b - sqrtf(delta)) / 2.0f;
+	x2 = (-b + sqrtf(delta)) / 2.0f;
+	if (x1 > 0.001f)
+		return (x1);
+	if (x2 > 0.001f)
+		return (x2);
+	return (-1.0f);
 }

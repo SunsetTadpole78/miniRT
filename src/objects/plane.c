@@ -47,24 +47,6 @@ void	*parse_plane(char **values)
 	return (plane(position, normal, color));
 }
 
-// t = ((P - O) * N) / D * N
-// P = point du plan.		O = origin du rayon.
-// D = direction du rayon.	N = normal du plan.
-static inline float	intersection_plane(t_ray ray, t_plane *plane)
-{
-	float	denominator;
-	float	x;
-
-	denominator = ft_fdot_product(ray.direction, plane->normal);
-	if (fabs(denominator) < 0.000001f)
-		return (-1.0f);
-	x = ft_fdot_product(ft_fvector3_diff(plane->position, ray.origin),
-			plane->normal) / denominator;
-	if (x >= 0.0f)
-		return (x);
-	return (-1.0f);
-}
-
 void	render_plane(t_minirt *mrt, t_ray *ray, t_vector2 pixel,
 			t_object *object)
 {
@@ -82,4 +64,22 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_vector2 pixel,
 			= (plane->color.r << 16 | plane->color.g << 8 | plane->color.b);
 		ray->dist = dist;
 	}
+}
+
+// t = ((P - O) * N) / D * N
+// P = point du plan.		O = origin du rayon.
+// D = direction du rayon.	N = normal du plan.
+static inline float	intersection_plane(t_ray ray, t_plane *plane)
+{
+	float	denominator;
+	float	x;
+
+	denominator = ft_fdot_product(ray.direction, plane->normal);
+	if (fabs(denominator) < 0.000001f)
+		return (-1.0f);
+	x = ft_fdot_product(ft_fvector3_diff(plane->position, ray.origin),
+			plane->normal) / denominator;
+	if (x >= 0.0f)
+		return (x);
+	return (-1.0f);
 }

@@ -14,8 +14,7 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline void		intercept(t_minirt *mrt, t_vector2, t_ray ray);
-static inline t_fvector3	ray_tracer(t_camera *cam, t_vector2 v,
-							float ratio);
+static inline t_fvector3	ray_tracer(t_camera *cam, t_vector2 v, float ratio);
 /* -------------------------------------------------------------------------- */
 
 void	render_scene(t_minirt *mrt)
