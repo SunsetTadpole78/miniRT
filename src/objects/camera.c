@@ -28,7 +28,6 @@ t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov)
 	c->up = ft_fcross_product(c->right, c->normal);
 	c->fov = fov;
 	c->iplane_scale = tan((fov / 2) * (M_PI / 180.0f));
-	c->wid_height = (float)WIN_WIDTH / (float)WIN_HEIGHT;
 	return (c);
 }
 
@@ -53,10 +52,10 @@ void	*parse_camera(char **values)
 
 void	rotate_camera_yaw(t_camera *cam, float theta)
 {
-	t_fvector3		new;
-	float			cos_t;
-	float			sin_t;
-	t_fvector3		world;
+	t_fvector3	new;
+	float		cos_t;
+	float		sin_t;
+	t_fvector3	world;
 
 	world = (t_fvector3){0, 1, 0};
 	if (ft_fdot_product(cam->up, (t_fvector3){0, 1, 0}) < 0)
@@ -77,9 +76,9 @@ void	rotate_camera_yaw(t_camera *cam, float theta)
 
 void	rotate_camera_pitch(t_camera *cam, float theta)
 {
-	t_fvector3		new;
-	float			cos_t;
-	float			sin_t;
+	t_fvector3	new;
+	float		cos_t;
+	float		sin_t;
 
 	cos_t = cosf(theta);
 	sin_t = sinf(theta);

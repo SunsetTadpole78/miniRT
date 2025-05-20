@@ -51,13 +51,13 @@ void	*parse_sphere(char **values)
 // discriminant = b^2 - 4c
 // t1 = (-b - sqrt(discriminant)) / 2.0f;
 // t2 = (-b + sqrt(discriminant)) / 2.0f;
-static float	intersection_sphere(t_ray ray, t_sphere *sphere)
+static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
 {
-	t_fvector3		oc;
-	float			b;
-	float			delta;
-	float			x1;
-	float			x2;
+	t_fvector3	oc;
+	float		b;
+	float		delta;
+	float		x1;
+	float		x2;
 
 	oc = ft_fvector3_diff(ray.origin, sphere->position);
 	b = 2.0f * ft_fdot_product(oc, ray.direction);
@@ -84,7 +84,10 @@ void	render_sphere(t_mlx *mlx, t_ray *ray,
 	dist = intersection_sphere(*ray, sphere);
 	if (dist > 0 && dist <= ray->dist)
 	{
-		put_pixel(mlx, pixel, sphere->color);
+		*((unsigned int *)
+				(mlx->data + (int)(pixel.y * mlx->size_line
+						+ pixel.x * (mlx->bpp / 8))))
+			= (sphere->color.r << 16 | sphere->color.g << 8 | sphere->color.b);
 		ray->dist = dist;
 	}
 }

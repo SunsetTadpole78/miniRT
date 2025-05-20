@@ -201,7 +201,4 @@ int			parse_normal(char *value, t_fvector3 *normal,
 int			parse_color(char *value, t_rgb *rgb, char *invalid_format_error);
 void		*error_and_null(char *error);
 
-//TESTS
-void		put_pixel(t_mlx *mlx, t_fvector2 v, t_rgb rgb);
-
 #endif
