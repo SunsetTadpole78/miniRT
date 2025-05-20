@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 16:55:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:44:35 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 	sp->diameter = diameter;
 	sp->radius = diameter / 2.0f;
 	sp->color = color;
+	sp->render = get_render_by_id(SPHERE_ID);
 	return (sp);
 }
 
@@ -74,11 +75,41 @@ static float	intersection_sphere(t_ray ray, t_sphere *sphere)
 	return (-1.0f);
 }
 
+static float	get_intensity(t_ray *ray, t_ambiant *ambiant, t_sphere *sphere,
+	float dist)
+{
+	float		intensity;
+	float		level;
+	t_fvector3	direction;
+
+	level = ambiant->level;
+	direction = ray->direction;
+	intensity = level + (1 - level) * fmax(ft_fdot_product(
+				ft_fnormalize(ft_fvector3_diff(
+						ft_fvector3_sum(
+							ray->origin,
+							ft_fvector3_scale(direction, dist)
+							),
+						sphere->position
+						)),
+				ft_fnormalize(ft_fvector3_scale(
+						direction,
+						-1.0f
+						))
+				),
+			0.0f
+			);
+	if (intensity > 1.0f)
+		intensity = 1.0f;
+	return (intensity);
+}
+
 void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
 {
 	float		dist;
 	t_sphere	*sphere;
 	t_fvector3	impact_point;
+	float		intensity;
 
 	sphere = (t_sphere *)object;
 	dist = intersection_sphere(*ray, sphere);
@@ -88,12 +119,16 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
 				ray->origin,
 				ft_fvector3_scale(ray->direction, dist)
 				);
+		intensity = get_intensity(ray, mrt->ambiant, sphere, dist);
 		ray->color = calculate_brightness(
 				mrt,
 				impact_point,
 				ft_fnormalize(ft_fvector3_diff(impact_point, sphere->position)),
 				sphere->color
 				);
+		ray->color.r *= intensity;
+		ray->color.g *= intensity;
+		ray->color.b *= intensity;
 		ray->dist = dist;
 	}
 }

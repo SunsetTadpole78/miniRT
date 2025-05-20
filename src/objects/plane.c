@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 16:55:49 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:42:32 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
 	pl->position = position;
 	pl->normal = ft_fnormalize(normal);
 	pl->color = color;
+	pl->render = get_render_by_id(PLANE_ID);
 	return (pl);
 }
 

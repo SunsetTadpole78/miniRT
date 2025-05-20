@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 16:54:53 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:39:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,31 @@
 // Structures
 
 typedef struct s_minirt	t_minirt;
+typedef struct s_ray	t_ray;
+typedef struct s_object	t_object;
 
 typedef struct s_object
 {
-	char			*id;
-	struct s_object	*next;
+	char		*id;
+	t_object	*next;
+	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
 }	t_object;
+
+typedef struct s_color_object
+{
+	char		*id;
+	t_object	*next;
+	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	t_rgb		color;
+}	t_color_object;
 
 typedef struct s_ambiant
 {
 	char		*id;
 	t_object	*next;
-	float		level;
+	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
 	t_rgb		color;
+	float		level;
 }	t_ambiant;
 
 typedef struct s_ray
@@ -71,6 +83,7 @@ typedef struct s_camera
 {
 	char		*id;
 	t_object	*next;
+	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
 	t_fvector3	position;
 	t_fvector3	normal;
 	int			fov;
@@ -81,6 +94,8 @@ typedef struct s_light
 {
 	char		*id;
 	t_object	*next;
+	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	t_rgb		color;
 	t_fvector3	position;
 	float		level;
 	t_rgb		color;
@@ -93,40 +108,44 @@ typedef struct s_sphere
 {
 	char		*id;
 	t_object	*next;
+	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	t_rgb		color;
 	t_fvector3	position;
 	float		diameter;
 	float		radius;
-	t_rgb		color;
 }	t_sphere;
 
 typedef struct s_plane
 {
 	char		*id;
 	t_object	*next;
+	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	t_rgb		color;
 	t_fvector3	position;
 	t_fvector3	normal;
-	t_rgb		color;
 }	t_plane;
 
 typedef struct s_cylinder
 {
 	char		*id;
 	t_object	*next;
+	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	t_rgb		color;
 	t_fvector3	position;
 	t_fvector3	normal;
 	t_fvector2	size;
-	t_rgb		color;
 }	t_cylinder;
 
 typedef struct s_mlx
 {
-	void		*mlx_ptr;
-	void		*win_ptr;
-	void		*img_ptr;
-	char		*data;
-	int			bpp;
-	int			size_line;
-	int			endian;
+	void	*mlx_ptr;
+	void	*win_ptr;
+	void	*img_ptr;
+	char	*data;
+	int		bpp;
+	int		ll;
+	int		cl;
+	int		endian;
 }	t_mlx;
 
 typedef struct s_type
@@ -134,6 +153,7 @@ typedef struct s_type
 	char			*id;
 	void			*(*parser)(char **);
 	void			(*render)(t_minirt *, t_ray *, t_object *);
+	void			(*updater)(t_minirt *, t_object *);
 	struct s_type	*next;
 }	t_type;
 
@@ -190,10 +210,15 @@ int			set_ambiant(t_ambiant *ambiant);
 int			set_camera(t_camera *camera);
 
 int			register_type(char *id, void *(*parser)(char **),
-				void (*render)(t_minirt *, t_ray *, t_object *));
+				void (*render)(t_minirt *, t_ray *, t_object *),
+				void (*updater)(t_minirt *, t_object *));
 int			exist_type(char *id);
 void		*get_parser_by_id(char *id);
 void		*get_render_by_id(char *id);
+void		*get_updater_by_id(char *id);
+
+void		update_values(t_minirt *mrt);
+void		update_object_colors(t_minirt *mrt, t_object *object);
 
 //parsing
 int			parse_map(char *path);
@@ -205,6 +230,6 @@ int			parse_color(char *value, t_rgb *rgb, char *invalid_format_error);
 void		*error_and_null(char *error);
 
 //TESTS
-void		put_pixel(t_mlx *mlx, t_fvector2 v, t_rgb rgb);
+void		put_pixel(t_mlx *mlx, t_vector2 v, t_rgb rgb);
 
 #endif
