@@ -50,7 +50,7 @@ void	*parse_camera(char **values)
 	return (camera(position, normal, fov));
 }
 
-void	rotate_camera_yaw(t_camera *cam, float theta)
+void	update_yaw(t_camera *cam, float theta)
 {
 	t_fvector3	new;
 	float		cos_t;
@@ -73,7 +73,7 @@ void	rotate_camera_yaw(t_camera *cam, float theta)
 	cam->up = ft_fcross_product(cam->right, cam->normal);
 }
 
-void	rotate_camera_pitch(t_camera *cam, float theta)
+void	update_pitch(t_camera *cam, float theta)
 {
 	t_fvector3	new;
 	float		cos_t;
@@ -88,7 +88,7 @@ void	rotate_camera_pitch(t_camera *cam, float theta)
 	cam->up = ft_fnormalize(ft_fcross_product(cam->right, cam->normal));
 }
 
-void	add_fov(t_minirt *mrt, int incrementation)
+void	update_fov(t_minirt *mrt, int incrementation)
 {
 	int	fov;
 

@@ -15,9 +15,9 @@
 
 int	main(int argc, char **argv)
 {
+	int			code;
 	t_minirt	*mrt;
 	t_mlx		*mlx;
-	int			code;
 
 	if (argc != 2)
 		return (ft_error(USAGE_E, ERR_PREFIX, 1));

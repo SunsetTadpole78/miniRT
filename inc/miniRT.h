@@ -120,6 +120,7 @@ typedef struct s_mlx
 	int			bpp;
 	int			size_line;
 	int			endian;
+	int			update;
 }	t_mlx;
 
 typedef struct s_type
@@ -147,6 +148,7 @@ void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 void		init_mlx(t_mlx *mlx);
 void		destruct_mlx(t_mlx *mlx);
 int			key_hook(int keycode, t_minirt *mrt);
+int			release_key_hook(int keycode, t_minirt *mrt);
 int			loop_hook(t_minirt *mrt);
 int			close_window(t_minirt *mrt);
 void		handle_events(t_minirt *mrt);
@@ -159,9 +161,9 @@ void		*parse_ambiant(char **values);
 
 t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
 void		*parse_camera(char **values);
-void		rotate_camera_yaw(t_camera *cam, float theta);
-void		rotate_camera_pitch(t_camera *cam, float theta);
-void		add_fov(t_minirt *mrt, int incrementation);
+void		update_yaw(t_camera *cam, float theta);
+void		update_pitch(t_camera *cam, float theta);
+void		update_fov(t_minirt *mrt, int incrementation);
 
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_rgb color);

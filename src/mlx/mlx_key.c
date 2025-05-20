@@ -19,12 +19,10 @@ static int	rotation_key_hook(int keycode, t_minirt *mrt);
 
 int	key_hook(int keycode, t_minirt *mrt)
 {
-	if (keycode == OGLK_ESC || keycode == XK_ESC)
-		close_window(mrt);
-	else if (keycode == OGLK_FOVP || keycode == XK_FOVP)
-		add_fov(mrt, -1);
+	if (keycode == OGLK_FOVP || keycode == XK_FOVP)
+		update_fov(mrt, -1);
 	else if (keycode == OGLK_FOVM || keycode == XK_FOVM)
-		add_fov(mrt, 1);
+		update_fov(mrt, 1);
 	else if (keycode == OGLK_LEFT || keycode == XK_LEFT)
 		mrt->camera->position = ft_fvector3_sum(mrt->camera->position,
 				mrt->camera->right);
@@ -43,18 +41,28 @@ int	key_hook(int keycode, t_minirt *mrt)
 				ft_fvector3_scale(mrt->camera->normal, -1.0f));
 	else
 		rotation_key_hook(keycode, mrt);
+	mrt->mlx->update = 1;
 	return (0);
 }
 
 static int	rotation_key_hook(int keycode, t_minirt *mrt)
 {
 	if (keycode == OGLK_ARROW_LEFT || keycode == XK_ARROW_LEFT)
-		rotate_camera_yaw(mrt->camera, 0.1f);
+		update_yaw(mrt->camera, 0.1f);
 	else if (keycode == OGLK_ARROW_RIGHT || keycode == XK_ARROW_RIGHT)
-		rotate_camera_yaw(mrt->camera, -0.1f);
+		update_yaw(mrt->camera, -0.1f);
 	else if (keycode == OGLK_ARROW_UP || keycode == XK_ARROW_UP)
-		rotate_camera_pitch(mrt->camera, 0.1f);
+		update_pitch(mrt->camera, 0.1f);
 	else if (keycode == OGLK_ARROW_DOWN || keycode == XK_ARROW_DOWN)
-		rotate_camera_pitch(mrt->camera, -0.1f);
+		update_pitch(mrt->camera, -0.1f);
+	else if (keycode == OGLK_ESC || keycode == XK_ESC)
+		close_window(mrt);
+	return (0);
+}
+
+int	release_key_hook(int keycode, t_minirt *mrt)
+{
+	(void)keycode;
+	mrt->mlx->update = 0;
 	return (0);
 }
