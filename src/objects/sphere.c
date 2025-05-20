@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 15:14:03 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:16:25 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,20 +109,18 @@ void	render_sphere(t_minirt *mrt, t_ray *ray,
 {
 	float		dist;
 	t_sphere	*sphere;
-	t_mlx		*mlx;
 	float		intensity;
 
 	sphere = (t_sphere *)object;
 	dist = intersection_sphere(*ray, sphere);
-	mlx = mrt->mlx;
 	if (dist > 0 && dist <= ray->dist)
 	{
 		intensity = get_intensity(ray, mrt->ambiant, sphere, dist);
-		put_pixel(mlx, pixel, (t_rgb){
-				sphere->color.r * intensity,
-				sphere->color.g * intensity,
-				sphere->color.b * intensity
-				});
+		put_pixel(mrt->mlx, pixel, (t_rgb){
+			sphere->color.r * intensity,
+			sphere->color.g * intensity,
+			sphere->color.b * intensity
+		});
 		ray->dist = dist;
 	}
 }
