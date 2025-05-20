@@ -38,9 +38,6 @@
 
 # define WINDOW_NAME "miniRT"
 
-# define OPENGL_ESC_KEY 53
-# define X11_ESC_KEY 65307
-
 // Structures
 
 typedef struct s_minirt	t_minirt;
@@ -85,6 +82,8 @@ typedef struct s_camera
 	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
 	t_fvector3	position;
 	t_fvector3	normal;
+	t_fvector3	right;
+	t_fvector3	up;
 	int			fov;
 	float		iplane_scale;
 }	t_camera;
@@ -141,6 +140,7 @@ typedef struct s_mlx
 	int		ll;
 	int		cl;
 	int		endian;
+	int		update;
 }	t_mlx;
 
 typedef struct s_type
@@ -165,8 +165,13 @@ typedef struct s_minirt
 t_minirt	*minirt(void);
 void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
+// mlx
 void		init_mlx(t_mlx *mlx);
 void		destruct_mlx(t_mlx *mlx);
+int			key_hook(int keycode, t_minirt *mrt);
+int			loop_hook(t_minirt *mrt);
+int			close_window(t_minirt *mrt);
+void		handle_events(t_minirt *mrt);
 
 void		render_scene(t_minirt *mrt);
 
@@ -176,6 +181,9 @@ void		*parse_ambiant(char **values);
 
 t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
 void		*parse_camera(char **values);
+void		update_yaw(t_camera *cam, float theta);
+void		update_pitch(t_camera *cam, float theta);
+void		update_fov(t_minirt *mrt, int incrementation);
 
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_rgb color);
@@ -218,8 +226,5 @@ int			parse_normal(char *value, t_fvector3 *normal,
 				char *invalid_format_error);
 int			parse_color(char *value, t_rgb *rgb, char *invalid_format_error);
 void		*error_and_null(char *error);
-
-//TESTS
-void		put_pixel(t_mlx *mlx, t_vector2 v, t_rgb rgb);
 
 #endif

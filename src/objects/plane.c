@@ -13,6 +13,10 @@
 #include "miniRT.h"
 #include "errors.h"
 
+/* ------------------------------- PROTOTYPE -------------------------------- */
+static inline float	intersection_plane(t_ray ray, t_plane *plane);
+/* -------------------------------------------------------------------------- */
+
 t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
 {
 	t_plane	*pl;
@@ -43,13 +47,32 @@ void	*parse_plane(char **values)
 	return (plane(position, normal, color));
 }
 
+void	render_plane(t_minirt *mrt, t_ray *ray, t_vector2 pixel,
+			t_object *object)
+{
+	t_mlx	*mlx;
+	t_plane	*plane;
+	float	dist;
+
+	mlx = mrt->mlx;
+	plane = (t_plane *)object;
+	dist = intersection_plane(*ray, plane);
+	if (dist > 0 && dist <= ray->dist)
+	{
+		*((unsigned int *)(mlx->data + (int)(pixel.y * mlx->ll
+						+ pixel.x * mlx->cl)))
+			= (plane->color.r << 16 | plane->color.g << 8 | plane->color.b);
+		ray->dist = dist;
+	}
+}
+
 // t = ((P - O) * N) / D * N
 // P = point du plan.		O = origin du rayon.
 // D = direction du rayon.	N = normal du plan.
-static float	intersection_plane(t_ray ray, t_plane *plane)
+static inline float	intersection_plane(t_ray ray, t_plane *plane)
 {
-	float			denominator;
-	float			x;
+	float	denominator;
+	float	x;
 
 	denominator = ft_fdot_product(ray.direction, plane->normal);
 	if (fabs(denominator) < 0.000001f)
@@ -59,19 +82,4 @@ static float	intersection_plane(t_ray ray, t_plane *plane)
 	if (x >= 0.0f)
 		return (x);
 	return (-1.0f);
-}
-
-void	render_plane(t_minirt *mrt, t_ray *ray, t_vector2 pixel,
-			t_object *object)
-{
-	float		dist;
-	t_plane		*plane;
-
-	plane = (t_plane *)object;
-	dist = intersection_plane(*ray, plane);
-	if (dist > 0 && dist <= ray->dist)
-	{
-		put_pixel(mrt->mlx, pixel, plane->color);
-		ray->dist = dist;
-	}
 }

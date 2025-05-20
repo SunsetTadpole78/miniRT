@@ -13,6 +13,12 @@
 #include "miniRT.h"
 #include "errors.h"
 
+/* ------------------------------- PROTOTYPE -------------------------------- */
+static inline float	intersection_sphere(t_ray ray, t_sphere *sphere);
+static float	get_intensity(t_ray *ray, t_ambiant *ambiant, t_sphere *sphere,
+						float dist);
+/* -------------------------------------------------------------------------- */
+
 t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 {
 	t_sphere	*sp;
@@ -49,16 +55,39 @@ void	*parse_sphere(char **values)
 	return (sphere(position, diameter, color));
 }
 
-// discriminant = b^2 - 4c
+void	render_sphere(t_minirt *mrt, t_ray *ray,
+		t_vector2 pixel, t_object *object)
+{
+	t_mlx		*mlx;
+	t_sphere	*sphere;
+	float		dist;
+	float		intensity;
+
+	mlx = mrt->mlx;
+	sphere = (t_sphere *)object;
+	dist = intersection_sphere(*ray, sphere);
+	if (dist > 0 && dist <= ray->dist)
+	{
+		intensity = get_intensity(ray, mrt->ambiant, sphere, dist);
+		*((unsigned int *)(mlx->data + (int)(pixel.y * mlx->ll
+						+ pixel.x * mlx->cl)))
+			= ((int)(sphere->color.r * intensity) << 16
+				| (int)(sphere->color.g * intensity) << 8
+				| (int)(sphere->color.b * intensity));
+		ray->dist = dist;
+	}
+}
+
+// discriminant = b^2 - 4ac
 // t1 = (-b - sqrt(discriminant)) / 2.0f;
 // t2 = (-b + sqrt(discriminant)) / 2.0f;
-static float	intersection_sphere(t_ray ray, t_sphere *sphere)
+static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
 {
-	t_fvector3		oc;
-	float			b;
-	float			delta;
-	float			x1;
-	float			x2;
+	t_fvector3	oc;
+	float		b;
+	float		delta;
+	float		x1;
+	float		x2;
 
 	oc = ft_fvector3_diff(ray.origin, sphere->position);
 	b = 2.0f * ft_fdot_product(oc, ray.direction);
@@ -88,39 +117,10 @@ static float	get_intensity(t_ray *ray, t_ambiant *ambiant, t_sphere *sphere,
 				ft_fnormalize(ft_fvector3_diff(
 						ft_fvector3_sum(
 							ray->origin,
-							ft_fvector3_scale(direction, dist)
-							),
-						sphere->position
-						)),
-				ft_fnormalize(ft_fvector3_scale(
-						direction,
-						-1.0f
-						))
-				),
-			0.0f
-			);
+							ft_fvector3_scale(direction, dist)),
+						sphere->position)),
+				ft_fnormalize(ft_fvector3_scale(direction, -1.0f))), 0.0f);
 	if (intensity > 1.0f)
 		intensity = 1.0f;
 	return (intensity);
-}
-
-void	render_sphere(t_minirt *mrt, t_ray *ray,
-		t_vector2 pixel, t_object *object)
-{
-	float		dist;
-	t_sphere	*sphere;
-	float		intensity;
-
-	sphere = (t_sphere *)object;
-	dist = intersection_sphere(*ray, sphere);
-	if (dist > 0 && dist <= ray->dist)
-	{
-		intensity = get_intensity(ray, mrt->ambiant, sphere, dist);
-		put_pixel(mrt->mlx, pixel, (t_rgb){
-			sphere->color.r * intensity,
-			sphere->color.g * intensity,
-			sphere->color.b * intensity
-		});
-		ray->dist = dist;
-	}
 }

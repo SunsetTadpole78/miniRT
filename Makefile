@@ -23,6 +23,7 @@ FILES =		destructor.c			\
 		initializer.c			\
 		main.c				\
 		mlx/mlx.c			\
+		mlx/mlx_key.c			\
 		objects/ambiant.c		\
 		objects/camera.c		\
 		objects/cylinder.c		\
@@ -35,7 +36,7 @@ FILES =		destructor.c			\
 		parsing/elements.c		\
 		parsing/parser.c		\
 		parsing/utils.c			\
-		render/render.c
+		render/render.c			\
 
 ifeq ($(shell uname), Darwin)
 FILES += mlx/opengl.c

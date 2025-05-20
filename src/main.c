@@ -15,8 +15,8 @@
 
 int	main(int argc, char **argv)
 {
-	t_minirt	*mrt;
 	int			code;
+	t_minirt	*mrt;
 	t_mlx		*mlx;
 
 	if (argc != 2)
@@ -34,7 +34,8 @@ int	main(int argc, char **argv)
 	update_values(mrt);
 	init_mlx(mlx);
 	render_scene(mrt);
-	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img_ptr, 0, 0);
+	handle_events(mrt);
+	mlx_loop_hook(mlx->mlx_ptr, loop_hook, mrt);
 	mlx_loop(mlx->mlx_ptr);
 	return (0);
 }
