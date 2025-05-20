@@ -53,27 +53,6 @@ void	*parse_sphere(char **values)
 	return (sphere(position, diameter, color));
 }
 
-static float	get_intensity(t_ray *ray, t_ambiant *ambiant, t_sphere *sphere,
-	float dist)
-{
-	float		intensity;
-	float		level;
-	t_fvector3	direction;
-
-	level = ambiant->level;
-	direction = ray->direction;
-	intensity = level + (1 - level) * fmax(ft_fdot_product(
-				ft_fnormalize(ft_fvector3_diff(
-						ft_fvector3_sum(
-							ray->origin,
-							ft_fvector3_scale(direction, dist)),
-						sphere->position)),
-				ft_fnormalize(ft_fvector3_scale(direction, -1.0f))), 0.0f);
-	if (intensity > 1.0f)
-		intensity = 1.0f;
-	return (intensity);
-}
-
 void	render_sphere(t_minirt *mrt, t_ray *ray,
 		t_vector2 pixel, t_object *object)
 {
@@ -95,6 +74,27 @@ void	render_sphere(t_minirt *mrt, t_ray *ray,
 				| (int)(sphere->color.b * intensity));
 		ray->dist = dist;
 	}
+}
+
+static float	get_intensity(t_ray *ray, t_ambiant *ambiant, t_sphere *sphere,
+	float dist)
+{
+	float		intensity;
+	float		level;
+	t_fvector3	direction;
+
+	level = ambiant->level;
+	direction = ray->direction;
+	intensity = level + (1 - level) * fmax(ft_fdot_product(
+				ft_fnormalize(ft_fvector3_diff(
+						ft_fvector3_sum(
+							ray->origin,
+							ft_fvector3_scale(direction, dist)),
+						sphere->position)),
+				ft_fnormalize(ft_fvector3_scale(direction, -1.0f))), 0.0f);
+	if (intensity > 1.0f)
+		intensity = 1.0f;
+	return (intensity);
 }
 
 // discriminant = b^2 - 4ac
