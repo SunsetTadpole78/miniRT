@@ -73,8 +73,7 @@ void	render_plane(t_mlx *mlx, t_ray *ray, t_fvector2 pixel, t_object *object)
 	dist = intersection_plane(*ray, plane);
 	if (dist > 0 && dist <= ray->dist)
 	{
-		*((unsigned int *)
-				(mlx->data + (int)(pixel.y * mlx->size_line
+		*((unsigned int *)(mlx->data + (int)(pixel.y * mlx->size_line
 						+ pixel.x * (mlx->bpp / 8))))
 			= (plane->color.r << 16 | plane->color.g << 8 | plane->color.b);
 		ray->dist = dist;

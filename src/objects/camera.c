@@ -69,8 +69,7 @@ void	rotate_camera_yaw(t_camera *cam, float theta)
 	new.y = cam->normal.y;
 	new.z = cam->normal.x * sin_t + cam->normal.z * cos_t;
 	cam->normal = ft_fnormalize(new);
-	cam->right = ft_fnormalize(ft_fcross_product(cam->normal,
-				world));
+	cam->right = ft_fnormalize(ft_fcross_product(cam->normal, world));
 	cam->up = ft_fcross_product(cam->right, cam->normal);
 }
 

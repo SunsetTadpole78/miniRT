@@ -66,8 +66,7 @@ static inline t_fvector3	ray_tracer(t_camera *cam, t_fvector2 v, float ratio)
 
 	ndc_vec = (t_fvector3){
 		-(2.0f * ((v.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
-		-(2.0f * ((v.y + 0.5f) / WIN_HEIGHT) - 1.0f)
-		* cam->iplane_scale, 1.0f};
+		-(2.0f * ((v.y + 0.5f) / WIN_HEIGHT) - 1.0f) * cam->iplane_scale, 1.0f};
 	return (ft_fnormalize(
 			ft_fvector3_sum(
 				ft_fvector3_sum(
