@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   specular_reflection.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,32 +11,27 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include "errors.h"
 
-int	main(int argc, char **argv)
+t_fvector3	reflect(t_fvector3 v, t_fvector3 n)
 {
-	int			code;
-	t_minirt	*mrt;
-	t_mlx		*mlx;
+	return (ft_fvector3_diff(v, ft_fvector3_scale(n, 2.0f
+				* ft_fdot_product(v, n))));
+}
 
-	if (argc != 2)
-		return (ft_error(USAGE_E, ERR_PREFIX, 1));
-	mrt = minirt();
-	if (!mrt)
-		return (ft_error(MALLOC_E, ERR_PREFIX, 2));
-	code = parse_map(argv[1]);
-	if (code != 0)
-	{
-		destruct_minirt(mrt, 0);
-		return (2 + code);
-	}
-	mlx = mrt->mlx;
-	update_values(mrt);
-	init_mlx(mlx);
-	ft_bzero(mlx->data, WIN_HEIGHT * mlx->ll);
-	render_scene(mrt);
-	handle_events(mrt);
-	mlx_loop_hook(mlx->mlx_ptr, loop_hook, mrt);
-	mlx_loop(mlx->mlx_ptr);
-	return (0);
+t_fvector3	lerp(t_fvector3 a, t_fvector3 b, float t)
+{
+	return (ft_fvector3_sum(ft_fvector3_scale(a, 1.0f - t),
+			ft_fvector3_scale(b, t)));
+}
+
+t_fvector3	random_seed(void)
+{
+	float	theta;
+	float	u;
+	float	r;
+
+	theta = 2.0f * M_PI * ((float)rand() / (float)RAND_MAX);
+	u = 2.0f * ((float)rand() / (float)RAND_MAX) - 1.0f;
+	r = sqrtf(1.0f - u * u);
+	return ((t_fvector3){r * cosf(theta), r * sinf(theta), u});
 }

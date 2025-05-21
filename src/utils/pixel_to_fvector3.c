@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pixel_to_fvector3.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,32 +11,13 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include "errors.h"
 
-int	main(int argc, char **argv)
+t_fvector3	pixel_to_fvector3(t_mlx *mlx, int x, int y)
 {
-	int			code;
-	t_minirt	*mrt;
-	t_mlx		*mlx;
+	unsigned int	color;
 
-	if (argc != 2)
-		return (ft_error(USAGE_E, ERR_PREFIX, 1));
-	mrt = minirt();
-	if (!mrt)
-		return (ft_error(MALLOC_E, ERR_PREFIX, 2));
-	code = parse_map(argv[1]);
-	if (code != 0)
-	{
-		destruct_minirt(mrt, 0);
-		return (2 + code);
-	}
-	mlx = mrt->mlx;
-	update_values(mrt);
-	init_mlx(mlx);
-	ft_bzero(mlx->data, WIN_HEIGHT * mlx->ll);
-	render_scene(mrt);
-	handle_events(mrt);
-	mlx_loop_hook(mlx->mlx_ptr, loop_hook, mrt);
-	mlx_loop(mlx->mlx_ptr);
-	return (0);
+	color = *((unsigned int *)(mlx->data + (y * mlx->ll + x * mlx->cl)));
+	return ((t_fvector3){((color >> 16) & 0xFF) / 255.0f,
+		((color >> 8) & 0xFF) / 255.0f,
+		(color & 0xFF) / 255.0f});
 }

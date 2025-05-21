@@ -69,7 +69,7 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_vector2 pixel,
 	dist = intersection_plane(*ray, plane);
 	if (dist > 0 && dist <= ray->dist)
 	{
-		if (plane->pattern == 1)
+		if (plane->pattern >= 1)
 			color = checkerboard_pattern(plane, ray, dist);
 		else
 			color = plane->color.r << 16 | plane->color.g << 8 | plane->color.b;

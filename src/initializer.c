@@ -12,6 +12,10 @@
 
 #include "miniRT.h"
 
+/* ------------------------------- PROTOTYPE -------------------------------- */
+static void	register_all(void);
+/* -------------------------------------------------------------------------- */
+
 t_minirt	*minirt(void)
 {
 	static t_minirt	*mrt = NULL;
@@ -29,14 +33,23 @@ t_minirt	*minirt(void)
 		mrt->mlx = malloc(sizeof(t_mlx));
 		if (!mrt->mlx)
 			return (NULL);
-		register_type(AMBIANT_ID, parse_ambiant, NULL, NULL);
-		register_type(CAMERA_ID, parse_camera, NULL, NULL);
-		register_type(CYLINDER_ID, parse_cylinder, NULL, update_object_colors);
-		register_type(LIGHT_ID, parse_light, NULL, NULL);
-		register_type(PLANE_ID, parse_plane, render_plane,
-			update_object_colors);
-		register_type(SPHERE_ID, parse_sphere, render_sphere,
-			update_object_colors);
+		mrt->buffer = malloc(sizeof(t_fvector3) * (WIN_WIDTH * WIN_HEIGHT));
+		if (!mrt->buffer)
+			return (NULL);
+		mrt->count = 0;
+		register_all();
 	}
 	return (mrt);
+}
+
+static void	register_all(void)
+{
+	register_type(AMBIANT_ID, parse_ambiant, NULL, NULL);
+	register_type(CAMERA_ID, parse_camera, NULL, NULL);
+	register_type(CYLINDER_ID, parse_cylinder, NULL, update_object_colors);
+	register_type(LIGHT_ID, parse_light, NULL, NULL);
+	register_type(PLANE_ID, parse_plane, render_plane,
+		update_object_colors);
+	register_type(SPHERE_ID, parse_sphere, render_sphere,
+		update_object_colors);
 }

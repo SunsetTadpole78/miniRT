@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   fvector3_to_pixel.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,32 +11,10 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include "errors.h"
 
-int	main(int argc, char **argv)
+unsigned int	fvector3_to_pixel(t_fvector3 c)
 {
-	int			code;
-	t_minirt	*mrt;
-	t_mlx		*mlx;
-
-	if (argc != 2)
-		return (ft_error(USAGE_E, ERR_PREFIX, 1));
-	mrt = minirt();
-	if (!mrt)
-		return (ft_error(MALLOC_E, ERR_PREFIX, 2));
-	code = parse_map(argv[1]);
-	if (code != 0)
-	{
-		destruct_minirt(mrt, 0);
-		return (2 + code);
-	}
-	mlx = mrt->mlx;
-	update_values(mrt);
-	init_mlx(mlx);
-	ft_bzero(mlx->data, WIN_HEIGHT * mlx->ll);
-	render_scene(mrt);
-	handle_events(mrt);
-	mlx_loop_hook(mlx->mlx_ptr, loop_hook, mrt);
-	mlx_loop(mlx->mlx_ptr);
-	return (0);
+	return ((int)(fminf(fmaxf(c.x, 0.0f), 1.0f) * 255.0f) << 16
+		| (int)(fminf(fmaxf(c.y, 0.0f), 1.0f) * 255.0f) << 8
+		| (int)(fminf(fmaxf(c.z, 0.0f), 1.0f) * 255.0f));
 }

@@ -22,7 +22,6 @@ void	init_mlx(t_mlx *mlx)
 	mlx->data = mlx_get_data_addr(mlx->img_ptr, &mlx->bpp,
 			&mlx->ll, &mlx->endian);
 	mlx->cl = mlx->bpp / 8;
-	mlx->update = 0;
 }
 
 void	handle_events(t_minirt *mrt)
@@ -36,11 +35,7 @@ void	handle_events(t_minirt *mrt)
 
 int	loop_hook(t_minirt *mrt)
 {
-	if (mrt->mlx->update == 1)
-	{
-		render_scene(mrt);
-		mrt->mlx->update = 0;
-	}
+	render_scene(mrt);
 	return (0);
 }
 

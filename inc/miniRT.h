@@ -73,6 +73,8 @@ typedef struct s_ray
 	t_fvector3		origin;
 	t_fvector3		direction;
 	float			dist;
+	t_fvector3		hit;
+	t_fvector3		normal;
 }	t_ray;
 
 typedef struct s_camera
@@ -100,14 +102,16 @@ typedef struct s_light
 
 typedef struct s_sphere
 {
-	char		*id;
-	t_object	*next;
-	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
-	t_rgb		color;
-	t_fvector3	position;
-	float		diameter;
-	float		radius;
-	int			pattern;
+	char			*id;
+	t_object		*next;
+	void			(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	t_rgb			color;
+	t_fvector3		position;
+	float			diameter;
+	float			radius;
+	unsigned int	pixel_color;
+	int				pattern;
+	float			smoothness;
 }	t_sphere;
 
 typedef struct s_plane
@@ -144,7 +148,6 @@ typedef struct s_mlx
 	int		ll;
 	int		cl;
 	int		endian;
-	int		update;
 }	t_mlx;
 
 typedef struct s_type
@@ -164,71 +167,83 @@ typedef struct s_minirt
 	t_ambiant	*ambiant;
 	t_camera	*camera;
 	t_mlx		*mlx;
+	t_fvector3	*buffer;
+	int			count;
 }	t_minirt;
 
-t_minirt	*minirt(void);
-void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
+t_minirt		*minirt(void);
+void			destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
 // mlx
-void		init_mlx(t_mlx *mlx);
-void		destruct_mlx(t_mlx *mlx);
-int			key_hook(int keycode, t_minirt *mrt);
-int			loop_hook(t_minirt *mrt);
-int			close_window(t_minirt *mrt);
-void		handle_events(t_minirt *mrt);
+void			init_mlx(t_mlx *mlx);
+void			destruct_mlx(t_mlx *mlx);
+int				key_hook(int keycode, t_minirt *mrt);
+int				loop_hook(t_minirt *mrt);
+int				close_window(t_minirt *mrt);
+void			handle_events(t_minirt *mrt);
 
-void		render_scene(t_minirt *mrt);
+void			render_scene(t_minirt *mrt);
 
 //objects
-t_ambiant	*ambiant(float level, t_rgb color);
-void		*parse_ambiant(char **values);
+t_ambiant		*ambiant(float level, t_rgb color);
+void			*parse_ambiant(char **values);
 
-t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
-void		*parse_camera(char **values);
-void		update_yaw(t_camera *cam, float theta);
-void		update_pitch(t_camera *cam, float theta);
-void		update_fov(t_minirt *mrt, int incrementation);
+t_camera		*camera(t_fvector3 position, t_fvector3 normal, int fov);
+void			*parse_camera(char **values);
+void			update_yaw(t_camera *cam, float theta);
+void			update_pitch(t_camera *cam, float theta);
+void			update_fov(t_minirt *mrt, int incrementation);
 
-t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
-				t_fvector2 size, t_rgb color);
-void		*parse_cylinder(char **values);
+t_cylinder		*cylinder(t_fvector3 position, t_fvector3 normal,
+					t_fvector2 size, t_rgb color);
+void			*parse_cylinder(char **values);
 
-t_light		*light(t_fvector3 position, float level, t_rgb color);
-void		*parse_light(char **values);
+t_light			*light(t_fvector3 position, float level, t_rgb color);
+void			*parse_light(char **values);
 
-t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
-void		*parse_plane(char **values);
-void		render_plane(t_minirt *mrt, t_ray *ray,
-				t_vector2 pixel, t_object *object);
+t_plane			*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
+void			*parse_plane(char **values);
+void			render_plane(t_minirt *mrt, t_ray *ray,
+					t_vector2 pixel, t_object *object);
 
-t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color);
-void		*parse_sphere(char **values);
-void		render_sphere(t_minirt *mrt, t_ray *ray,
-				t_vector2 pixel, t_object *object);
+t_sphere		*sphere(t_fvector3 position, float diameter, t_rgb color);
+void			*parse_sphere(char **values);
+void			render_sphere(t_minirt *mrt, t_ray *ray,
+					t_vector2 pixel, t_object *object);
 
-int			register_object(void *object);
-int			register_light(t_light *light);
-int			set_ambiant(t_ambiant *ambiant);
-int			set_camera(t_camera *camera);
+int				register_object(void *object);
+int				register_light(t_light *light);
+int				set_ambiant(t_ambiant *ambiant);
+int				set_camera(t_camera *camera);
 
-int			register_type(char *id, void *(*parser)(char **),
-				void (*render)(t_minirt *, t_ray *, t_vector2, t_object *),
-				void (*updater)(t_minirt *, t_object *));
-int			exist_type(char *id);
-void		*get_parser_by_id(char *id);
-void		*get_render_by_id(char *id);
-void		*get_updater_by_id(char *id);
+int				register_type(char *id, void *(*parser)(char **),
+					void (*render)(t_minirt *, t_ray *, t_vector2, t_object *),
+					void (*updater)(t_minirt *, t_object *));
+int				exist_type(char *id);
+void			*get_parser_by_id(char *id);
+void			*get_render_by_id(char *id);
+void			*get_updater_by_id(char *id);
 
-void		update_values(t_minirt *mrt);
-void		update_object_colors(t_minirt *mrt, t_object *object);
+void			update_values(t_minirt *mrt);
+void			update_object_colors(t_minirt *mrt, t_object *object);
 
 //parsing
-int			parse_map(char *path);
-int			parse_fvector3(char *value, t_fvector3 *v3,
-				char *invalid_format_error);
-int			parse_normal(char *value, t_fvector3 *normal,
-				char *invalid_format_error);
-int			parse_color(char *value, t_rgb *rgb, char *invalid_format_error);
-void		*error_and_null(char *error);
+int				parse_map(char *path);
+int				parse_fvector3(char *value, t_fvector3 *v3,
+					char *invalid_format_error);
+int				parse_normal(char *value, t_fvector3 *normal,
+					char *invalid_format_error);
+int				parse_color(char *value, t_rgb *rgb,
+					char *invalid_format_error);
+void			*error_and_null(char *error);
+
+// utils
+
+unsigned int	fvector3_to_pixel(t_fvector3 c);
+t_fvector3		pixel_to_fvector3(t_mlx *mlx, int x, int y);
+
+t_fvector3		reflect(t_fvector3 v, t_fvector3 n);
+t_fvector3		lerp(t_fvector3 a, t_fvector3 b, float t);
+t_fvector3		random_seed(void);
 
 #endif
