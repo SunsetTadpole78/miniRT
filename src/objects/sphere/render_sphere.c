@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sphere.c                                           :+:      :+:    :+:   */
+/*   render_sphere.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
+/*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 16:16:25 by lroussel         ###   ########.fr       */
+/*   Created:   by Juste                               #+#    #+#             */
+/*   Updated:   by Juste                              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,54 +14,21 @@
 #include "errors.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline float	intersection_sphere(t_ray ray, t_sphere *sphere);
-static float	get_intensity(t_ray *ray, t_ambiant *ambiant, t_sphere *sphere,
-						float dist);
+static inline float			intersection_sphere(t_ray ray, t_sphere *sphere);
+static inline unsigned int	checkerboard_pattern_sphere(t_sphere *sphere,
+								t_ray *ray, float dist);
+static inline float			get_intensity(t_ray *ray, t_ambiant *ambiant,
+								t_sphere *sphere, float dist);
 /* -------------------------------------------------------------------------- */
-
-t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
-{
-	t_sphere	*sp;
-
-	sp = malloc(sizeof(t_sphere));
-	if (!sp)
-		return (NULL);
-	sp->id = SPHERE_ID;
-	sp->position = position;
-	sp->diameter = diameter;
-	sp->radius = diameter / 2.0f;
-	sp->color = color;
-	sp->render = get_render_by_id(SPHERE_ID);
-	return (sp);
-}
-
-void	*parse_sphere(char **values)
-{
-	t_fvector3	position;
-	float		diameter;
-	t_rgb		color;
-
-	if (!values[0] || !values[1] || !values[2] || values[3])
-		return (error_and_null(SP_ARGS_E));
-	if (!parse_fvector3(values[0], &position, SP_POS_E))
-		return (NULL);
-	if (!ft_isnumeric(values[1]) || ft_isoutint(values[1]))
-		return (error_and_null(SP_DIAM_E));
-	diameter = ft_atof(values[1]);
-	if (diameter < 0.0f)
-		return (error_and_null(SP_DIAM_E));
-	if (!parse_color(values[2], &color, SP_RGB_E))
-		return (NULL);
-	return (sphere(position, diameter, color));
-}
 
 void	render_sphere(t_minirt *mrt, t_ray *ray,
 		t_vector2 pixel, t_object *object)
 {
-	t_mlx		*mlx;
-	t_sphere	*sphere;
-	float		dist;
-	float		intensity;
+	t_mlx			*mlx;
+	t_sphere		*sphere;
+	float			dist;
+	float			intensity;
+	unsigned int	color;
 
 	mlx = mrt->mlx;
 	sphere = (t_sphere *)object;
@@ -69,11 +36,14 @@ void	render_sphere(t_minirt *mrt, t_ray *ray,
 	if (dist > 0 && dist <= ray->dist)
 	{
 		intensity = get_intensity(ray, mrt->ambiant, sphere, dist);
+		if (sphere->pattern == 1)
+			color = checkerboard_pattern_sphere(sphere, ray, dist);
+		else
+			color = ((int)(sphere->color.r * intensity) << 16
+					| (int)(sphere->color.g * intensity) << 8
+					| (int)(sphere->color.b * intensity));
 		*((unsigned int *)(mlx->data + (int)(pixel.y * mlx->ll
-						+ pixel.x * mlx->cl)))
-			= ((int)(sphere->color.r * intensity) << 16
-				| (int)(sphere->color.g * intensity) << 8
-				| (int)(sphere->color.b * intensity));
+						+ pixel.x * mlx->cl))) = color;
 		ray->dist = dist;
 	}
 }
@@ -104,8 +74,23 @@ static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
 	return (-1.0f);
 }
 
-static float	get_intensity(t_ray *ray, t_ambiant *ambiant, t_sphere *sphere,
-	float dist)
+static inline unsigned int	checkerboard_pattern_sphere(t_sphere *sphere,
+	t_ray *ray, float dist)
+{
+	t_fvector3	diff;
+
+	diff = ft_fnormalize(ft_fvector3_diff(ft_fvector3_sum(ray->origin,
+					ft_fvector3_scale(ray->direction, dist)),
+				sphere->position));
+	if ((int)((floor((0.5f + atan2f(diff.z, diff.x) / (2.0f * M_PI)) * 10.0f))
+		+ (floor((0.5f - asinf(diff.y) / M_PI) * 10.0f))) % 2 == 0)
+		return (0xFFFFFF);
+	else
+		return (0x000000);
+}
+
+static inline float	get_intensity(t_ray *ray, t_ambiant *ambiant,
+	t_sphere *sphere, float dist)
 {
 	float		intensity;
 	float		level;
@@ -113,10 +98,9 @@ static float	get_intensity(t_ray *ray, t_ambiant *ambiant, t_sphere *sphere,
 
 	level = ambiant->level;
 	direction = ray->direction;
-	intensity = level + (1 - level) * fmax(ft_fdot_product(
-				ft_fnormalize(ft_fvector3_diff(
-						ft_fvector3_sum(
-							ray->origin,
+	intensity = level + (1 - level)
+		* fmax(ft_fdot_product(ft_fnormalize(
+					ft_fvector3_diff(ft_fvector3_sum(ray->origin,
 							ft_fvector3_scale(direction, dist)),
 						sphere->position)),
 				ft_fnormalize(ft_fvector3_scale(direction, -1.0f))), 0.0f);

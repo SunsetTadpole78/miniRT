@@ -14,12 +14,15 @@
 #include "errors.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline float	intersection_plane(t_ray ray, t_plane *plane);
+static inline float			intersection_plane(t_ray ray, t_plane *plane);
+static inline unsigned int	checkerboard_pattern(t_plane *plane,
+								t_ray *ray, float dist);
 /* -------------------------------------------------------------------------- */
 
 t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
 {
-	t_plane	*pl;
+	t_plane		*pl;
+	t_fvector3	ref;
 
 	pl = malloc(sizeof(t_plane));
 	if (!pl)
@@ -27,8 +30,14 @@ t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
 	pl->id = PLANE_ID;
 	pl->position = position;
 	pl->normal = ft_fnormalize(normal);
+	ref = (t_fvector3){0, 1, 0};
+	if (fabs(ft_fdot_product(pl->normal, ref)) > 0.999f)
+		ref = (t_fvector3){1, 0, 0};
+	pl->right = ft_fnormalize(ft_fcross_product(pl->normal, ref));
+	pl->up = ft_fcross_product(pl->right, pl->normal);
 	pl->color = color;
 	pl->render = get_render_by_id(PLANE_ID);
+	pl->pattern = 1;
 	return (pl);
 }
 
@@ -50,20 +59,38 @@ void	*parse_plane(char **values)
 void	render_plane(t_minirt *mrt, t_ray *ray, t_vector2 pixel,
 			t_object *object)
 {
-	t_mlx	*mlx;
-	t_plane	*plane;
-	float	dist;
+	t_mlx			*mlx;
+	t_plane			*plane;
+	float			dist;
+	unsigned int	color;
 
 	mlx = mrt->mlx;
 	plane = (t_plane *)object;
 	dist = intersection_plane(*ray, plane);
 	if (dist > 0 && dist <= ray->dist)
 	{
+		if (plane->pattern == 1)
+			color = checkerboard_pattern(plane, ray, dist);
+		else
+			color = plane->color.r << 16 | plane->color.g << 8 | plane->color.b;
 		*((unsigned int *)(mlx->data + (int)(pixel.y * mlx->ll
-						+ pixel.x * mlx->cl)))
-			= (plane->color.r << 16 | plane->color.g << 8 | plane->color.b);
+						+ pixel.x * mlx->cl))) = color;
 		ray->dist = dist;
 	}
+}
+
+static inline unsigned int	checkerboard_pattern(t_plane *plane,
+	t_ray *ray, float dist)
+{
+	t_fvector3	diff;
+
+	diff = ft_fvector3_diff(ft_fvector3_sum(ray->origin,
+				ft_fvector3_scale(ray->direction, dist)), plane->position);
+	if ((int)((floor(ft_fdot_product(diff, plane->right) * 0.05f))
+		+ (floor(ft_fdot_product(diff, plane->up) * 0.05f))) % 2 == 0)
+		return (0xFFFFFF);
+	else
+		return (0x000000);
 }
 
 // t = ((P - O) * N) / D * N

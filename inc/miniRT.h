@@ -107,6 +107,7 @@ typedef struct s_sphere
 	t_fvector3	position;
 	float		diameter;
 	float		radius;
+	int			pattern;
 }	t_sphere;
 
 typedef struct s_plane
@@ -117,6 +118,9 @@ typedef struct s_plane
 	t_rgb		color;
 	t_fvector3	position;
 	t_fvector3	normal;
+	t_fvector3	right;
+	t_fvector3	up;
+	int			pattern;
 }	t_plane;
 
 typedef struct s_cylinder
