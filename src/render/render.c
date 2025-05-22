@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/22 13:21:34 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 18:42:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ static inline void		intercept(t_minirt *mrt, t_vector2 pos, t_ray ray);
 
 void	render_scene(t_minirt *mrt)
 {
-	t_vector2		pos;
-	t_ray			ray;
-	t_camera		*camera;
-	t_mlx			*mlx;
-	float			ratio;
+	t_vector2	pos;
+	t_ray		ray;
+	t_camera	*camera;
+	t_mlx		*mlx;
+	float		ratio;
 
 	pos.y = 0;
 	mlx = mrt->mlx;
