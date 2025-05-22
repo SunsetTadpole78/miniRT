@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 16:16:25 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:21:48 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline float	intersection_sphere(t_ray ray, t_sphere *sphere);
-static float	get_intensity(t_ray *ray, t_ambiant *ambiant, t_sphere *sphere,
-						float dist);
 /* -------------------------------------------------------------------------- */
 
 t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
@@ -55,25 +53,30 @@ void	*parse_sphere(char **values)
 	return (sphere(position, diameter, color));
 }
 
-void	render_sphere(t_minirt *mrt, t_ray *ray,
-		t_vector2 pixel, t_object *object)
+void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
 {
-	t_mlx		*mlx;
 	t_sphere	*sphere;
 	float		dist;
-	float		intensity;
+	int			inside;
+	t_hit_data	hit;
 
-	mlx = mrt->mlx;
 	sphere = (t_sphere *)object;
 	dist = intersection_sphere(*ray, sphere);
 	if (dist > 0 && dist <= ray->dist)
 	{
-		intensity = get_intensity(ray, mrt->ambiant, sphere, dist);
-		*((unsigned int *)(mlx->data + (int)(pixel.y * mlx->ll
-						+ pixel.x * mlx->cl)))
-			= ((int)(sphere->color.r * intensity) << 16
-				| (int)(sphere->color.g * intensity) << 8
-				| (int)(sphere->color.b * intensity));
+		hit.impact_point = ft_fvector3_sum(ray->origin,
+				ft_fvector3_scale(ray->direction, dist));
+		hit.normal = ft_fnormalize(ft_fvector3_diff(hit.impact_point,
+					sphere->position));
+		hit.position = sphere->position;
+		inside = ft_fvector3_length(ft_fvector3_diff(ray->origin,
+					sphere->position)) < sphere->radius;
+		if (inside)
+			hit.normal = ft_fvector3_scale(hit.normal, -1);
+		ray->color = apply_lights_modifier(
+				get_lights_modifier(mrt, hit,
+					sphere->radius * ((!inside) * -1 + (inside))),
+				sphere->color);
 		ray->dist = dist;
 	}
 }
@@ -102,25 +105,4 @@ static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
 	if (x2 > 0.001f)
 		return (x2);
 	return (-1.0f);
-}
-
-static float	get_intensity(t_ray *ray, t_ambiant *ambiant, t_sphere *sphere,
-	float dist)
-{
-	float		intensity;
-	float		level;
-	t_fvector3	direction;
-
-	level = ambiant->level;
-	direction = ray->direction;
-	intensity = level + (1 - level) * fmax(ft_fdot_product(
-				ft_fnormalize(ft_fvector3_diff(
-						ft_fvector3_sum(
-							ray->origin,
-							ft_fvector3_scale(direction, dist)),
-						sphere->position)),
-				ft_fnormalize(ft_fvector3_scale(direction, -1.0f))), 0.0f);
-	if (intensity > 1.0f)
-		intensity = 1.0f;
-	return (intensity);
 }
