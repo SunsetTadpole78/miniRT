@@ -17,15 +17,12 @@
 static inline float			intersection_sphere(t_ray ray, t_sphere *sphere);
 static inline unsigned int	checkerboard_pattern(t_sphere *sphere,
 								t_ray *ray, float dist);
-static inline float			get_intensity(t_ray *ray, t_ambiant *ambiant,
-								t_sphere *sphere, float dist);
 /* -------------------------------------------------------------------------- */
 
 void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
 {
-	t_sphere		*sphere;
-	float			dist;
-	float			intensity;
+	t_sphere	*sphere;
+	float		dist;
 
 	sphere = (t_sphere *)object;
 	dist = intersection_sphere(*ray, sphere);
@@ -35,13 +32,12 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
 				ft_fvector3_scale(ray->direction, dist));
 		ray->normal = ft_fnormalize(
 				ft_fvector3_diff(ray->hit, sphere->position));
-		intensity = get_intensity(ray, mrt->ambiant, sphere, dist);
 		if (sphere->pattern == 1)
 			mrt->mlx->pixel_color = checkerboard_pattern(sphere, ray, dist);
 		else
-			mrt->mlx->pixel_color = ((int)(sphere->color.r * intensity) << 16
-					| (int)(sphere->color.g * intensity) << 8
-					| (int)(sphere->color.b * intensity));
+			mrt->mlx->pixel_color = (int)sphere->color.r << 16
+				| (int)sphere->color.g << 8
+				| (int)sphere->color.b;
 		specular_reflection(ray, sphere->smoothness);
 		ray->dist = dist;
 	}
@@ -71,26 +67,6 @@ static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
 	if (x2 > 0.001f)
 		return (x2);
 	return (-1.0f);
-}
-
-static inline float	get_intensity(t_ray *ray, t_ambiant *ambiant,
-	t_sphere *sphere, float dist)
-{
-	float		intensity;
-	float		level;
-	t_fvector3	direction;
-
-	level = ambiant->level;
-	direction = ray->direction;
-	intensity = level + (1 - level)
-		* fmax(ft_fdot_product(ft_fnormalize(
-					ft_fvector3_diff(ft_fvector3_sum(ray->origin,
-							ft_fvector3_scale(direction, dist)),
-						sphere->position)),
-				ft_fnormalize(ft_fvector3_scale(direction, -1.0f))), 0.0f);
-	if (intensity > 1.0f)
-		intensity = 1.0f;
-	return (intensity);
 }
 
 static inline unsigned int	checkerboard_pattern(t_sphere *sphere,
