@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:44:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 15:20:31 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:44:25 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,36 +20,37 @@ static inline void	apply_diffuse_lights(t_light *light,
 
 t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data hit, float radius)
 {
-	t_frgb	light_color;
+	t_frgb	color;
 	t_light	*light;
 
-	light_color = (t_frgb){
-		powf(mrt->ambiant->color.r / 255.0f, GAMMA) * mrt->ambiant->level,
-		powf(mrt->ambiant->color.g / 255.0f, GAMMA) * mrt->ambiant->level,
-		powf(mrt->ambiant->color.b / 255.0f, GAMMA) * mrt->ambiant->level};
+	color = (t_frgb){
+		(float)powf(mrt->ambiant->color.r / 255.0f, GAMMA)
+		* mrt->ambiant->level,
+		(float)powf(mrt->ambiant->color.g / 255.0f, GAMMA)
+		* mrt->ambiant->level,
+		(float)powf(mrt->ambiant->color.b / 255.0f, GAMMA)
+		* mrt->ambiant->level};
 	light = mrt->lights;
 	while (light)
 	{
 		if (radius <= 0.0f || ft_fvector3_length(ft_fvector3_diff(
-					light->position, hit.position))
-			<= radius)
-			apply_diffuse_lights(light, hit.impact_point, hit.normal,
-				&light_color);
+					light->position, hit.position)) <= radius)
+			apply_diffuse_lights(light, hit.impact_point, hit.normal, &color);
 		light = (t_light *)light->next;
 	}
-	light_color.r = fmin(light_color.r, 1.0f);
-	light_color.g = fmin(light_color.g, 1.0f);
-	light_color.b = fmin(light_color.b, 1.0f);
-	return (light_color);
+	color.r = fmin(color.r, 1.0f);
+	color.g = fmin(color.g, 1.0f);
+	color.b = fmin(color.b, 1.0f);
+	return (color);
 }
 
 t_rgb	apply_lights_modifier(t_frgb modifier, t_rgb base)
 {
-	base.r = (unsigned char) fmin(powf((powf((float)base.r / 255.0f, GAMMA))
+	base.r = (unsigned char) fmin(powf(powf((float)base.r / 255.0f, GAMMA)
 				* fmin(modifier.r, 1.0f), 1.0f / GAMMA) * 255.0f, 255.0f);
-	base.g = (unsigned char) fmin(powf((powf((float)base.g / 255.0f, GAMMA))
+	base.g = (unsigned char) fmin(powf(powf((float)base.g / 255.0f, GAMMA)
 				* fmin(modifier.g, 1.0f), 1.0f / GAMMA) * 255.0f, 255.0f);
-	base.b = (unsigned char) fmin(powf((powf((float)base.b / 255.0f, GAMMA))
+	base.b = (unsigned char) fmin(powf(powf((float)base.b / 255.0f, GAMMA)
 				* fmin(modifier.b, 1.0f), 1.0f / GAMMA) * 255.0f, 255.0f);
 	return (base);
 }
@@ -67,8 +68,8 @@ static inline float	calculate_light_level(t_light *light,
 	dot = ft_fdot_product(normal, direction);
 	if (dot <= 0.0f)
 		return (0.0f);
-	return (dot * (1.0f / (1.0f + light->linear_at_coef * distance
-				+ light->quadratic_at_coef * distance * distance)));
+	return (dot * (1.0f / (1.0f + LINEAR_ATTENUATION_COEF * distance
+				+ QUADRATIC_ATTENUATION_COEF * distance * distance)));
 }
 
 static inline void	apply_diffuse_lights(t_light *light,

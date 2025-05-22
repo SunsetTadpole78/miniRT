@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 13:24:04 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:42:29 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	main(int argc, char **argv)
 		destruct_minirt(mrt, 0);
 		return (2 + code);
 	}
+	if (!mrt->ambiant)
+		mrt->ambiant = ambiant(0, (t_rgb){0, 0, 0});
 	mlx = mrt->mlx;
 	init_mlx(mlx);
 	render_scene(mrt);

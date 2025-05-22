@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 15:14:02 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:44:43 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 # define WINDOW_NAME "miniRT"
 
 # define GAMMA 2.2f
+# define LINEAR_ATTENUATION_COEF 0.0004f
+# define QUADRATIC_ATTENUATION_COEF 0.004f
 
 // Structures
 
@@ -99,8 +101,6 @@ typedef struct s_light
 	t_rgb		color;
 	t_fvector3	position;
 	float		level;
-	float		linear_at_coef;
-	float		quadratic_at_coef;
 	t_rgb		render_color;
 }	t_light;
 
