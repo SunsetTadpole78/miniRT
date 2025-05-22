@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 13:23:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:14:02 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,13 @@ typedef struct s_minirt
 	t_mlx		*mlx;
 }	t_minirt;
 
+typedef struct s_hit_data
+{
+	t_fvector3	impact_point;
+	t_fvector3	normal;
+	t_fvector3	position;
+}	t_hit_data;
+
 t_minirt	*minirt(void);
 void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
@@ -180,8 +187,7 @@ void		handle_events(t_minirt *mrt);
 
 void		render_scene(t_minirt *mrt);
 
-t_frgb		get_lights_modifier(t_minirt *mrt, t_fvector3 impact_point,
-				t_fvector3 normal, float radius, t_fvector3 position);
+t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit, float radius);
 t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 
 //objects

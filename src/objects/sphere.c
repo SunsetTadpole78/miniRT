@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 13:34:53 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:21:48 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,28 +57,25 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
 {
 	t_sphere	*sphere;
 	float		dist;
-	t_fvector3	impact_point;
-	t_fvector3	normal;
 	int			inside;
+	t_hit_data	hit;
 
 	sphere = (t_sphere *)object;
 	dist = intersection_sphere(*ray, sphere);
 	if (dist > 0 && dist <= ray->dist)
 	{
-		impact_point = ft_fvector3_sum(
-				ray->origin,
-				ft_fvector3_scale(ray->direction, dist)
-				);
-		normal = ft_fnormalize(ft_fvector3_diff(impact_point,
+		hit.impact_point = ft_fvector3_sum(ray->origin,
+				ft_fvector3_scale(ray->direction, dist));
+		hit.normal = ft_fnormalize(ft_fvector3_diff(hit.impact_point,
 					sphere->position));
+		hit.position = sphere->position;
 		inside = ft_fvector3_length(ft_fvector3_diff(ray->origin,
 					sphere->position)) < sphere->radius;
 		if (inside)
-			normal = ft_fvector3_scale(normal, -1);
-		ray->color = apply_lights_modifier(get_lights_modifier(
-					mrt, impact_point, normal,
-					sphere->radius * ((!inside) * -1 + (inside)),
-					sphere->position),
+			hit.normal = ft_fvector3_scale(hit.normal, -1);
+		ray->color = apply_lights_modifier(
+				get_lights_modifier(mrt, hit,
+					sphere->radius * ((!inside) * -1 + (inside))),
 				sphere->color);
 		ray->dist = dist;
 	}

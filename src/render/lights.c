@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:44:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 13:11:32 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:20:31 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ static inline void	apply_diffuse_lights(t_light *light,
 						t_fvector3 impact_point, t_fvector3 normal,
 						t_frgb *color);
 
-t_frgb	get_lights_modifier(t_minirt *mrt, t_fvector3 impact_point,
-		t_fvector3 normal, float radius, t_fvector3 position)
+t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data hit, float radius)
 {
 	t_frgb	light_color;
 	t_light	*light;
@@ -31,10 +30,11 @@ t_frgb	get_lights_modifier(t_minirt *mrt, t_fvector3 impact_point,
 	light = mrt->lights;
 	while (light)
 	{
-		if (radius <= 0.0f
-			|| ft_fvector3_length(ft_fvector3_diff(light->position, position))
+		if (radius <= 0.0f || ft_fvector3_length(ft_fvector3_diff(
+					light->position, hit.position))
 			<= radius)
-			apply_diffuse_lights(light, impact_point, normal, &light_color);
+			apply_diffuse_lights(light, hit.impact_point, hit.normal,
+				&light_color);
 		light = (t_light *)light->next;
 	}
 	light_color.r = fmin(light_color.r, 1.0f);

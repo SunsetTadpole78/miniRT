@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 13:39:57 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:17:51 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,20 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object)
 {
 	t_plane		*plane;
 	float		dist;
-	t_fvector3	impact_point;
-	t_fvector3	normal;
+	t_hit_data	hit;
 
 	plane = (t_plane *)object;
 	dist = intersection_plane(*ray, plane);
 	if (dist > 0 && dist <= ray->dist)
 	{
-		impact_point = ft_fvector3_sum(ray->origin,
+		hit.position = plane->position;
+		hit.impact_point = ft_fvector3_sum(ray->origin,
 				ft_fvector3_scale(ray->direction, dist));
-		normal = plane->normal;
-		if (ft_fdot_product(ray->direction, normal) > 0)
-			normal = ft_fvector3_scale(normal, -1);
-		ray->color = apply_lights_modifier(get_lights_modifier(mrt,
-					impact_point, normal, 0, plane->position),
+		hit.normal = plane->normal;
+		if (ft_fdot_product(ray->direction, hit.normal) > 0)
+			hit.normal = ft_fvector3_scale(hit.normal, -1);
+		ray->color = apply_lights_modifier(
+				get_lights_modifier(mrt, hit, 0),
 				plane->color);
 		ray->dist = dist;
 	}
