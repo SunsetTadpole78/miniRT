@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 17:44:43 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 18:59:03 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,13 +209,11 @@ void		*parse_light(char **values);
 
 t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
 void		*parse_plane(char **values);
-void		render_plane(t_minirt *mrt, t_ray *ray,
-				t_object *object);
+void		render_plane(t_minirt *mrt, t_ray *ray, t_object *object);
 
 t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color);
 void		*parse_sphere(char **values);
-void		render_sphere(t_minirt *mrt, t_ray *ray,
-				t_object *object);
+void		render_sphere(t_minirt *mrt, t_ray *ray, t_object *object);
 
 int			register_object(void *object);
 int			register_light(t_light *light);
