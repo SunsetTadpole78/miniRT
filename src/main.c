@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 01:14:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:42:29 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 int	main(int argc, char **argv)
 {
-	t_minirt	*mrt;
 	int			code;
+	t_minirt	*mrt;
 	t_mlx		*mlx;
 
 	if (argc != 2)
@@ -30,10 +30,13 @@ int	main(int argc, char **argv)
 		destruct_minirt(mrt, 0);
 		return (2 + code);
 	}
+	if (!mrt->ambiant)
+		mrt->ambiant = ambiant(0, (t_rgb){0, 0, 0});
 	mlx = mrt->mlx;
 	init_mlx(mlx);
 	render_scene(mrt);
-	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img_ptr, 0, 0);
+	handle_events(mrt);
+	mlx_loop_hook(mlx->mlx_ptr, loop_hook, mrt);
 	mlx_loop(mlx->mlx_ptr);
 	return (0);
 }

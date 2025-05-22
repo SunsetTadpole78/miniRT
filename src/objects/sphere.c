@@ -6,12 +6,16 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/17 21:40:07 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:21:48 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "errors.h"
+
+/* ------------------------------- PROTOTYPE -------------------------------- */
+static inline float	intersection_sphere(t_ray ray, t_sphere *sphere);
+/* -------------------------------------------------------------------------- */
 
 t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 {
@@ -25,6 +29,7 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 	sp->diameter = diameter;
 	sp->radius = diameter / 2.0f;
 	sp->color = color;
+	sp->render = get_render_by_id(SPHERE_ID);
 	return (sp);
 }
 
@@ -48,16 +53,44 @@ void	*parse_sphere(char **values)
 	return (sphere(position, diameter, color));
 }
 
-// discriminant = b^2 - 4c
+void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
+{
+	t_sphere	*sphere;
+	float		dist;
+	int			inside;
+	t_hit_data	hit;
+
+	sphere = (t_sphere *)object;
+	dist = intersection_sphere(*ray, sphere);
+	if (dist > 0 && dist <= ray->dist)
+	{
+		hit.impact_point = ft_fvector3_sum(ray->origin,
+				ft_fvector3_scale(ray->direction, dist));
+		hit.normal = ft_fnormalize(ft_fvector3_diff(hit.impact_point,
+					sphere->position));
+		hit.position = sphere->position;
+		inside = ft_fvector3_length(ft_fvector3_diff(ray->origin,
+					sphere->position)) < sphere->radius;
+		if (inside)
+			hit.normal = ft_fvector3_scale(hit.normal, -1);
+		ray->color = apply_lights_modifier(
+				get_lights_modifier(mrt, hit,
+					sphere->radius * ((!inside) * -1 + (inside))),
+				sphere->color);
+		ray->dist = dist;
+	}
+}
+
+// discriminant = b^2 - 4ac
 // t1 = (-b - sqrt(discriminant)) / 2.0f;
 // t2 = (-b + sqrt(discriminant)) / 2.0f;
-static float	intersection_sphere(t_ray ray, t_sphere *sphere)
+static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
 {
-	t_fvector3		oc;
-	float			b;
-	float			delta;
-	float			x1;
-	float			x2;
+	t_fvector3	oc;
+	float		b;
+	float		delta;
+	float		x1;
+	float		x2;
 
 	oc = ft_fvector3_diff(ray.origin, sphere->position);
 	b = 2.0f * ft_fdot_product(oc, ray.direction);
@@ -72,19 +105,4 @@ static float	intersection_sphere(t_ray ray, t_sphere *sphere)
 	if (x2 > 0.001f)
 		return (x2);
 	return (-1.0f);
-}
-
-void	render_sphere(t_mlx *mlx, t_ray *ray,
-		t_fvector2 pixel, t_object *object)
-{
-	float		dist;
-	t_sphere	*sphere;
-
-	sphere = (t_sphere *)object;
-	dist = intersection_sphere(*ray, sphere);
-	if (dist > 0 && dist <= ray->dist)
-	{
-		put_pixel(mlx, pixel, sphere->color);
-		ray->dist = dist;
-	}
 }

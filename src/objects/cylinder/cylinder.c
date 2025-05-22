@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 02:59:57 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 19:31:50 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	cy->color = color;
 	cy->radius = size.x / 2.0f;
 	cy->half_height = size.y / 2.0f;
+	cy->render = get_render_by_id(CYLINDER_ID);
 	return (cy);
 }
 
@@ -80,8 +81,7 @@ float	intersection_cylinder(t_ray ray, t_cylinder *cylinder)
 	return (t);
 }
 
-void	render_cylinder(t_mlx *mlx, t_ray *ray, t_fvector2 pixel,
-	t_object *object)
+void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object)
 {
 	float		dist;
 	t_cylinder	*cylinder;
@@ -90,7 +90,8 @@ void	render_cylinder(t_mlx *mlx, t_ray *ray, t_fvector2 pixel,
 	dist = intersection_cylinder(*ray, cylinder);
 	if (dist > 0 && dist <= ray->dist)
 	{
-		put_pixel(mlx, pixel, cylinder->color);
+		(void)mrt;
+		ray->color = cylinder->color;
 		ray->dist = dist;
 	}
 }
