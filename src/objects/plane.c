@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 13:33:26 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:39:57 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object)
 				ft_fvector3_scale(ray->direction, dist));
 		normal = plane->normal;
 		if (ft_fdot_product(ray->direction, normal) > 0)
-			shading_normal = ft_fvector3_scale(normal, -1);
+			normal = ft_fvector3_scale(normal, -1);
 		ray->color = apply_lights_modifier(get_lights_modifier(mrt,
 					impact_point, normal, 0, plane->position),
 				plane->color);
