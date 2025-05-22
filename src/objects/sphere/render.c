@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_sphere.c                                    :+:      :+:    :+:   */
+/*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -106,12 +106,4 @@ static inline unsigned int	checkerboard_pattern(t_sphere *sphere,
 		return (0xFFFFFF);
 	else
 		return (0x000000);
-}
-
-void	specular_reflection(t_ray *ray, float smoothness)
-{
-	ray->origin = ray->hit;
-	ray->direction = lerp(ft_fnormalize(
-				ft_fvector3_sum(ray->normal, random_seed())),
-			reflect(ray->direction, ray->normal), smoothness);
 }

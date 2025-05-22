@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   clean_buffer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,31 +11,21 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include "errors.h"
 
-int	main(int argc, char **argv)
+void	clean_buffer(t_minirt *mrt)
 {
-	int			code;
-	t_minirt	*mrt;
-	t_mlx		*mlx;
+	int		i;
+	int		scale;
+	t_mlx	*mlx;
 
-	if (argc != 2)
-		return (ft_error(USAGE_E, ERR_PREFIX, 1));
-	mrt = minirt();
-	if (!mrt)
-		return (ft_error(MALLOC_E, ERR_PREFIX, 2));
-	code = parse_map(argv[1]);
-	if (code != 0)
-	{
-		destruct_minirt(mrt, 0);
-		return (2 + code);
-	}
+	i = 0;
 	mlx = mrt->mlx;
-	update_values(mrt);
-	init_mlx(mlx);
-	render_scene(mrt);
-	handle_events(mrt);
-	mlx_loop_hook(mlx->mlx_ptr, loop_hook, mrt);
-	mlx_loop(mlx->mlx_ptr);
-	return (0);
+	scale = WIN_HEIGHT * WIN_WIDTH;
+	ft_bzero(mlx->data, WIN_HEIGHT * mlx->ll);
+	while (i < scale)
+	{
+		mrt->buffer[i] = (t_fvector3){0.0f, 0.0f, 0.0f};
+		i++;
+	}
+	mrt->count = 0;
 }

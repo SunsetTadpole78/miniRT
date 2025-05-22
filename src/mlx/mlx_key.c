@@ -15,7 +15,6 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static int	rotation_key_hook(int keycode, t_minirt *mrt);
-static void	clean_buffer(t_minirt *mrt);
 /* -------------------------------------------------------------------------- */
 
 int	key_hook(int keycode, t_minirt *mrt)
@@ -59,22 +58,4 @@ static int	rotation_key_hook(int keycode, t_minirt *mrt)
 	else if (keycode == OGLK_ESC || keycode == XK_ESC)
 		close_window(mrt);
 	return (0);
-}
-
-static void	clean_buffer(t_minirt *mrt)
-{
-	int		i;
-	int		scale;
-	t_mlx	*mlx;
-
-	i = 0;
-	scale = WIN_HEIGHT * WIN_WIDTH;
-	mlx = mrt->mlx;
-	ft_bzero(mlx->data, WIN_HEIGHT * mlx->ll);
-	while (i < scale)
-	{
-		mrt->buffer[i] = (t_fvector3){0.0f, 0.0f, 0.0f};
-		i++;
-	}
-	mrt->count = 0;
 }

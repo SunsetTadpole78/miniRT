@@ -241,6 +241,7 @@ void			*error_and_null(char *error);
 
 unsigned int	fvector3_to_pixel(t_fvector3 c);
 t_fvector3		pixel_to_fvector3(t_mlx *mlx, int x, int y);
+void			clean_buffer(t_minirt *mrt);
 
 t_fvector3		reflect(t_fvector3 v, t_fvector3 n);
 t_fvector3		lerp(t_fvector3 a, t_fvector3 b, float t);
