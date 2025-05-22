@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 20:03:16 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:33:26 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,24 +49,23 @@ void	*parse_plane(char **values)
 
 void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object)
 {
-	t_plane	*plane;
-	float	dist;
+	t_plane		*plane;
+	float		dist;
 	t_fvector3	impact_point;
+	t_fvector3	normal;
 
 	plane = (t_plane *)object;
 	dist = intersection_plane(*ray, plane);
 	if (dist > 0 && dist <= ray->dist)
 	{
-		impact_point = ft_fvector3_sum(
-				ray->origin,
-				ft_fvector3_scale(ray->direction, dist)
-				);
-		ray->color = calculate_brightness(
-				mrt,
-				impact_point,
-				plane->normal,
-				plane->color
-				);
+		impact_point = ft_fvector3_sum(ray->origin,
+				ft_fvector3_scale(ray->direction, dist));
+		normal = plane->normal;
+		if (ft_fdot_product(ray->direction, normal) > 0)
+			shading_normal = ft_fvector3_scale(normal, -1);
+		ray->color = apply_lights_modifier(get_lights_modifier(mrt,
+					impact_point, normal, 0, plane->position),
+				plane->color);
 		ray->dist = dist;
 	}
 }
