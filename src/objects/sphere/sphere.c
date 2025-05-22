@@ -26,7 +26,6 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 	sp->radius = diameter / 2.0f;
 	sp->color = color;
 	sp->render = get_render_by_id(SPHERE_ID);
-	sp->pixel_color = 0;
 	sp->pattern = 1;
 	sp->smoothness = 0.1f;
 	return (sp);

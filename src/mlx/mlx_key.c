@@ -41,6 +41,7 @@ int	key_hook(int keycode, t_minirt *mrt)
 				ft_fvector3_scale(mrt->camera->normal, -1.0f));
 	else
 		rotation_key_hook(keycode, mrt);
+	mrt->mlx->update = 1;
 	clean_buffer(mrt);
 	return (0);
 }

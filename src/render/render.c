@@ -6,55 +6,59 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated:   by Juste                              ###   ########.fr       */
+/*   Updated: 2025/05/22 18:42:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline t_fvector3	primary_ray(t_camera *cam,
-								t_vector2 v, float ratio);
-static inline void		ray_tracer(t_minirt *mrt, t_ray ray);
-static inline void		refresh_buffer(t_minirt *mrt, t_vector2 v);
+static inline t_fvector3	primary_ray(t_camera *cam, t_vector2 pos,
+								float ratio);
+static inline void		ray_tracer(t_minirt *mrt, t_ray *ray);
+static inline void		refresh_buffer(t_minirt *mrt, t_ray *ray,
+								t_vector2 pos);
 /* -------------------------------------------------------------------------- */
 
 void	render_scene(t_minirt *mrt)
 {
-	t_vector2	v;
+	t_vector2	pos;
 	t_ray		ray;
 	t_camera	*camera;
 	t_mlx		*mlx;
 	float		ratio;
 
-	v.y = 0;
+	pos.y = 0;
 	mlx = mrt->mlx;
 	camera = mrt->camera;
 	ratio = ((float)WIN_WIDTH / (float)WIN_HEIGHT) * camera->iplane_scale;
 	ray.origin = mrt->camera->position;
-	while (v.y < WIN_HEIGHT)
+	while (pos.y < WIN_HEIGHT)
 	{
-		v.x = 0;
-		while (v.x < WIN_WIDTH)
+		pos.x = 0;
+		while (pos.x < WIN_WIDTH)
 		{
-			ray.direction = primary_ray(camera, v, ratio);
-			ray_tracer(mrt, ray);
-			refresh_buffer(mrt, v);
-			v.x++;
+			ray.direction = primary_ray(camera, pos, ratio);
+			ray_tracer(mrt, &ray);
+			refresh_buffer(mrt, &ray, pos);
+			pos.x++;
 		}
-		v.y++;
+		pos.y++;
 	}
 	mrt->count++;
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img_ptr, 0, 0);
 }
 
-static inline t_fvector3	primary_ray(t_camera *cam, t_vector2 v, float ratio)
+static inline t_fvector3	primary_ray(t_camera *cam,
+	t_vector2 pos, float ratio)
 {
 	t_fvector3	ndc_vec;
 
 	ndc_vec = (t_fvector3){
-		-(2.0f * ((v.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
-		-(2.0f * ((v.y + 0.5f) / WIN_HEIGHT) - 1.0f) * cam->iplane_scale, 1.0f};
+		-(2.0f * (((float)pos.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
+		-(2.0f * (((float)pos.y + 0.5f) / WIN_HEIGHT) - 1.0f)
+		* cam->iplane_scale,
+		1.0f};
 	return (ft_fnormalize(
 			ft_fvector3_sum(
 				ft_fvector3_sum(
@@ -65,38 +69,36 @@ static inline t_fvector3	primary_ray(t_camera *cam, t_vector2 v, float ratio)
 		cam->normal)));
 }
 
-static inline void	ray_tracer(t_minirt *mrt, t_ray ray)
+static inline void	ray_tracer(t_minirt *mrt, t_ray *ray)
 {
 	t_object	*cur;
 	void		(*render)(t_minirt *, t_ray *, t_object *);
 
-	ray.dist = 3.4E+38;
+	ray->dist = 3.4E+38;
 	cur = mrt->objects;
 	while (cur)
 	{
 		render = cur->render;
 		if (render)
-			render(mrt, &ray, cur);
+			render(mrt, ray, cur);
 		cur = cur->next;
 	}
-	if (ray.dist >= 3.4E+37)
-		mrt->mlx->pixel_color = 0x000000;
+	if (ray->dist >= 3.4E+37)
+		ray->color = (t_rgb){0, 0, 0};
 }
 
-static inline void	refresh_buffer(t_minirt *mrt, t_vector2 v)
+static inline void	refresh_buffer(t_minirt *mrt, t_ray *ray, t_vector2 pos)
 {
-	t_fvector3	sample;
-	t_fvector3	avg;
-	t_mlx		*mlx;
-	int			index;
+	t_mlx	*mlx;
+	int		index;
 
 	mlx = mrt->mlx;
-	*((unsigned int *)(mlx->data + (int)(v.y * mlx->ll
-					+ v.x * mlx->cl))) = mlx->pixel_color;
-	index = (int)v.y * WIN_WIDTH + (int)v.x;
-	sample = pixel_to_fvector3(mlx, v.x, v.y);
-	mrt->buffer[index] = ft_fvector3_sum(mrt->buffer[index], sample);
-	avg = ft_fvector3_scale(mrt->buffer[index], 1.0f / (mrt->count + 1));
-	*((unsigned int *)(mlx->data + (int)(v.y * mlx->ll + v.x * mlx->cl)))
-		= fvector3_to_pixel(avg);
+	*((unsigned int *)(mlx->data + (pos.y * mlx->ll + pos.x * mlx->cl)))
+		= (ray->color.r << 16 | ray->color.g << 8 | ray->color.b);
+	index = (int)pos.y * WIN_WIDTH + (int)pos.x;
+	mrt->buffer[index] = ft_fvector3_sum(mrt->buffer[index],
+			pixel_to_fvector3(mlx, pos.x, pos.y));
+	*((unsigned int *)(mlx->data + (int)(pos.y * mlx->ll + pos.x * mlx->cl)))
+		= fvector3_to_pixel(ft_fvector3_scale(
+				mrt->buffer[index], 1.0f / (mrt->count + 1)));
 }

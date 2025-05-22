@@ -6,15 +6,14 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:11:12 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/19 11:50:37 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:23:52 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 int	register_type(char *id, void *(*parser)(char **),
-	void (*render)(t_minirt *, t_ray *, t_object *),
-	void (*updater)(t_minirt *, t_object *))
+	void (*render)(t_minirt *, t_ray *, t_object *))
 {
 	t_type		*type;
 	t_minirt	*mrt;
@@ -27,7 +26,6 @@ int	register_type(char *id, void *(*parser)(char **),
 	type->id = id;
 	type->parser = parser;
 	type->render = render;
-	type->updater = updater;
 	mrt = minirt();
 	type->next = mrt->types;
 	mrt->types = type;
@@ -77,22 +75,6 @@ void	*get_render_by_id(char *id)
 	{
 		if (ft_strncmp(types->id, id, len) == 0)
 			return (types->render);
-		types = types->next;
-	}
-	return (NULL);
-}
-
-void	*get_updater_by_id(char *id)
-{
-	t_type	*types;
-	int		len;
-
-	types = minirt()->types;
-	len = ft_strlen(id) + 1;
-	while (types)
-	{
-		if (ft_strncmp(types->id, id, len) == 0)
-			return (types->updater);
 		types = types->next;
 	}
 	return (NULL);

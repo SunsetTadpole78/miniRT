@@ -14,39 +14,36 @@
 #include "errors.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline float			intersection_plane(t_ray ray, t_plane *plane);
-static inline unsigned int	checkerboard_pattern(t_plane *plane,
-								t_ray *ray, float dist);
+static inline float	intersection_plane(t_ray ray, t_plane *plane);
+static inline t_rgb	checkerboard_pattern(t_plane *plane, t_ray *ray,
+						float dist);
 /* -------------------------------------------------------------------------- */
 
 void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object)
 {
-	t_mlx			*mlx;
-	t_plane			*plane;
-	float			dist;
+	t_plane		*plane;
+	float		dist;
+	t_hit_data	hit;
 
-	mlx = mrt->mlx;
 	plane = (t_plane *)object;
 	dist = intersection_plane(*ray, plane);
 	if (dist > 0 && dist <= ray->dist)
 	{
-		ray->hit = ft_fvector3_sum(ray->origin,
+		hit.position = plane->position;
+		hit.impact_point = ft_fvector3_sum(ray->origin,
 				ft_fvector3_scale(ray->direction, dist));
-		ray->normal = ft_fnormalize(
-				ft_fvector3_diff(ray->hit, plane->position));
-		if (plane->pattern >= 1)
-			mlx->pixel_color = checkerboard_pattern(plane, ray, dist);
-		else
-			mlx->pixel_color = plane->color.r << 16
-				| plane->color.g << 8 | plane->color.b;
-		specular_reflection(ray, 1.0f);
+		hit.normal = plane->normal;
+		if (ft_fdot_product(ray->direction, hit.normal) > 0)
+			hit.normal = ft_fvector3_scale(hit.normal, -1);
+		if (plane->pattern == 1)
+			plane->color = checkerboard_pattern(plane, ray, dist);
+		ray->color = apply_lights_modifier(
+				get_lights_modifier(mrt, hit, 0),
+				plane->color);
 		ray->dist = dist;
 	}
 }
 
-// t = ((P - O) * N) / D * N
-// P = point du plan.		O = origin du rayon.
-// D = direction du rayon.	N = normal du plan.
 static inline float	intersection_plane(t_ray ray, t_plane *plane)
 {
 	float	denominator;
@@ -62,8 +59,7 @@ static inline float	intersection_plane(t_ray ray, t_plane *plane)
 	return (-1.0f);
 }
 
-static inline unsigned int	checkerboard_pattern(t_plane *plane,
-	t_ray *ray, float dist)
+static inline t_rgb	checkerboard_pattern(t_plane *plane, t_ray *ray, float dist)
 {
 	t_fvector3	diff;
 
@@ -71,7 +67,7 @@ static inline unsigned int	checkerboard_pattern(t_plane *plane,
 				ft_fvector3_scale(ray->direction, dist)), plane->position);
 	if ((int)((floor(ft_fdot_product(diff, plane->right) * 0.05f))
 		+ (floor(ft_fdot_product(diff, plane->up) * 0.05f))) % 2 == 0)
-		return (0xFFFFFF);
+		return ((t_rgb){255, 255, 255});
 	else
-		return (0x000000);
+		return ((t_rgb){0, 0, 0});
 }

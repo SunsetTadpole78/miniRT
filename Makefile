@@ -34,15 +34,13 @@ FILES =		destructor.c				\
 		objects/sphere/sphere.c			\
 		objects/sphere/render.c			\
 		objects/types_factory.c			\
-		objects/updater.c			\
 		parsing/elements.c			\
 		parsing/parser.c			\
 		parsing/utils.c				\
 		render/render.c				\
-		render/specular_reflection.c		\
-		utils/pixel_to_fvector3.c		\
+		render/lights.c				\
 		utils/fvector3_to_pixel.c		\
-		utils/specular_reflection.c		\
+		utils/pixel_to_fvector3.c		\
 		utils/clean_buffer.c			\
 
 ifeq ($(shell uname), Darwin)
