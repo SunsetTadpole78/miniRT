@@ -13,7 +13,7 @@
 #include "miniRT.h"
 
 int	register_type(char *id, void *(*parser)(char **),
-	void (*render)(t_minirt *, t_ray *, t_vector2, t_object *),
+	void (*render)(t_minirt *, t_ray *, t_object *),
 	void (*updater)(t_minirt *, t_object *))
 {
 	t_type		*type;

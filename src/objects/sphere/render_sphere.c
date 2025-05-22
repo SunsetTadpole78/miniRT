@@ -19,11 +19,9 @@ static inline unsigned int	checkerboard_pattern(t_sphere *sphere,
 								t_ray *ray, float dist);
 static inline float			get_intensity(t_ray *ray, t_ambiant *ambiant,
 								t_sphere *sphere, float dist);
-static inline void			specular_reflection(t_ray *ray, float smoothness);
 /* -------------------------------------------------------------------------- */
 
-void	render_sphere(t_minirt *mrt, t_ray *ray,
-		t_vector2 pixel, t_object *object)
+void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
 {
 	t_sphere		*sphere;
 	float			dist;
@@ -39,13 +37,11 @@ void	render_sphere(t_minirt *mrt, t_ray *ray,
 				ft_fvector3_diff(ray->hit, sphere->position));
 		intensity = get_intensity(ray, mrt->ambiant, sphere, dist);
 		if (sphere->pattern == 1)
-			sphere->pixel_color = checkerboard_pattern(sphere, ray, dist);
+			mrt->mlx->pixel_color = checkerboard_pattern(sphere, ray, dist);
 		else
-			sphere->pixel_color = ((int)(sphere->color.r * intensity) << 16
+			mrt->mlx->pixel_color = ((int)(sphere->color.r * intensity) << 16
 					| (int)(sphere->color.g * intensity) << 8
 					| (int)(sphere->color.b * intensity));
-		*((unsigned int *)(mrt->mlx->data + (int)(pixel.y * mrt->mlx->ll
-						+ pixel.x * mrt->mlx->cl))) = sphere->pixel_color;
 		specular_reflection(ray, sphere->smoothness);
 		ray->dist = dist;
 	}
@@ -112,7 +108,7 @@ static inline unsigned int	checkerboard_pattern(t_sphere *sphere,
 		return (0x000000);
 }
 
-static inline void	specular_reflection(t_ray *ray, float smoothness)
+void	specular_reflection(t_ray *ray, float smoothness)
 {
 	ray->origin = ray->hit;
 	ray->direction = lerp(ft_fnormalize(

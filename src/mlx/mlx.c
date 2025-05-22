@@ -22,6 +22,7 @@ void	init_mlx(t_mlx *mlx)
 	mlx->data = mlx_get_data_addr(mlx->img_ptr, &mlx->bpp,
 			&mlx->ll, &mlx->endian);
 	mlx->cl = mlx->bpp / 8;
+	mlx->pixel_color = 0;
 }
 
 void	handle_events(t_minirt *mrt)

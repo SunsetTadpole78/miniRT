@@ -56,25 +56,27 @@ void	*parse_plane(char **values)
 	return (plane(position, normal, color));
 }
 
-void	render_plane(t_minirt *mrt, t_ray *ray, t_vector2 pixel,
-			t_object *object)
+void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object)
 {
 	t_mlx			*mlx;
 	t_plane			*plane;
 	float			dist;
-	unsigned int	color;
 
 	mlx = mrt->mlx;
 	plane = (t_plane *)object;
 	dist = intersection_plane(*ray, plane);
 	if (dist > 0 && dist <= ray->dist)
 	{
+		ray->hit = ft_fvector3_sum(ray->origin,
+				ft_fvector3_scale(ray->direction, dist));
+		ray->normal = ft_fnormalize(
+				ft_fvector3_diff(ray->hit, plane->position));
 		if (plane->pattern >= 1)
-			color = checkerboard_pattern(plane, ray, dist);
+			mlx->pixel_color = checkerboard_pattern(plane, ray, dist);
 		else
-			color = plane->color.r << 16 | plane->color.g << 8 | plane->color.b;
-		*((unsigned int *)(mlx->data + (int)(pixel.y * mlx->ll
-						+ pixel.x * mlx->cl))) = color;
+			mlx->pixel_color = plane->color.r << 16
+				| plane->color.g << 8 | plane->color.b;
+		specular_reflection(ray, 1.0f);
 		ray->dist = dist;
 	}
 }

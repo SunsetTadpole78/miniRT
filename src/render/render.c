@@ -13,8 +13,9 @@
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline void		intercept(t_minirt *mrt, t_vector2, t_ray ray);
-static inline t_fvector3	ray_tracer(t_camera *cam, t_vector2 v, float ratio);
+static inline t_fvector3	primary_ray(t_camera *cam,
+								t_vector2 v, float ratio);
+static inline void		ray_tracer(t_minirt *mrt, t_ray ray);
 static inline void		refresh_buffer(t_minirt *mrt, t_vector2 v);
 /* -------------------------------------------------------------------------- */
 
@@ -36,8 +37,9 @@ void	render_scene(t_minirt *mrt)
 		v.x = 0;
 		while (v.x < WIN_WIDTH)
 		{
-			ray.direction = ray_tracer(camera, v, ratio);
-			intercept(mrt, v, ray);
+			ray.direction = primary_ray(camera, v, ratio);
+			ray_tracer(mrt, ray);
+			refresh_buffer(mrt, v);
 			v.x++;
 		}
 		v.y++;
@@ -46,7 +48,7 @@ void	render_scene(t_minirt *mrt)
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img_ptr, 0, 0);
 }
 
-static inline t_fvector3	ray_tracer(t_camera *cam, t_vector2 v, float ratio)
+static inline t_fvector3	primary_ray(t_camera *cam, t_vector2 v, float ratio)
 {
 	t_fvector3	ndc_vec;
 
@@ -63,10 +65,10 @@ static inline t_fvector3	ray_tracer(t_camera *cam, t_vector2 v, float ratio)
 		cam->normal)));
 }
 
-static inline void	intercept(t_minirt *mrt, t_vector2 v, t_ray ray)
+static inline void	ray_tracer(t_minirt *mrt, t_ray ray)
 {
 	t_object	*cur;
-	void		(*render)(t_minirt *, t_ray *, t_vector2, t_object *);
+	void		(*render)(t_minirt *, t_ray *, t_object *);
 
 	ray.dist = 3.4E+38;
 	cur = mrt->objects;
@@ -74,10 +76,11 @@ static inline void	intercept(t_minirt *mrt, t_vector2 v, t_ray ray)
 	{
 		render = cur->render;
 		if (render)
-			render(mrt, &ray, v, cur);
+			render(mrt, &ray, cur);
 		cur = cur->next;
 	}
-	refresh_buffer(mrt, v);
+	if (ray.dist >= 3.4E+37)
+		mrt->mlx->pixel_color = 0x000000;
 }
 
 static inline void	refresh_buffer(t_minirt *mrt, t_vector2 v)
@@ -88,6 +91,8 @@ static inline void	refresh_buffer(t_minirt *mrt, t_vector2 v)
 	int			index;
 
 	mlx = mrt->mlx;
+	*((unsigned int *)(mlx->data + (int)(v.y * mlx->ll
+					+ v.x * mlx->cl))) = mlx->pixel_color;
 	index = (int)v.y * WIN_WIDTH + (int)v.x;
 	sample = pixel_to_fvector3(mlx, v.x, v.y);
 	mrt->buffer[index] = ft_fvector3_sum(mrt->buffer[index], sample);
