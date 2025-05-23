@@ -30,6 +30,7 @@ void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 	if (destroy_mlx)
 		destruct_mlx(mlx);
 	free(mlx);
+	free(mrt->buffer);
 	free(mrt);
 }
 

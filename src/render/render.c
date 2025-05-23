@@ -13,9 +13,11 @@
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline t_fvector3	ray_tracer(t_camera *cam, t_vector2 pos,
+static inline t_fvector3	primary_ray(t_camera *cam, t_vector2 pos,
 								float ratio);
-static inline void		intercept(t_minirt *mrt, t_vector2 pos, t_ray ray);
+t_rgb				ray_tracer(t_minirt *mrt, t_ray *ray, int depth);
+static inline void		refresh_buffer(t_minirt *mrt, t_ray *ray,
+								t_vector2 pos);
 /* -------------------------------------------------------------------------- */
 
 void	render_scene(t_minirt *mrt)
@@ -36,46 +38,26 @@ void	render_scene(t_minirt *mrt)
 		pos.x = 0;
 		while (pos.x < WIN_WIDTH)
 		{
-			ray.direction = ray_tracer(camera, pos, ratio);
-			intercept(mrt, pos, ray);
+			ray.direction = primary_ray(camera, pos, ratio);
+			ray_tracer(mrt, &ray, 0);
+			refresh_buffer(mrt, &ray, pos);
 			pos.x++;
 		}
 		pos.y++;
 	}
+	mrt->count++;
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img_ptr, 0, 0);
 }
 
-static inline void	intercept(t_minirt *mrt, t_vector2 pos, t_ray ray)
-{
-	t_object	*cur;
-	void		(*render)(t_minirt *, t_ray *, t_object *);
-	t_mlx		*mlx;
-
-	ray.dist = 3.4E+38;
-	ray.color = ft_rgb(0, 0, 0);
-	cur = mrt->objects;
-	mlx = mrt->mlx;
-	while (cur)
-	{
-		render = cur->render;
-		if (render)
-			render(mrt, &ray, cur);
-		cur = cur->next;
-	}
-	*((unsigned int *)(mlx->data + (pos.y * mlx->ll + pos.x * mlx->cl)))
-		= (ray.color.r << 16 | ray.color.g << 8 | ray.color.b);
-}
-
-static inline t_fvector3	ray_tracer(t_camera *cam, t_vector2 pos,
-				float ratio)
+static inline t_fvector3	primary_ray(t_camera *cam,
+	t_vector2 pos, float ratio)
 {
 	t_fvector3	ndc_vec;
 
 	ndc_vec = (t_fvector3){
 		-(2.0f * (((float)pos.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
 		-(2.0f * (((float)pos.y + 0.5f) / WIN_HEIGHT) - 1.0f)
-		* cam->iplane_scale,
-		1.0f};
+		* cam->iplane_scale, 1.0f};
 	return (ft_fnormalize(
 			ft_fvector3_sum(
 				ft_fvector3_sum(
@@ -84,4 +66,42 @@ static inline t_fvector3	ray_tracer(t_camera *cam, t_vector2 pos,
 				(t_fvector3){cam->up.x * ndc_vec.y,
 				cam->up.y * ndc_vec.y, cam->up.z * ndc_vec.y}),
 		cam->normal)));
+}
+
+t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
+{
+	t_object	*cur;
+	void		(*render)(t_minirt *, t_ray *, t_object *, int);
+
+	if (depth > MAX_DEPTH)
+		return (ray->color);
+	ray->dist = 3.4E+38;
+	cur = mrt->objects;
+	while (cur)
+	{
+		render = cur->render;
+		if (render)
+			render(mrt, ray, cur, depth);
+		cur = cur->next;
+	}
+	if (ray->dist >= 3.4E+37)
+		ray->color = (t_rgb){0, 0, 0};
+	return (ray->color);
+}
+
+// adoucit les couleurs en les fusionnant.
+static inline void	refresh_buffer(t_minirt *mrt, t_ray *ray, t_vector2 pos)
+{
+	t_mlx	*mlx;
+	int		index;
+
+	mlx = mrt->mlx;
+	*((unsigned int *)(mlx->data + (pos.y * mlx->ll + pos.x * mlx->cl)))
+		= (ray->color.r << 16 | ray->color.g << 8 | ray->color.b);
+	index = (int)pos.y * WIN_WIDTH + (int)pos.x;
+	mrt->buffer[index] = ft_fvector3_sum(mrt->buffer[index],
+			pixel_to_fvector3(mlx, pos.x, pos.y));
+	*((unsigned int *)(mlx->data + (int)(pos.y * mlx->ll + pos.x * mlx->cl)))
+		= fvector3_to_pixel(ft_fvector3_scale(
+				mrt->buffer[index], 1.0f / (mrt->count + 1)));
 }
