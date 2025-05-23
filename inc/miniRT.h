@@ -43,7 +43,7 @@
 # define LINEAR_ATTENUATION_COEF 0.0004f
 # define QUADRATIC_ATTENUATION_COEF 0.004f
 
-# define MAX_DEPTH 10
+# define MAX_DEPTH 5
 
 // Structures
 
