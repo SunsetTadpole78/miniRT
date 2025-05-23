@@ -20,8 +20,9 @@ static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
 static inline t_rgb	checkerboard_pattern(t_hit_data hit);
 /* -------------------------------------------------------------------------- */
 
-void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
+void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 {
+	t_ray		reflect_ray;
 	t_sphere	*sphere;
 	float		dist;
 	t_hit_data	hit;
@@ -41,6 +42,10 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit,
 				sphere->radius * ((!inside) * -1 + (inside))),
 			sphere->color);
+	reflect_ray = *ray;
+	specular_reflection(&reflect_ray, &hit, sphere->smoothness);
+	ray->color = lerp(ray->color,
+			ray_tracer(mrt, &reflect_ray, depth + 1), sphere->mat);
 	ray->dist = dist;
 }
 

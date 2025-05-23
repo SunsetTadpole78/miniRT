@@ -31,6 +31,8 @@ t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
 	pl->up = ft_fcross_product(pl->right, pl->normal);
 	pl->color = color;
 	pl->render = get_render_by_id(PLANE_ID);
+	pl->smoothness = 1.0f;
+	pl->mat = 0.7f;
 	pl->pattern = 0;
 	return (pl);
 }

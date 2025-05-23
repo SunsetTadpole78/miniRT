@@ -71,7 +71,7 @@ static inline t_fvector3	primary_ray(t_camera *cam,
 t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 {
 	t_object	*cur;
-	void		(*render)(t_minirt *, t_ray *, t_object *);
+	void		(*render)(t_minirt *, t_ray *, t_object *, int);
 
 	if (depth > MAX_DEPTH)
 		return (ray->color);
@@ -81,7 +81,7 @@ t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 	{
 		render = cur->render;
 		if (render)
-			render(mrt, ray, cur);
+			render(mrt, ray, cur, depth);
 		cur = cur->next;
 	}
 	if (ray->dist >= 3.4E+37)

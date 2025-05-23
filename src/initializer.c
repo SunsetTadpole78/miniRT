@@ -38,7 +38,6 @@ t_minirt	*minirt(void)
 			return (NULL);
 		clean_buffer(mrt);
 		mrt->count = 0;
-		mrt->depth = 0;
 		register_all();
 	}
 	return (mrt);
