@@ -39,9 +39,11 @@ FILES =		destructor.c				\
 		parsing/utils.c				\
 		render/render.c				\
 		render/lights.c				\
+		render/specular_reflection.c		\
 		utils/fvector3_to_pixel.c		\
 		utils/pixel_to_fvector3.c		\
 		utils/clean_buffer.c			\
+		utils/lerp.c				\
 
 ifeq ($(shell uname), Darwin)
 FILES += mlx/opengl.c

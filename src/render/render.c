@@ -15,7 +15,7 @@
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline t_fvector3	primary_ray(t_camera *cam, t_vector2 pos,
 								float ratio);
-static inline void		ray_tracer(t_minirt *mrt, t_ray *ray);
+t_rgb				ray_tracer(t_minirt *mrt, t_ray *ray, int depth);
 static inline void		refresh_buffer(t_minirt *mrt, t_ray *ray,
 								t_vector2 pos);
 /* -------------------------------------------------------------------------- */
@@ -39,7 +39,7 @@ void	render_scene(t_minirt *mrt)
 		while (pos.x < WIN_WIDTH)
 		{
 			ray.direction = primary_ray(camera, pos, ratio);
-			ray_tracer(mrt, &ray);
+			ray_tracer(mrt, &ray, 0);
 			refresh_buffer(mrt, &ray, pos);
 			pos.x++;
 		}
@@ -68,11 +68,13 @@ static inline t_fvector3	primary_ray(t_camera *cam,
 		cam->normal)));
 }
 
-static inline void	ray_tracer(t_minirt *mrt, t_ray *ray)
+t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 {
 	t_object	*cur;
 	void		(*render)(t_minirt *, t_ray *, t_object *);
 
+	if (depth > MAX_DEPTH)
+		return (ray->color);
 	ray->dist = 3.4E+38;
 	cur = mrt->objects;
 	while (cur)
@@ -84,8 +86,10 @@ static inline void	ray_tracer(t_minirt *mrt, t_ray *ray)
 	}
 	if (ray->dist >= 3.4E+37)
 		ray->color = (t_rgb){0, 0, 0};
+	return (ray->color);
 }
 
+// adoucit les couleurs en les fusionnant.
 static inline void	refresh_buffer(t_minirt *mrt, t_ray *ray, t_vector2 pos)
 {
 	t_mlx	*mlx;

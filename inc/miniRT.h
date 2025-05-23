@@ -39,8 +39,11 @@
 # define WINDOW_NAME "miniRT"
 
 # define GAMMA 2.2f
+# define EPSILON 0.001f
 # define LINEAR_ATTENUATION_COEF 0.0004f
 # define QUADRATIC_ATTENUATION_COEF 0.004f
+
+# define MAX_DEPTH 5
 
 // Structures
 
@@ -172,6 +175,7 @@ typedef struct s_minirt
 	t_mlx		*mlx;
 	t_fvector3	*buffer;
 	int			count;
+	int			depth;
 }	t_minirt;
 
 typedef struct s_hit_data
@@ -193,6 +197,7 @@ int				close_window(t_minirt *mrt);
 void			handle_events(t_minirt *mrt);
 
 void			render_scene(t_minirt *mrt);
+t_rgb			ray_tracer(t_minirt *mrt, t_ray *ray, int depth);
 void			specular_reflection(t_ray *ray, t_hit_data *hit,
 					float smoothness);
 
@@ -251,5 +256,6 @@ void			*error_and_null(char *error);
 unsigned int	fvector3_to_pixel(t_fvector3 c);
 t_fvector3		pixel_to_fvector3(t_mlx *mlx, int x, int y);
 void			clean_buffer(t_minirt *mrt);
+t_rgb			lerp(t_rgb color1, t_rgb color2, float t);
 
 #endif

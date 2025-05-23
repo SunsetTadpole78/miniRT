@@ -22,6 +22,7 @@ static inline t_rgb	checkerboard_pattern(t_plane *plane, t_hit_data hit);
 
 void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object)
 {
+	t_ray		reflect_ray;
 	t_plane		*plane;
 	float		dist;
 	t_hit_data	hit;
@@ -37,6 +38,10 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object)
 		plane->color = checkerboard_pattern(plane, hit);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0),
 			plane->color);
+	reflect_ray = *ray;
+	specular_reflection(&reflect_ray, &hit, 0.98f);
+	ray->color = lerp(ray->color,
+			ray_tracer(mrt, &reflect_ray, mrt->depth + 1), 0.5f);
 	ray->dist = dist;
 }
 
