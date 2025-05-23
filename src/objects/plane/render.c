@@ -68,7 +68,7 @@ static inline t_rgb	checkerboard_pattern(t_plane *plane, t_hit_data hit)
 {
 	t_fvector3	diff;
 
-	diff = ft_fvector3_diff(hit.impact_point, plane->position);
+	diff = ft_fvector3_diff(hit.impact_point, hit.position);
 	if ((int)((floor(ft_fdot_product(diff, plane->right) * 0.05f))
 		+ (floor(ft_fdot_product(diff, plane->up) * 0.05f))) % 2 == 0)
 		return ((t_rgb){255, 255, 255});
