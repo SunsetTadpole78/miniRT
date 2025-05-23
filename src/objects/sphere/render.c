@@ -15,10 +15,9 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline float	intersection_sphere(t_ray ray, t_sphere *sphere);
-static void		init_hit(t_ray *ray, t_hit_data *hit,
-						t_sphere *sphere, float dist);
-static inline t_rgb	checkerboard_pattern(t_sphere *sphere, t_ray *ray,
+static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
 						float dist);
+static inline t_rgb	checkerboard_pattern(t_hit_data hit);
 /* -------------------------------------------------------------------------- */
 
 void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
@@ -30,30 +29,19 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
 
 	sphere = (t_sphere *)object;
 	dist = intersection_sphere(*ray, sphere);
-	if (dist > 0 && dist <= ray->dist)
-	{
-		init_hit(ray, &hit, sphere, dist);
-		inside = ft_fvector3_length(ft_fvector3_diff(ray->origin,
-					sphere->position)) < sphere->radius;
-		if (inside)
-			hit.normal = ft_fvector3_scale(hit.normal, -1);
-		if (sphere->pattern == 1)
-			sphere->color = checkerboard_pattern(sphere, ray, dist);
-		ray->color = apply_lights_modifier(
-				get_lights_modifier(mrt, hit,
-					sphere->radius * ((!inside) * -1 + (inside))),
-				sphere->color);
-		ray->dist = dist;
-	}
-}
-
-static void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere, float dist)
-{
-	hit->impact_point = ft_fvector3_sum(ray->origin,
-			ft_fvector3_scale(ray->direction, dist));
-	hit->normal = ft_fnormalize(ft_fvector3_diff(hit->impact_point,
-				sphere->position));
-	hit->position = sphere->position;
+	if (dist <= 0 || dist > ray->dist)
+		return ;
+	init_hit(ray, &hit, sphere, dist);
+	inside = ft_fvector3_length(ft_fvector3_diff(ray->origin,
+				sphere->position)) < sphere->radius;
+	if (inside)
+		hit.normal = ft_fvector3_scale(hit.normal, -1);
+	if (sphere->pattern == 1)
+		sphere->color = checkerboard_pattern(hit);
+	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit,
+				sphere->radius * ((!inside) * -1 + (inside))),
+			sphere->color);
+	ray->dist = dist;
 }
 
 static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
@@ -79,16 +67,21 @@ static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
 	return (-1.0f);
 }
 
-static inline t_rgb	checkerboard_pattern(t_sphere *sphere, t_ray *ray,
+static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
 	float dist)
 {
-	t_fvector3	diff;
-
-	diff = ft_fnormalize(ft_fvector3_diff(ft_fvector3_sum(ray->origin,
-					ft_fvector3_scale(ray->direction, dist)),
+	hit->impact_point = ft_fvector3_sum(ray->origin,
+			ft_fvector3_scale(ray->direction, dist));
+	hit->normal = ft_fnormalize(ft_fvector3_diff(hit->impact_point,
 				sphere->position));
-	if ((int)((floor((0.5f + atan2f(diff.z, diff.x) / (2.0f * M_PI)) * 10.0f))
-		+ (floor((0.5f - asinf(diff.y) / M_PI) * 10.0f))) % 2 == 0)
+	hit->position = sphere->position;
+}
+
+static inline t_rgb	checkerboard_pattern(t_hit_data hit)
+{
+	if ((int)((floor((0.5f + atan2f(hit.normal.z, hit.normal.x)
+					/ (2.0f * M_PI)) * 10.0f))
+		+ (floor((0.5f - asinf(hit.normal.y) / M_PI) * 10.0f))) % 2 == 0)
 		return ((t_rgb){255, 255, 255});
 	else
 		return ((t_rgb){0, 0, 0});

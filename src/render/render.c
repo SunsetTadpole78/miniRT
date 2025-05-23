@@ -57,8 +57,7 @@ static inline t_fvector3	primary_ray(t_camera *cam,
 	ndc_vec = (t_fvector3){
 		-(2.0f * (((float)pos.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
 		-(2.0f * (((float)pos.y + 0.5f) / WIN_HEIGHT) - 1.0f)
-		* cam->iplane_scale,
-		1.0f};
+		* cam->iplane_scale, 1.0f};
 	return (ft_fnormalize(
 			ft_fvector3_sum(
 				ft_fvector3_sum(
