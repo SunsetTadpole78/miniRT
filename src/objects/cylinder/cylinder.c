@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/25 00:08:11 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/25 00:24:10 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object)
 	int			inside;
 
 	cylinder = (t_cylinder *)object;
+	type = 0;
 	dist = intersection_cylinder(*ray, cylinder, &type);
 	if (dist > 0 && dist <= ray->dist)
 	{
