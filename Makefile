@@ -26,7 +26,9 @@ FILES =		destructor.c			\
 		mlx/mlx_key.c			\
 		objects/ambiant.c		\
 		objects/camera.c		\
-		objects/cylinder.c		\
+		objects/cylinder/caps.c		\
+		objects/cylinder/cylinder.c	\
+		objects/cylinder/side.c		\
 		objects/factory.c		\
 		objects/light.c			\
 		objects/plane.c			\
