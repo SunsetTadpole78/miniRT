@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/24 20:34:20 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/25 00:08:11 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	cy->id = CYLINDER_ID;
 	cy->position = position;
 	cy->normal = normal;
-	cy->size = size;
 	cy->color = color;
+	cy->diameter = size.x;
 	cy->radius = size.x / 2.0f;
+	cy->height = size.y;
 	cy->half_height = size.y / 2.0f;
 	cy->render = get_render_by_id(CYLINDER_ID);
 	return (cy);

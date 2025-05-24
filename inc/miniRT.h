@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/24 20:44:18 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/25 00:06:55 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,9 @@ typedef struct s_cylinder
 	t_rgb		color;
 	t_fvector3	position;
 	t_fvector3	normal;
-	t_fvector2	size;
+	float		diameter;
 	float		radius;
+	float		height;
 	float		half_height;
 }	t_cylinder;
 
