@@ -37,15 +37,11 @@ void	handle_events(t_minirt *mrt)
 
 int	loop_hook(t_minirt *mrt)
 {
-	if (mrt->mlx->update > 0)
+	if (mrt->mlx->update != 0)
 	{
-		if (mrt->mlx->update == 2)
-			render_scene(mrt);
-		else
-		{
-			render_scene(mrt);
+		render_scene(mrt);
+		if (mrt->mlx->update != 2)
 			mrt->mlx->update = 0;
-		}
 	}
 	return (0);
 }

@@ -199,7 +199,7 @@ t_rgb		ray_tracer(t_minirt *mrt, t_ray *ray, int depth);
 t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit,
 				float radius);
 t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
-void		blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos);
+void		blender(t_minirt *mrt, t_ray *ray, t_vector2 pos);
 void		specular_reflection(t_ray *ray, t_hit_data *hit,
 				float smoothness);
 

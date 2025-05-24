@@ -37,7 +37,7 @@ void	render_scene(t_minirt *mrt)
 		{
 			ray.direction = primary_ray(camera, pos, ratio);
 			ray_tracer(mrt, &ray, 0);
-			blend_colors(mrt, &ray, pos);
+			blender(mrt, &ray, pos);
 			pos.x++;
 		}
 		pos.y++;

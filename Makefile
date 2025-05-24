@@ -37,7 +37,7 @@ FILES =		destructor.c				\
 		parsing/elements.c			\
 		parsing/parser.c			\
 		parsing/utils.c				\
-		render/blend_colors.c			\
+		render/blender.c			\
 		render/lights.c				\
 		render/render.c				\
 		render/specular_reflection.c		\
