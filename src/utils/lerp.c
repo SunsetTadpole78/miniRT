@@ -14,7 +14,8 @@
 
 t_rgb	lerp(t_rgb color1, t_rgb color2, float t)
 {
-	return ((t_rgb){color1.r * (1.0f - t) + color2.r * t,
+	return ((t_rgb){
+		color1.r * (1.0f - t) + color2.r * t,
 		color1.g * (1.0f - t) + color2.g * t,
 		color1.b * (1.0f - t) + color2.b * t});
 }

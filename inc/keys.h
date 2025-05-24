@@ -63,6 +63,6 @@
 # define XK_ARROW_RIGHT 65363
 
 // start high definition
-# define XK_R -1
+# define XK_R 'r'
 
 #endif

@@ -35,8 +35,10 @@ static inline t_fvector3	reflect(t_fvector3 v, t_fvector3 n)
 
 static inline t_fvector3	lerp_vector(t_fvector3 a, t_fvector3 b, float t)
 {
-	return (ft_fvector3_sum(ft_fvector3_scale(a, 1.0f - t),
-			ft_fvector3_scale(b, t)));
+	return ((t_fvector3){
+		a.x * (1.0f - t) + b.x * t,
+		a.y * (1.0f - t) + b.y * t,
+		a.z * (1.0f - t) + b.z * t});
 }
 
 static inline t_fvector3	random_seed(void)
