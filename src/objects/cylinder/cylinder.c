@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/24 18:11:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/24 20:34:20 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,22 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object)
 	t_cylinder	*cylinder;
 	int			type;
 	t_hit_data	hit;
+	int			inside;
 
 	cylinder = (t_cylinder *)object;
 	dist = intersection_cylinder(*ray, cylinder, &type);
 	if (dist > 0 && dist <= ray->dist)
 	{
+		hit.object = object;
 		hit.position = cylinder->position;
 		hit.impact_point = ft_fvector3_sum(ray->origin,
 				ft_fvector3_scale(ray->direction, dist));
 		hit.normal = get_normal(type, hit.impact_point, cylinder);
+		inside = is_inside_cylinder(hit, ray->origin);
+		if (inside)
+			hit.normal = ft_fvector3_scale(hit.normal, -1);
 		ray->color = apply_lights_modifier(
-				get_lights_modifier(mrt, hit, 0),
+				get_lights_modifier(mrt, hit, inside, is_inside_cylinder),
 				cylinder->color);
 		ray->dist = dist;
 	}

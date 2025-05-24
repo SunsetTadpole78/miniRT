@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 15:21:48 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/24 18:56:16 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
 	dist = intersection_sphere(*ray, sphere);
 	if (dist > 0 && dist <= ray->dist)
 	{
+		hit.object = object;
 		hit.impact_point = ft_fvector3_sum(ray->origin,
 				ft_fvector3_scale(ray->direction, dist));
 		hit.normal = ft_fnormalize(ft_fvector3_diff(hit.impact_point,
@@ -74,8 +75,7 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object)
 		if (inside)
 			hit.normal = ft_fvector3_scale(hit.normal, -1);
 		ray->color = apply_lights_modifier(
-				get_lights_modifier(mrt, hit,
-					sphere->radius * ((!inside) * -1 + (inside))),
+				get_lights_modifier(mrt, hit, inside, is_inside_sphere),
 				sphere->color);
 		ray->dist = dist;
 	}
@@ -105,4 +105,13 @@ static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
 	if (x2 > 0.001f)
 		return (x2);
 	return (-1.0f);
+}
+
+int	is_inside_sphere(t_hit_data hit, t_fvector3 point)
+{
+	t_sphere	*sphere;
+
+	sphere = (t_sphere *)hit.object;
+	return (ft_fvector3_length(ft_fvector3_diff(point,
+				hit.position)) < sphere->radius);
 }

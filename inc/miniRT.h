@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 19:31:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/24 20:44:18 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ typedef struct s_minirt
 
 typedef struct s_hit_data
 {
+	t_object	*object;
 	t_fvector3	impact_point;
 	t_fvector3	normal;
 	t_fvector3	position;
@@ -189,7 +190,8 @@ void		handle_events(t_minirt *mrt);
 
 void		render_scene(t_minirt *mrt);
 
-t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit, float radius);
+t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside,
+				int (*check_method)(t_hit_data, t_fvector3));
 t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 
 //objects
@@ -212,6 +214,7 @@ void		normalize_side(t_fvector3 *local_origin, t_fvector3 *local_dir,
 				t_ray ray, t_cylinder *cylinder);
 float		apply_side_equation(t_fvector3 local_origin, t_fvector3 local_dir,
 				t_cylinder *cylinder);
+int			is_inside_cylinder(t_hit_data hit, t_fvector3 point);
 
 t_light		*light(t_fvector3 position, float level, t_rgb color);
 void		*parse_light(char **values);
@@ -223,6 +226,7 @@ void		render_plane(t_minirt *mrt, t_ray *ray, t_object *object);
 t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color);
 void		*parse_sphere(char **values);
 void		render_sphere(t_minirt *mrt, t_ray *ray, t_object *object);
+int			is_inside_sphere(t_hit_data hit, t_fvector3 point);
 
 int			register_object(void *object);
 int			register_light(t_light *light);
