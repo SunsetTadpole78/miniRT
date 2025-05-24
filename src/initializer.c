@@ -33,11 +33,6 @@ t_minirt	*minirt(void)
 		mrt->mlx = malloc(sizeof(t_mlx));
 		if (!mrt->mlx)
 			return (NULL);
-		mrt->buffer = malloc(sizeof(t_fvector3) * (WIN_WIDTH * WIN_HEIGHT));
-		if (!mrt->buffer)
-			return (NULL);
-		clean_buffer(mrt);
-		mrt->count = 0;
 		register_all();
 	}
 	return (mrt);

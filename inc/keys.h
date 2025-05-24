@@ -13,7 +13,9 @@
 #ifndef KEYS_H
 # define KEYS_H
 
-// OPENGL Keys
+/*
+ *	OPENGL KEYS
+ */
 
 # define OGLK_ESC 53
 
@@ -34,7 +36,12 @@
 # define OGLK_ARROW_LEFT 123
 # define OGLK_ARROW_RIGHT 124
 
-// X11 Keys
+// start high definition
+# define OGLK_R 15
+
+/*
+ *	X11 KEYS
+ */
 
 # define XK_ESC 65307
 
@@ -54,5 +61,8 @@
 # define XK_ARROW_DOWN 65364
 # define XK_ARROW_LEFT 65361
 # define XK_ARROW_RIGHT 65363
+
+// start high definition
+# define XK_R -1
 
 #endif

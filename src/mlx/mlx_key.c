@@ -14,7 +14,7 @@
 #include "keys.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static int	rotation_key_hook(int keycode, t_minirt *mrt);
+static void	key_hook_next(int keycode, t_minirt *mrt);
 /* -------------------------------------------------------------------------- */
 
 int	key_hook(int keycode, t_minirt *mrt)
@@ -39,15 +39,15 @@ int	key_hook(int keycode, t_minirt *mrt)
 	else if (keycode == OGLK_BACKWARD || keycode == XK_BACKWARD)
 		mrt->camera->position = ft_fvector3_sum(mrt->camera->position,
 				ft_fvector3_scale(mrt->camera->normal, -1.0f));
-	else
-		rotation_key_hook(keycode, mrt);
-	mrt->mlx->update = 1;
-	clean_buffer(mrt);
+	key_hook_next(keycode, mrt);
 	return (0);
 }
 
-static int	rotation_key_hook(int keycode, t_minirt *mrt)
+static void	key_hook_next(int keycode, t_minirt *mrt)
 {
+	t_mlx		*mlx;
+
+	mlx = mrt->mlx;
 	if (keycode == OGLK_ARROW_LEFT || keycode == XK_ARROW_LEFT)
 		update_yaw(mrt->camera, 0.1f);
 	else if (keycode == OGLK_ARROW_RIGHT || keycode == XK_ARROW_RIGHT)
@@ -56,7 +56,16 @@ static int	rotation_key_hook(int keycode, t_minirt *mrt)
 		update_pitch(mrt->camera, 0.1f);
 	else if (keycode == OGLK_ARROW_DOWN || keycode == XK_ARROW_DOWN)
 		update_pitch(mrt->camera, -0.1f);
+	else if (keycode == OGLK_R || keycode == XK_R)
+	{
+		if (mlx->update == 2)
+			mlx->update = 1;
+		else
+			mlx->update = 2;
+		return ;
+	}
 	else if (keycode == OGLK_ESC || keycode == XK_ESC)
 		close_window(mrt);
-	return (0);
+	mrt->mlx->count = 0;
+	mrt->mlx->update = 1;
 }

@@ -43,7 +43,7 @@
 # define LINEAR_ATTENUATION_COEF 0.0004f
 # define QUADRATIC_ATTENUATION_COEF 0.004f
 
-# define MAX_DEPTH 5
+# define MAX_DEPTH 3
 
 // Structures
 
@@ -158,6 +158,7 @@ typedef struct s_mlx
 	int		cl;
 	int		endian;
 	int		update;
+	int		count;
 }	t_mlx;
 
 typedef struct s_type
@@ -176,8 +177,6 @@ typedef struct s_minirt
 	t_ambiant	*ambiant;
 	t_camera	*camera;
 	t_mlx		*mlx;
-	t_fvector3	*buffer;
-	int			count;
 }	t_minirt;
 
 typedef struct s_hit_data
@@ -187,79 +186,77 @@ typedef struct s_hit_data
 	t_fvector3	position;
 }	t_hit_data;
 
-t_minirt		*minirt(void);
-void			destruct_minirt(t_minirt *mrt, int destroy_mlx);
+t_minirt	*minirt(void);
+void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
 // mlx
-void			init_mlx(t_mlx *mlx);
-void			destruct_mlx(t_mlx *mlx);
-int				key_hook(int keycode, t_minirt *mrt);
-int				loop_hook(t_minirt *mrt);
-int				close_window(t_minirt *mrt);
-void			handle_events(t_minirt *mrt);
+void		init_mlx(t_mlx *mlx);
+void		destruct_mlx(t_mlx *mlx);
+int			key_hook(int keycode, t_minirt *mrt);
+int			loop_hook(t_minirt *mrt);
+int			close_window(t_minirt *mrt);
+void		handle_events(t_minirt *mrt);
 
-void			render_scene(t_minirt *mrt);
-t_rgb			ray_tracer(t_minirt *mrt, t_ray *ray, int depth);
-void			specular_reflection(t_ray *ray, t_hit_data *hit,
-					float smoothness);
-
-t_frgb			get_lights_modifier(t_minirt *mrt, t_hit_data hit,
-					float radius);
-t_rgb			apply_lights_modifier(t_frgb modifier, t_rgb base);
+// render
+void		render_scene(t_minirt *mrt);
+t_rgb		ray_tracer(t_minirt *mrt, t_ray *ray, int depth);
+t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit,
+				float radius);
+t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
+void		blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos);
+void		specular_reflection(t_ray *ray, t_hit_data *hit,
+				float smoothness);
 
 //objects
-t_ambiant		*ambiant(float level, t_rgb color);
-void			*parse_ambiant(char **values);
+t_ambiant	*ambiant(float level, t_rgb color);
+void		*parse_ambiant(char **values);
 
-t_camera		*camera(t_fvector3 position, t_fvector3 normal, int fov);
-void			*parse_camera(char **values);
-void			update_yaw(t_camera *cam, float theta);
-void			update_pitch(t_camera *cam, float theta);
-void			update_fov(t_minirt *mrt, int incrementation);
+t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
+void		*parse_camera(char **values);
+void		update_yaw(t_camera *cam, float theta);
+void		update_pitch(t_camera *cam, float theta);
+void		update_fov(t_minirt *mrt, int incrementation);
 
-t_cylinder		*cylinder(t_fvector3 position, t_fvector3 normal,
-					t_fvector2 size, t_rgb color);
-void			*parse_cylinder(char **values);
+t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
+				t_fvector2 size, t_rgb color);
+void		*parse_cylinder(char **values);
 
-t_light			*light(t_fvector3 position, float level, t_rgb color);
-void			*parse_light(char **values);
+t_light		*light(t_fvector3 position, float level, t_rgb color);
+void		*parse_light(char **values);
 
-t_plane			*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
-void			*parse_plane(char **values);
-void			render_plane(t_minirt *mrt, t_ray *ray, t_object *object,
-					int depth);
+t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
+void		*parse_plane(char **values);
+void		render_plane(t_minirt *mrt, t_ray *ray, t_object *object,
+				int depth);
 
-t_sphere		*sphere(t_fvector3 position, float diameter, t_rgb color);
-void			*parse_sphere(char **values);
-void			render_sphere(t_minirt *mrt, t_ray *ray, t_object *object,
-					int depth);
+t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color);
+void		*parse_sphere(char **values);
+void		render_sphere(t_minirt *mrt, t_ray *ray, t_object *object,
+				int depth);
 
-int				register_object(void *object);
-int				register_light(t_light *light);
-int				set_ambiant(t_ambiant *ambiant);
-int				set_camera(t_camera *camera);
+int			register_object(void *object);
+int			register_light(t_light *light);
+int			set_ambiant(t_ambiant *ambiant);
+int			set_camera(t_camera *camera);
 
-int				register_type(char *id, void *(*parser)(char **),
-					void (*render)(t_minirt *, t_ray *, t_object *, int depth));
-int				exist_type(char *id);
-void			*get_parser_by_id(char *id);
-void			*get_render_by_id(char *id);
+int			register_type(char *id, void *(*parser)(char **),
+				void (*render)(t_minirt *, t_ray *, t_object *, int depth));
+int			exist_type(char *id);
+void		*get_parser_by_id(char *id);
+void		*get_render_by_id(char *id);
 
 //parsing
-int				parse_map(char *path);
-int				parse_fvector3(char *value, t_fvector3 *v3,
-					char *invalid_format_error);
-int				parse_normal(char *value, t_fvector3 *normal,
-					char *invalid_format_error);
-int				parse_color(char *value, t_rgb *rgb,
-					char *invalid_format_error);
-void			*error_and_null(char *error);
+int			parse_map(char *path);
+int			parse_fvector3(char *value, t_fvector3 *v3,
+				char *invalid_format_error);
+int			parse_normal(char *value, t_fvector3 *normal,
+				char *invalid_format_error);
+int			parse_color(char *value, t_rgb *rgb,
+				char *invalid_format_error);
+void		*error_and_null(char *error);
 
 // utils
 
-unsigned int	fvector3_to_pixel(t_fvector3 c);
-t_fvector3		pixel_to_fvector3(t_mlx *mlx, int x, int y);
-void			clean_buffer(t_minirt *mrt);
-t_rgb			lerp(t_rgb color1, t_rgb color2, float t);
+t_rgb		lerp(t_rgb color1, t_rgb color2, float t);
 
 #endif
