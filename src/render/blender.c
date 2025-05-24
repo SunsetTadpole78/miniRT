@@ -17,7 +17,7 @@ static inline t_rgb			pixel_to_rgb(t_mlx *mlx, int x, int y);
 static inline unsigned int	rgb_to_uint(t_rgb color);
 /* -------------------------------------------------------------------------- */
 
-void	blender(t_minirt *mrt, t_ray *ray, t_vector2 pos)
+void	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos)
 {
 	int		count;
 	t_mlx	*mlx;
