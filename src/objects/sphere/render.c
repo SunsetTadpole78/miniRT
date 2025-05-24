@@ -44,7 +44,7 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 			sphere->color);
 	reflect_ray = *ray;
 	specular_reflection(&reflect_ray, &hit, sphere->smoothness);
-	ray->color = lerp(ray->color,
+	ray->color = ft_rgb_lerp(ray->color,
 			ray_tracer(mrt, &reflect_ray, depth + 1), sphere->mat);
 	ray->dist = dist;
 }

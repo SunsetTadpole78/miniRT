@@ -257,6 +257,6 @@ void		*error_and_null(char *error);
 
 // utils
 
-t_rgb		lerp(t_rgb color1, t_rgb color2, float t);
+t_rgb		ft_rgb_lerp(t_rgb color1, t_rgb color2, float t);
 
 #endif

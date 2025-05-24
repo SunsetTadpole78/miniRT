@@ -40,7 +40,7 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 			plane->color);
 	reflect_ray = *ray;
 	specular_reflection(&reflect_ray, &hit, plane->smoothness);
-	ray->color = lerp(ray->color,
+	ray->color = ft_rgb_lerp(ray->color,
 			ray_tracer(mrt, &reflect_ray, depth + 1), plane->mat);
 	ray->dist = dist;
 }

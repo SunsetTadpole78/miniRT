@@ -14,7 +14,8 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline t_fvector3	reflect(t_fvector3 v, t_fvector3 n);
-static inline t_fvector3	lerp_vector(t_fvector3 a, t_fvector3 b, float t);
+static inline t_fvector3	ft_fvector3_lerp(t_fvector3 a, t_fvector3 b,
+								float t);
 static inline t_fvector3	random_seed(void);
 /* -------------------------------------------------------------------------- */
 
@@ -22,7 +23,7 @@ void	specular_reflection(t_ray *ray, t_hit_data *hit, float smoothness)
 {
 	ray->origin = ft_fvector3_sum(hit->impact_point,
 			ft_fvector3_scale(hit->normal, EPSILON));
-	ray->direction = lerp_vector(ft_fnormalize(
+	ray->direction = ft_fvector3_lerp(ft_fnormalize(
 				ft_fvector3_sum(hit->normal, random_seed())),
 			reflect(ray->direction, hit->normal), smoothness);
 }
@@ -33,7 +34,8 @@ static inline t_fvector3	reflect(t_fvector3 v, t_fvector3 n)
 				* ft_fdot_product(v, n))));
 }
 
-static inline t_fvector3	lerp_vector(t_fvector3 a, t_fvector3 b, float t)
+static inline t_fvector3	ft_fvector3_lerp(t_fvector3 a, t_fvector3 b,
+	float t)
 {
 	return ((t_fvector3){
 		a.x * (1.0f - t) + b.x * t,

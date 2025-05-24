@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lerp.c                                             :+:      :+:    :+:   */
+/*   ft_rgb_lerp.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "miniRT.h"
 
-t_rgb	lerp(t_rgb color1, t_rgb color2, float t)
+t_rgb	ft_rgb_lerp(t_rgb color1, t_rgb color2, float t)
 {
 	return ((t_rgb){
 		color1.r * (1.0f - t) + color2.r * t,
