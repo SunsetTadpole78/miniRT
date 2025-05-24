@@ -41,7 +41,6 @@ FILES =		destructor.c				\
 		render/lights.c				\
 		render/render.c				\
 		render/specular_reflection.c		\
-		utils/lerp.c				\
 
 ifeq ($(shell uname), Darwin)
 FILES += mlx/opengl.c

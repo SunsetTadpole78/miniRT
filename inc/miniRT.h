@@ -118,7 +118,6 @@ typedef struct s_sphere
 	float		radius;
 	float		smoothness;
 	float		mat;
-	int			pattern;
 }	t_sphere;
 
 typedef struct s_plane
@@ -129,11 +128,8 @@ typedef struct s_plane
 	t_rgb		color;
 	t_fvector3	position;
 	t_fvector3	normal;
-	t_fvector3	right;
-	t_fvector3	up;
 	float		smoothness;
 	float		mat;
-	int			pattern;
 }	t_plane;
 
 typedef struct s_cylinder
@@ -254,9 +250,5 @@ int			parse_normal(char *value, t_fvector3 *normal,
 int			parse_color(char *value, t_rgb *rgb,
 				char *invalid_format_error);
 void		*error_and_null(char *error);
-
-// utils
-
-t_rgb		ft_rgb_lerp(t_rgb color1, t_rgb color2, float t);
 
 #endif

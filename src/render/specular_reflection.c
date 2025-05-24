@@ -14,8 +14,6 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline t_fvector3	reflect(t_fvector3 v, t_fvector3 n);
-static inline t_fvector3	ft_fvector3_lerp(t_fvector3 a, t_fvector3 b,
-								float t);
 static inline t_fvector3	random_seed(void);
 /* -------------------------------------------------------------------------- */
 
@@ -32,15 +30,6 @@ static inline t_fvector3	reflect(t_fvector3 v, t_fvector3 n)
 {
 	return (ft_fvector3_diff(v, ft_fvector3_scale(n, 2.0f
 				* ft_fdot_product(v, n))));
-}
-
-static inline t_fvector3	ft_fvector3_lerp(t_fvector3 a, t_fvector3 b,
-	float t)
-{
-	return ((t_fvector3){
-		a.x * (1.0f - t) + b.x * t,
-		a.y * (1.0f - t) + b.y * t,
-		a.z * (1.0f - t) + b.z * t});
 }
 
 static inline t_fvector3	random_seed(void)

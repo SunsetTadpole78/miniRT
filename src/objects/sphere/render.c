@@ -17,7 +17,6 @@
 static inline float	intersection_sphere(t_ray ray, t_sphere *sphere);
 static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
 						float dist);
-static inline t_rgb	checkerboard_pattern(t_hit_data hit);
 /* -------------------------------------------------------------------------- */
 
 void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
@@ -37,8 +36,6 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 				sphere->position)) < sphere->radius;
 	if (inside)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
-	if (sphere->pattern == 1)
-		sphere->color = checkerboard_pattern(hit);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit,
 				sphere->radius * ((!inside) * -1 + (inside))),
 			sphere->color);
@@ -80,14 +77,4 @@ static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
 	hit->normal = ft_fnormalize(ft_fvector3_diff(hit->impact_point,
 				sphere->position));
 	hit->position = sphere->position;
-}
-
-static inline t_rgb	checkerboard_pattern(t_hit_data hit)
-{
-	if ((int)((floor((0.5f + atan2f(hit.normal.z, hit.normal.x)
-					/ (2.0f * M_PI)) * 10.0f))
-		+ (floor((0.5f - asinf(hit.normal.y) / M_PI) * 10.0f))) % 2 == 0)
-		return ((t_rgb){255, 255, 255});
-	else
-		return ((t_rgb){0, 0, 0});
 }

@@ -66,6 +66,6 @@ static void	key_hook_next(int keycode, t_minirt *mrt)
 	}
 	else if (keycode == OGLK_ESC || keycode == XK_ESC)
 		close_window(mrt);
-	mrt->mlx->count = 0;
-	mrt->mlx->update = 1;
+	mlx->count = 0;
+	mlx->update = 1;
 }
