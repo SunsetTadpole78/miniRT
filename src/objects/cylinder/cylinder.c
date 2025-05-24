@@ -6,12 +6,19 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 19:31:50 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/24 18:11:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "errors.h"
+
+/* ------------------------------- PROTOTYPE -------------------------------- */
+static inline float		intersection_cylinder(t_ray ray, t_cylinder *cylinder,
+							int *type);
+static inline t_fvector3	get_normal(int type, t_fvector3 impact_point,
+							t_cylinder *cylinder);
+/* -------------------------------------------------------------------------- */
 
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	t_fvector2 size, t_rgb color)
@@ -60,7 +67,30 @@ void	*parse_cylinder(char **values)
 	return (cylinder(position, normal, size, color));
 }
 
-float	intersection_cylinder(t_ray ray, t_cylinder *cylinder)
+void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object)
+{
+	float		dist;
+	t_cylinder	*cylinder;
+	int			type;
+	t_hit_data	hit;
+
+	cylinder = (t_cylinder *)object;
+	dist = intersection_cylinder(*ray, cylinder, &type);
+	if (dist > 0 && dist <= ray->dist)
+	{
+		hit.position = cylinder->position;
+		hit.impact_point = ft_fvector3_sum(ray->origin,
+				ft_fvector3_scale(ray->direction, dist));
+		hit.normal = get_normal(type, hit.impact_point, cylinder);
+		ray->color = apply_lights_modifier(
+				get_lights_modifier(mrt, hit, 0),
+				cylinder->color);
+		ray->dist = dist;
+	}
+}
+
+static inline float	intersection_cylinder(t_ray ray, t_cylinder *cylinder,
+	int *type)
 {
 	t_fvector3	local_origin;
 	t_fvector3	local_dir;
@@ -70,28 +100,37 @@ float	intersection_cylinder(t_ray ray, t_cylinder *cylinder)
 
 	normalize_side(&local_origin, &local_dir, ray, cylinder);
 	t = apply_side_equation(local_origin, local_dir, cylinder);
+	t_cap_bottom = -1;
+	t_cap_top = -1;
+	if (fabs(local_dir.y) < 1e-6)
+		return (t);
 	t_cap_bottom = intersect_cap(local_origin, local_dir, cylinder->radius,
 			-(cylinder->half_height));
 	t_cap_top = intersect_cap(local_origin, local_dir, cylinder->radius,
 			cylinder->half_height);
-	if (t_cap_bottom > 0.001f && (t < 0 || t_cap_bottom < t))
+	*type = t_cap_bottom > 0.001f && (t < 0 || t_cap_bottom < t);
+	if (*type == 1)
 		t = t_cap_bottom;
 	if (t_cap_top > 0.001f && (t < 0 || t_cap_top < t))
+	{
+		*type = 2;
 		t = t_cap_top;
+	}
 	return (t);
 }
 
-void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object)
+static inline t_fvector3	get_normal(int type, t_fvector3 impact_point,
+		t_cylinder *cylinder)
 {
-	float		dist;
-	t_cylinder	*cylinder;
-
-	cylinder = (t_cylinder *)object;
-	dist = intersection_cylinder(*ray, cylinder);
-	if (dist > 0 && dist <= ray->dist)
-	{
-		(void)mrt;
-		ray->color = cylinder->color;
-		ray->dist = dist;
-	}
+	if (type == 1)
+		return (ft_fvector3_scale(cylinder->normal, -1.0f));
+	if (type == 2)
+		return (cylinder->normal);
+	return (ft_fnormalize(ft_fvector3_diff(impact_point,
+				ft_fvector3_sum(cylinder->position,
+					ft_fvector3_scale(cylinder->normal,
+						ft_fdot_product(ft_fvector3_diff(
+								impact_point,
+								cylinder->position),
+							cylinder->normal))))));
 }

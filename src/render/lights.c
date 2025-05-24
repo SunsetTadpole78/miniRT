@@ -6,17 +6,19 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:44:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 17:44:25 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/24 18:01:19 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
+/* ------------------------------- PROTOTYPE -------------------------------- */
 static inline float	calculate_light_level(t_light *light,
 						t_fvector3 impact_point, t_fvector3 normal);
 static inline void	apply_diffuse_lights(t_light *light,
 						t_fvector3 impact_point, t_fvector3 normal,
 						t_frgb *color);
+/* -------------------------------------------------------------------------- */
 
 t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data hit, float radius)
 {

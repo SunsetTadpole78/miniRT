@@ -6,14 +6,14 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 02:56:19 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/20 02:59:30 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/24 16:32:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 /* -------------------------------- PROTOTYPE ------------------------------- */
-static float	find_candidate(float sqrt_delta, float a, float b);
+static inline float	find_candidate(float sqrt_delta, float a, float b);
 /* -------------------------------------------------------------------------- */
 
 void	normalize_side(t_fvector3 *local_origin, t_fvector3 *local_dir,
@@ -58,18 +58,18 @@ float	apply_side_equation(t_fvector3 local_origin, t_fvector3 local_dir,
 	b = 2 * (local_origin.x * local_dir.x + local_origin.z * local_dir.z);
 	delta = b * b - 4 * a * (local_origin.x * local_origin.x + local_origin.z
 			* local_origin.z - cylinder->radius * cylinder->radius);
-	t = -1.0f;
 	if (delta > 0.0f)
 	{
 		t = find_candidate(sqrtf(delta), a, b);
 		y_hit = local_origin.y + t * local_dir.y;
 		if (y_hit < -cylinder->half_height || y_hit > cylinder->half_height)
 			t = -1.0f;
+		return (t);
 	}
-	return (t);
+	return (-1);
 }
 
-static float	find_candidate(float sqrt_delta, float a, float b)
+static inline float	find_candidate(float sqrt_delta, float a, float b)
 {
 	float	x1;
 	float	x2;
