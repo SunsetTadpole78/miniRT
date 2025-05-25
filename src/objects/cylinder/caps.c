@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 02:56:27 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/25 21:39:47 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/25 23:12:20 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ float	intersect_cap(t_fvector3 local_origin, t_fvector3 local_dir,
 	float	x;
 	float	z;
 
-	if (local_dir.y < EPSILON)
+	if (fabsf(local_dir.y) < EPSILON)
 		return (-1.0f);
 	t = (half_height - local_origin.y) / local_dir.y;
 	if (t < EPSILON)
