@@ -23,6 +23,7 @@ void	init_mlx(t_mlx *mlx)
 			&mlx->ll, &mlx->endian);
 	mlx->cl = mlx->bpp / 8;
 	mlx->update = 0;
+	mlx->count = 0;
 }
 
 void	handle_events(t_minirt *mrt)
@@ -36,10 +37,11 @@ void	handle_events(t_minirt *mrt)
 
 int	loop_hook(t_minirt *mrt)
 {
-	if (mrt->mlx->update == 1)
+	if (mrt->mlx->update != 0)
 	{
 		render_scene(mrt);
-		mrt->mlx->update = 0;
+		if (mrt->mlx->update != 2)
+			mrt->mlx->update = 0;
 	}
 	return (0);
 }

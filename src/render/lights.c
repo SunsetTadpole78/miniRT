@@ -12,11 +12,13 @@
 
 #include "miniRT.h"
 
+/* ------------------------------- PROTOTYPE -------------------------------- */
 static inline float	calculate_light_level(t_light *light,
 						t_fvector3 impact_point, t_fvector3 normal);
 static inline void	apply_diffuse_lights(t_light *light,
 						t_fvector3 impact_point, t_fvector3 normal,
 						t_frgb *color);
+/* -------------------------------------------------------------------------- */
 
 t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data hit, float radius)
 {
