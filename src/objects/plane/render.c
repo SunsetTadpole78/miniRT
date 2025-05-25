@@ -51,7 +51,7 @@ static inline float	intersection_plane(t_ray ray, t_plane *plane)
 	float	x;
 
 	denominator = ft_fdot_product(ray.direction, plane->normal);
-	if (fabs(denominator) < 0.000001f)
+	if (fabsf(denominator) < EPSILON)
 		return (-1.0f);
 	x = ft_fdot_product(ft_fvector3_diff(plane->position, ray.origin),
 			plane->normal) / denominator;

@@ -250,8 +250,7 @@ int			parse_fvector3(char *value, t_fvector3 *v3,
 				char *invalid_format_error);
 int			parse_normal(char *value, t_fvector3 *normal,
 				char *invalid_format_error);
-int			parse_color(char *value, t_rgb *rgb,
-				char *invalid_format_error);
+int			parse_color(char *value, t_rgb *rgb, char *invalid_format_error);
 void		*error_and_null(char *error);
 
 #endif
