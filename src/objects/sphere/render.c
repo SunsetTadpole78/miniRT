@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/25 21:25:32 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/25 21:29:24 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
 		return (-1.0f);
 	x1 = (-b - sqrtf(delta)) / 2.0f;
 	x2 = (-b + sqrtf(delta)) / 2.0f;
-	if (x1 > 0.001f)
+	if (x1 > EPSILON)
 		return (x1);
-	if (x2 > 0.001f)
+	if (x2 > EPSILON)
 		return (x2);
 	return (-1.0f);
 }
