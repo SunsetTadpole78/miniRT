@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 15:17:51 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/25 01:57:35 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
 {
-	t_plane		*pl;
+	t_plane	*pl;
 
 	pl = malloc(sizeof(t_plane));
 	if (!pl)

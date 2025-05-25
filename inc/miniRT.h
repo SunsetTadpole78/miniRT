@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 18:59:03 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/25 01:58:01 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,8 +196,7 @@ void		handle_events(t_minirt *mrt);
 // render
 void		render_scene(t_minirt *mrt);
 t_rgb		ray_tracer(t_minirt *mrt, t_ray *ray, int depth);
-t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit,
-				float radius);
+t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit, float radius);
 t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 void		blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos);
 void		specular_reflection(t_ray *ray, t_hit_data *hit,
@@ -247,8 +246,7 @@ int			parse_fvector3(char *value, t_fvector3 *v3,
 				char *invalid_format_error);
 int			parse_normal(char *value, t_fvector3 *normal,
 				char *invalid_format_error);
-int			parse_color(char *value, t_rgb *rgb,
-				char *invalid_format_error);
+int			parse_color(char *value, t_rgb *rgb, char *invalid_format_error);
 void		*error_and_null(char *error);
 
 #endif
