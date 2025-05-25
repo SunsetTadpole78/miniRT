@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/25 21:57:49 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/25 22:52:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,6 @@ static inline float	intersection_cylinder(t_ray ray, t_cylinder *cylinder,
 
 	normalize_side(&local_origin, &local_dir, ray, cylinder);
 	t = apply_side_equation(local_origin, local_dir, cylinder);
-	t_cap_bottom = -1;
-	t_cap_top = -1;
 	if (fabsf(local_dir.y) < 1e-6f)
 		return (t);
 	t_cap_bottom = intersect_cap(local_origin, local_dir, cylinder->radius,

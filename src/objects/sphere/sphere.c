@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/25 21:18:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/25 22:54:56 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,6 @@ void	*parse_sphere(char **values)
 
 int	is_inside_sphere(t_hit_data hit, t_fvector3 point)
 {
-	t_sphere	*sphere;
-
-	sphere = (t_sphere *)hit.object;
 	return (ft_fvector3_length(ft_fvector3_diff(point,
-				hit.position)) < sphere->radius);
+				hit.position)) < ((t_sphere *)hit.object)->radius);
 }
