@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/25 00:24:10 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/25 21:20:17 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	*parse_cylinder(char **values)
 	return (cylinder(position, normal, size, color));
 }
 
-void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object)
+void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 {
 	float		dist;
 	t_cylinder	*cylinder;
@@ -76,6 +76,7 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object)
 	t_hit_data	hit;
 	int			inside;
 
+	(void)depth;
 	cylinder = (t_cylinder *)object;
 	type = 0;
 	dist = intersection_cylinder(*ray, cylinder, &type);

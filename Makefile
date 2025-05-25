@@ -19,27 +19,31 @@ MLX_OPENGLA = $(MLX_OPENGL)/libmlx.a
 MLX_OPENGLI = $(MLX_OPENGL)
 MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 
-FILES =		destructor.c			\
-		initializer.c			\
-		main.c				\
-		mlx/mlx.c			\
-		mlx/mlx_key.c			\
-		objects/ambiant.c		\
-		objects/camera.c		\
-		objects/cylinder/caps.c		\
-		objects/cylinder/cylinder.c	\
-		objects/cylinder/side.c		\
-		objects/cylinder/utils.c	\
-		objects/factory.c		\
-		objects/light.c			\
-		objects/plane.c			\
-		objects/sphere.c		\
-		objects/types_factory.c		\
-		parsing/elements.c		\
-		parsing/parser.c		\
-		parsing/utils.c			\
-		render/lights.c		\
-		render/render.c
+FILES =		destructor.c				\
+		initializer.c				\
+		main.c					\
+		mlx/mlx.c				\
+		mlx/mlx_key.c				\
+		objects/ambiant.c			\
+		objects/camera.c			\
+		objects/cylinder/caps.c			\
+		objects/cylinder/cylinder.c		\
+		objects/cylinder/side.c			\
+		objects/cylinder/utils.c		\
+		objects/factory.c			\
+		objects/light.c				\
+		objects/plane/plane.c			\
+		objects/plane/render.c			\
+		objects/sphere/sphere.c			\
+		objects/sphere/render.c			\
+		objects/types_factory.c			\
+		parsing/elements.c			\
+		parsing/parser.c			\
+		parsing/utils.c				\
+		render/blender.c			\
+		render/lights.c				\
+		render/render.c				\
+		render/specular_reflection.c		\
 
 ifeq ($(shell uname), Darwin)
 FILES += mlx/opengl.c
