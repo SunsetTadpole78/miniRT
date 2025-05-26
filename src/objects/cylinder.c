@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/19 11:37:32 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/26 12:21:10 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	cy->size = size;
 	cy->color = color;
 	cy->render = get_render_by_id(CYLINDER_ID);
+	cy->intersect = get_intersect_by_id(CYLINDER_ID);
 	return (cy);
 }
 

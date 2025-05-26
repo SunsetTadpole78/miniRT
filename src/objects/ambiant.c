@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:58:48 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 11:43:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/26 12:20:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_ambiant	*ambiant(float level, t_rgb color)
 	a->color.g = color.g * level;
 	a->color.b = color.b * level;
 	a->render = get_render_by_id(AMBIANT_ID);
+	a->intersect = get_intersect_by_id(AMBIANT_ID);
 	return (a);
 }
 
