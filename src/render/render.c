@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/22 18:42:38 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/26 17:29:47 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 {
 	t_object	*cur;
 	void		(*render)(t_minirt *, t_ray *, t_object *, int);
+	t_light		*light;
 
 	if (depth > MAX_DEPTH)
 		return (ray->color);
@@ -83,5 +84,11 @@ t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 	}
 	if (ray->dist >= 3.4E+37)
 		ray->color = (t_rgb){0, 0, 0};
+	light = mrt->lights;
+	while (light)
+	{
+		show_light(ray, light);
+		light = (t_light *)light->next;
+	}
 	return (ray->color);
 }

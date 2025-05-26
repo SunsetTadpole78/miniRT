@@ -6,12 +6,17 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/19 11:37:51 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/26 18:00:55 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "errors.h"
+
+/* ------------------------------- PROTOTYPE -------------------------------- */
+static inline float	intersection_billboard(t_ray ray, t_light *light,
+						float *intensity);
+/* -------------------------------------------------------------------------- */
 
 t_light	*light(t_fvector3 position, float level, t_rgb color)
 {
@@ -44,4 +49,61 @@ void	*parse_light(char **values)
 	if (!parse_color(values[2], &color, L_RGB_E))
 		return (NULL);
 	return (light(position, level, color));
+}
+
+void	show_light(t_ray *ray, t_light *light)
+{
+	float		dist;
+	float		intensity;
+
+	dist = intersection_billboard(*ray, light, &intensity);
+	if (dist > 0 && dist <= ray->dist)
+	{
+		ray->color.r += (intensity * (light->color.r - ray->color.r));
+		ray->color.g += (intensity * (light->color.g - ray->color.g));
+		ray->color.b += (intensity * (light->color.b - ray->color.b));
+	}
+}
+
+static inline int	calcul_intensity(t_light *light, float *intensity, float d)
+{
+	float	inner_radius;
+	float	outer_radius;
+
+	inner_radius = light->level;
+	outer_radius = 4.0f * light->level;
+	if (d <= inner_radius)
+		*intensity = 1;
+	else if (d <= outer_radius)
+		*intensity = powf(1.0f
+				- ((d - inner_radius) / (outer_radius - inner_radius)), 2);
+	else
+		return (0);
+	return (1);
+}
+
+static inline float	intersection_billboard(t_ray ray, t_light *light,
+		float *intensity)
+{
+	t_fvector3	normal;
+	float		denominator;
+	float		t;
+	t_fvector3	diff;
+	float		d;
+
+	normal = ft_fnormalize(ft_fvector3_diff(light->position, ray.origin));
+	denominator = ft_fdot_product(ray.direction, normal);
+	if (fabs(denominator) < EPSILON)
+		return (-1.0f);
+	t = ft_fdot_product(ft_fvector3_diff(light->position, ray.origin), normal)
+		/ denominator;
+	if (t < EPSILON)
+		return (-1.0f);
+	diff = ft_fvector3_diff(ft_fvector3_sum(ray.origin,
+				ft_fvector3_scale(ray.direction, t)), light->position);
+	d = ft_fvector3_length(ft_fvector3_diff(diff, ft_fvector3_scale(normal,
+					ft_fdot_product(diff, normal))));
+	if (!calcul_intensity(light, intensity, d))
+		return (-1.0f);
+	return (t);
 }
