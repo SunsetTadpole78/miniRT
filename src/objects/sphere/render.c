@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/26 13:08:14 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:21:35 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,4 @@ static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
 	hit->normal = ft_fnormalize(ft_fvector3_diff(hit->impact_point,
 				sphere->position));
 	hit->position = sphere->position;
-	hit->ray = ray;
 }

@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/26 13:08:38 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:21:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,4 @@ static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_plane *plane,
 			ft_fvector3_scale(ray->direction, dist));
 	hit->normal = plane->normal;
 	hit->position = plane->position;
-	hit->ray = ray;
 }

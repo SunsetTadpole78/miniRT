@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/26 12:22:50 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:21:19 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,6 @@ typedef struct s_hit_data
 	t_fvector3	impact_point;
 	t_fvector3	normal;
 	t_fvector3	position;
-	t_ray		*ray;
 }	t_hit_data;
 
 t_minirt	*minirt(void);
