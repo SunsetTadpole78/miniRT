@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 02:56:19 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/25 22:13:09 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/26 19:44:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ void	normalize_side(t_fvector3 *local_origin, t_fvector3 *local_dir,
 		ft_fdot_product(oc, cylinder->normal),
 		ft_fdot_product(oc, forward)
 	};
-	*local_dir = ft_fvector3(
-			ft_fdot_product(ray.direction, right),
-			ft_fdot_product(ray.direction, cylinder->normal),
-			ft_fdot_product(ray.direction, forward)
-			);
+	*local_dir = (t_fvector3){
+		ft_fdot_product(ray.direction, right),
+		ft_fdot_product(ray.direction, cylinder->normal),
+		ft_fdot_product(ray.direction, forward)
+	};
 }
 
 float	apply_side_equation(t_fvector3 local_origin, t_fvector3 local_dir,
