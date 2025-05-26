@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/25 01:58:01 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/26 17:03:13 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
+# include <pthread.h>
 
 # include "libft.h"
 # include "mlx.h"
@@ -181,6 +182,16 @@ typedef struct s_hit_data
 	t_fvector3	normal;
 	t_fvector3	position;
 }	t_hit_data;
+
+typedef struct s_thread_data
+{
+	t_minirt	*mrt;
+	int			start;
+	int			end;
+	t_camera	*camera;
+	pthread_t	thread;
+	float		ratio;
+}	t_thread_data;
 
 t_minirt	*minirt(void);
 void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
