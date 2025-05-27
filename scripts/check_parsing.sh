@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PREFIX="\033[91mminiRT: " 
+PREFIX="Error:\n\033[91m» \033[1;93mminiRT\033[91m:" 
 SUFFIX="\n\033[0m"
 
 MAP_DIR="./maps/parsing"

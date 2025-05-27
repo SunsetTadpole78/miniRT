@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 15:51:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:58:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,6 @@ typedef struct s_object
 	t_object	*next;
 	void		(*render)(t_minirt *, t_ray *, t_object *, int depth);
 }	t_object;
-
-typedef struct s_color_object
-{
-	char		*id;
-	t_object	*next;
-	void		(*render)(t_minirt *, t_ray *, t_object *, int depth);
-	t_rgb		color;
-}	t_color_object;
 
 typedef struct s_ambiant
 {
