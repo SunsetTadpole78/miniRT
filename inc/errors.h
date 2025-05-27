@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:59:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 16:27:01 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:09:53 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 # define USAGE_E "Usage: /miniRT <map_path>\n"
 # define MALLOC_E "Malloc Error.\n"
+# define CORES_E "Failed to retrieve cores count\n"
 # define EXTENSION_E "Map file must be respect format: *.rt\n"
 # define REGISTRATION_E "Object Registration Error\n"
 # define MAP_NOT_FOUND_E "Map path not found\n"

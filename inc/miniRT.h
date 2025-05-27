@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 16:40:02 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:10:03 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
+# include <pthread.h>
 
 # include "libft.h"
 # include "mlx.h"
@@ -140,7 +141,10 @@ typedef struct s_cylinder
 	t_rgb		color;
 	t_fvector3	position;
 	t_fvector3	normal;
-	t_fvector2	size;
+	float		diameter;
+	float		radius;
+	float		height;
+	float		half_height;
 }	t_cylinder;
 
 typedef struct s_mlx
@@ -173,20 +177,33 @@ typedef struct s_minirt
 	t_ambiant	*ambiant;
 	t_camera	*camera;
 	t_mlx		*mlx;
+	int			cores;
 }	t_minirt;
 
 typedef struct s_hit_data
 {
+	t_object	*object;
 	t_fvector3	impact_point;
 	t_fvector3	normal;
 	t_fvector3	position;
 }	t_hit_data;
 
+typedef struct s_thread_data
+{
+	t_minirt	*mrt;
+	int			start;
+	int			end;
+	t_camera	*camera;
+	pthread_t	thread;
+	float		ratio;
+}	t_thread_data;
+
 t_minirt	*minirt(void);
+int			init_cores(t_minirt *mrt);
 void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
 // mlx
-void		init_mlx(t_mlx *mlx);
+t_mlx		*init_mlx(t_mlx *mlx);
 void		destruct_mlx(t_mlx *mlx);
 int			key_hook(int keycode, t_minirt *mrt);
 int			loop_hook(t_minirt *mrt);
@@ -195,8 +212,10 @@ void		handle_events(t_minirt *mrt);
 
 // render
 void		render_scene(t_minirt *mrt);
+
 t_rgb		ray_tracer(t_minirt *mrt, t_ray *ray, int depth);
-t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit, float radius);
+t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside,
+				int (*check_method)(t_hit_data, t_fvector3));
 t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 void		blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos);
 void		specular_reflection(t_ray *ray, t_hit_data *hit,
@@ -215,6 +234,15 @@ void		update_fov(t_minirt *mrt, int incrementation);
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_rgb color);
 void		*parse_cylinder(char **values);
+void		render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
+				int depth);
+float		intersect_cap(t_fvector3 local_origin, t_fvector3 local_dir,
+				float radius, float half_height);
+void		normalize_side(t_fvector3 *local_origin, t_fvector3 *local_dir,
+				t_ray ray, t_cylinder *cylinder);
+float		apply_side_equation(t_fvector3 local_origin, t_fvector3 local_dir,
+				t_cylinder *cylinder);
+int			is_inside_cylinder(t_hit_data hit, t_fvector3 point);
 
 t_light		*light(t_fvector3 position, float level, t_rgb color);
 void		*parse_light(char **values);
@@ -228,6 +256,7 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_pattern pattern);
 void		*parse_sphere(char **values);
 void		render_sphere(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
+int			is_inside_sphere(t_hit_data hit, t_fvector3 point);
 
 int			register_object(t_object *object);
 int			register_light(t_light *light);
