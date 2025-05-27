@@ -6,14 +6,14 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:59:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 10:13:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 11:30:21 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERRORS_H
 # define ERRORS_H
 
-# define ERR_PREFIX "Error:\n\033[91mminiRT: "
+# define ERR_PREFIX "Error:\n\033[91m» \033[1;93mminiRT\033[91m: "
 
 # define USAGE_E "Usage: /miniRT <map_path>\n"
 # define MALLOC_E "Malloc Error.\n"
@@ -39,7 +39,7 @@
 ,[INT_MIN;INT_MAX]\n"
 # define PL_NORM_E "Plane normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]\n"
 # define PL_RGB_E "Plane rgb format: [0;255],[0;255],[0;255]\n"
-# define SP_ARGS_E "Sphere format: 'sp <position> <diameter> <color>'\n"
+# define SP_ARGS_E "Sphere format: 'sp <position> <diameter> <color> [<pattern> [color2]] [<smoothness> [mattifying]]'\n"
 # define SP_POS_E "Sphere position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX]\
 ,[INT_MIN;INT_MAX]\n"
 # define SP_DIAM_E "Sphere diameter format: [0.0;INT_MAX]\n"

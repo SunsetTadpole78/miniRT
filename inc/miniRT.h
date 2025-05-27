@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/25 01:58:01 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:51:56 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,19 @@
 
 // Structures
 
-typedef struct s_minirt	t_minirt;
-typedef struct s_ray	t_ray;
-typedef struct s_object	t_object;
+typedef struct s_minirt		t_minirt;
+typedef struct s_ray		t_ray;
+typedef struct s_object		t_object;
+typedef struct s_pattern	t_pattern;
+
+typedef struct s_pattern
+{
+	char	id;
+	t_rgb	main_color;
+	t_rgb	secondary_color;
+	float	smoothness;
+	float	mattifying;
+}	t_pattern;
 
 typedef struct s_object
 {
@@ -112,12 +122,10 @@ typedef struct s_sphere
 	char		*id;
 	t_object	*next;
 	void		(*render)(t_minirt *, t_ray *, t_object *, int depth);
-	t_rgb		color;
+	t_pattern	pattern;
 	t_fvector3	position;
 	float		diameter;
 	float		radius;
-	float		smoothness;
-	float		mat;
 }	t_sphere;
 
 typedef struct s_plane
@@ -224,7 +232,7 @@ void		*parse_plane(char **values);
 void		render_plane(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
 
-t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color);
+t_sphere	*sphere(t_fvector3 position, float diameter, t_pattern pattern);
 void		*parse_sphere(char **values);
 void		render_sphere(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
@@ -242,11 +250,10 @@ void		*get_render_by_id(char *id);
 
 //parsing
 int			parse_map(char *path);
-int			parse_fvector3(char *value, t_fvector3 *v3,
-				char *invalid_format_error);
-int			parse_normal(char *value, t_fvector3 *normal,
-				char *invalid_format_error);
-int			parse_color(char *value, t_rgb *rgb, char *invalid_format_error);
+int			parse_fvector3(char *value, t_fvector3 *v3);
+int			parse_normal(char *value, t_fvector3 *normal);
+int			parse_color(char *value, t_rgb *rgb);
+int			parse_pattern(char **values, t_pattern *pattern);
 void		*error_and_null(char *error);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated:   by Juste                              ###   ########.fr       */
+/*   Updated: 2025/05/27 15:53:26 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,11 @@ void	*parse_plane(char **values)
 
 	if (!values[0] || !values[1] || !values[2] || values[3])
 		return (error_and_null(PL_ARGS_E));
-	if (!parse_fvector3(values[0], &position, PL_POS_E)
-		|| !parse_normal(values[1], &normal, PL_NORM_E)
-		|| !parse_color(values[2], &color, PL_RGB_E))
-		return (NULL);
+	if (!parse_fvector3(values[0], &position))
+		return (error_and_null(PL_POS_E));
+	if (!parse_normal(values[1], &normal))
+		return (error_and_null(PL_NORM_E));
+	if (!parse_color(values[2], &color))
+		return (error_and_null(PL_RGB_E));
 	return (plane(position, normal, color));
 }
