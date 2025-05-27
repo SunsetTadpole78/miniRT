@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:44:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 17:44:25 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/25 00:02:19 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static inline void	apply_diffuse_lights(t_light *light,
 						t_frgb *color);
 /* -------------------------------------------------------------------------- */
 
-t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data hit, float radius)
+t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside,
+			int (*check_method)(t_hit_data, t_fvector3))
 {
 	t_frgb	color;
 	t_light	*light;
@@ -35,8 +36,7 @@ t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data hit, float radius)
 	light = mrt->lights;
 	while (light)
 	{
-		if (radius <= 0.0f || ft_fvector3_length(ft_fvector3_diff(
-					light->position, hit.position)) <= radius)
+		if (!inside || (check_method && check_method(hit, light->position)))
 			apply_diffuse_lights(light, hit.impact_point, hit.normal, &color);
 		light = (t_light *)light->next;
 	}
