@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/26 13:21:35 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:16:04 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,8 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 				sphere->position)) < sphere->radius;
 	if (inside)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
-	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit,
-				sphere->radius * ((!inside) * -1 + (inside))),
-			sphere->color);
+	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside,
+				is_inside_sphere), sphere->color);
 	reflect_ray = *ray;
 	specular_reflection(&reflect_ray, &hit, sphere->smoothness);
 	ray->color = ft_rgb_lerp(ray->color,
@@ -72,6 +71,7 @@ float	intersect_sphere(t_ray ray, t_object *object)
 static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
 	float dist)
 {
+	hit->object = (t_object *)sphere;
 	hit->impact_point = ft_fvector3_sum(ray->origin,
 			ft_fvector3_scale(ray->direction, dist));
 	hit->normal = ft_fnormalize(ft_fvector3_diff(hit->impact_point,

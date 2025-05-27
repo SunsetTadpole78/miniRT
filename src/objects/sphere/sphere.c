@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/26 12:22:23 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:16:17 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,10 @@ void	*parse_sphere(char **values)
 	if (!parse_color(values[2], &color, SP_RGB_E))
 		return (NULL);
 	return (sphere(position, diameter, color));
+}
+
+int	is_inside_sphere(t_hit_data hit, t_fvector3 point)
+{
+	return (ft_fvector3_length(ft_fvector3_diff(point,
+				hit.position)) < ((t_sphere *)hit.object)->radius);
 }

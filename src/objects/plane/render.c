@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/26 13:21:44 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:15:20 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	init_hit(ray, &hit, plane, dist);
 	if (ft_fdot_product(ray->direction, hit.normal) > 0)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
-	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0),
+	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0, NULL),
 			plane->color);
 	reflect_ray = *ray;
 	specular_reflection(&reflect_ray, &hit, plane->smoothness);
@@ -61,6 +61,7 @@ float	intersect_plane(t_ray ray, t_object *object)
 static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_plane *plane,
 	float dist)
 {
+	hit->object = (t_object *)plane;
 	hit->impact_point = ft_fvector3_sum(ray->origin,
 			ft_fvector3_scale(ray->direction, dist));
 	hit->normal = plane->normal;
