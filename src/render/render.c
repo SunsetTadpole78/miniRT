@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/27 17:23:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:41:04 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	render_scene(t_minirt *mrt)
 	t_thread_data	*datas;
 
 	cores = sysconf(_SC_NPROCESSORS_ONLN);
+	if (cores == -1)
+		return ;
 	datas = malloc(sizeof(t_thread_data) * cores);
 	if (!datas)
 		return ;
