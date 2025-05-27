@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 15:53:08 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:02:39 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,6 @@ void	*parse_cylinder(char **values)
 	if (size.y < 0.0f)
 		return (error_and_null(CY_HEI_E));
 	if (!parse_color(values[4], &color))
-		return (NULL);
+		return (error_and_null(CY_RGB_E));
 	return (cylinder(position, normal, size, color));
 }
