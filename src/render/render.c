@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/26 17:17:59 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:23:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	render_scene(t_minirt *mrt)
 
 	cores = sysconf(_SC_NPROCESSORS_ONLN);
 	datas = malloc(sizeof(t_thread_data) * cores);
+	if (!datas)
+		return ;
 	pixels_per_thread = (WIN_WIDTH * WIN_HEIGHT) / cores;
 	i = -1;
 	while (++i < cores)
