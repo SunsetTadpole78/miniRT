@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:59:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 11:30:21 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:27:01 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # define REGISTRATION_E "Object Registration Error\n"
 # define MAP_NOT_FOUND_E "Map path not found\n"
 # define OBJ_E "Invalid object id\n"
+# define UNOPENED_COM_E "Unopened comment\n"
+# define UNCLOSED_COM_E "Unclosed comment\n"
 # define A_ARGS_E "Ambiant format: 'A <level> <color>'\n"
 # define A_LVL_E "Ambiant level format: [0.0;1.0]\n"
 # define A_RGB_E "Ambiant rgb format: [0;255],[0;255],[0;255]\n"
@@ -39,7 +41,8 @@
 ,[INT_MIN;INT_MAX]\n"
 # define PL_NORM_E "Plane normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]\n"
 # define PL_RGB_E "Plane rgb format: [0;255],[0;255],[0;255]\n"
-# define SP_ARGS_E "Sphere format: 'sp <position> <diameter> <color> [<pattern> [color2]] [<smoothness> [mattifying]]'\n"
+# define SP_ARGS_E "Sphere format: 'sp <position> <diameter> <color> [<pattern>\
+ [color2]] [<smoothness> [mattifying]]'\n"
 # define SP_POS_E "Sphere position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX]\
 ,[INT_MIN;INT_MAX]\n"
 # define SP_DIAM_E "Sphere diameter format: [0.0;INT_MAX]\n"

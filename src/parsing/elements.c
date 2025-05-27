@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 03:08:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 15:52:12 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:32:20 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ int	parse_normal(char *value, t_fvector3 *normal)
 {
 	if (!parse_fvector3(value, normal))
 		return (0);
-	return (normal->x >= -1.0f && normal->x <= 1.0f && normal->y >= -1.0f
-                && normal->y <= 1.0f && normal->z >= -1.0f && normal->z <= 1.0f);
+	return (normal->x >= -1.0f && normal->x <= 1.0f
+		&& normal->y >= -1.0f && normal->y <= 1.0f
+		&& normal->z >= -1.0f && normal->z <= 1.0f);
 }
 
 int	parse_color(char *value, t_rgb *color)

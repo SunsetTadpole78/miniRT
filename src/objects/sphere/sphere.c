@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 15:53:45 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:31:03 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,22 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_pattern pattern)
 	return (sp);
 }
 
+void	init_pattern(t_pattern *pattern)
+{
+	pattern->id = '\0';
+	pattern->secondary_color = (t_rgb){0, 0, 0};
+	pattern->smoothness = 1.0f;
+	pattern->mattifying = 0.0f;
+}
+
 void	*parse_sphere(char **values)
 {
 	t_fvector3	position;
 	float		diameter;
 	t_pattern	pattern;
 
-	if (!values[0] || !values[1] || !values[2] || (values[3] && values[4] && values[5] && values[6] && values[7]))
+	if (!values[0] || !values[1] || !values[2] || (values[3] && values[4]
+			&& values[5] && values[6] && values[7]))
 		return (error_and_null(SP_ARGS_E));
 	if (!parse_fvector3(values[0], &position))
 		return (error_and_null(SP_POS_E));
@@ -46,17 +55,8 @@ void	*parse_sphere(char **values)
 		return (error_and_null(SP_DIAM_E));
 	if (!parse_color(values[2], &pattern.main_color))
 		return (NULL);
-	if (values[3])
-	{
-		if (!parse_pattern(values + 3, &pattern))
-			return (error_and_null(SP_ARGS_E));
-	}
-	else
-	{
-		pattern.id = '\0';
-		pattern.secondary_color = (t_rgb){0,0,0};
-		pattern.smoothness = 1.0f;
-		pattern.mattifying = 0.0f;
-	}
+	init_pattern(&pattern);
+	if (values[3] && !parse_pattern(values + 3, &pattern))
+		return (error_and_null(SP_ARGS_E));
 	return (sphere(position, diameter, pattern));
 }

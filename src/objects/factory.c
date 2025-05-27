@@ -6,13 +6,13 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:45:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/15 09:56:03 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:39:48 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	register_object(void *object)
+int	register_object(t_object *object)
 {
 	char		*id;
 	int			len;
@@ -20,7 +20,7 @@ int	register_object(void *object)
 
 	if (!object)
 		return (0);
-	id = ((t_object *)object)->id;
+	id = object->id;
 	len = ft_strlen(id) + 1;
 	if (ft_strncmp(AMBIANT_ID, id, len) == 0)
 		return (set_ambiant((t_ambiant *)object));
@@ -29,8 +29,9 @@ int	register_object(void *object)
 	if (ft_strncmp(CAMERA_ID, id, len) == 0)
 		return (set_camera((t_camera *)object));
 	mrt = minirt();
-	((t_object *)object)->next = mrt->objects;
-	mrt->objects = (t_object *)object;
+	object->next = mrt->objects;
+	mrt->objects = object;
+	printf("Register object with id %s\n", id);
 	return (1);
 }
 
