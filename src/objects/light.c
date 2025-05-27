@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 15:53:18 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:05:57 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,6 @@ void	*parse_light(char **values)
 	if (level < 0.0f || level > 1.0f)
 		return (error_and_null(L_LVL_E));
 	if (!parse_color(values[2], &color))
-		return (NULL);
+		return (error_and_null(L_RGB_E));
 	return (light(position, level, color));
 }
