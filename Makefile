@@ -59,7 +59,7 @@ COMPILATOR = cc
 
 all: $(NAME)
 
-$(NAME): $(LIBFTA) $(OFILES)
+$(NAME): submodules $(LIBFTA) $(OFILES)
 ifeq ($(shell uname), Darwin)
 	make -C $(MLX_OPENGL) CFLAGS="-O3 -DSTRINGPUTX11 -w" > /dev/null
 	$(COMPILATOR) $(FLAGS) $(OFILES) $(LIBFTA) $(MLX_OPENGLA) -o $(NAME) -I $(INC) -I $(LIBFTI) -I $(MLX_OPENGLI) $(EXTRA_FLAGS) $(MLX_OPENGLF)
@@ -94,7 +94,10 @@ else
 endif
 
 submodules:
-	git submodule update --remote --init --recursive
+	@if [ ! -d $(LIBFT) ]; then \
+		echo "Fetching submodules..."; \
+		git submodule update --remote --init --recursive; \
+	fi
 
 clean-branches:
 	@echo "Fetching and pruning remote branches...";
