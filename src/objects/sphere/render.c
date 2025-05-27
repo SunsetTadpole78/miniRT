@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated:   by Juste                              ###   ########.fr       */
+/*   Updated: 2025/05/25 21:29:24 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,8 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	if (sphere->pattern == 'c')
 		sphere->color = checkerboard_pattern(hit);
-	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit,
-				sphere->radius * ((!inside) * -1 + (inside))),
-			sphere->color);
+	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside,
+				is_inside_sphere), sphere->color);
 	reflect_ray = *ray;
 	specular_reflection(&reflect_ray, &hit, sphere->smoothness);
 	ray->color = ft_rgb_lerp(ray->color,
@@ -65,9 +64,9 @@ static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
 		return (-1.0f);
 	x1 = (-b - sqrtf(delta)) / 2.0f;
 	x2 = (-b + sqrtf(delta)) / 2.0f;
-	if (x1 > 0.001f)
+	if (x1 > EPSILON)
 		return (x1);
-	if (x2 > 0.001f)
+	if (x2 > EPSILON)
 		return (x2);
 	return (-1.0f);
 }
@@ -75,6 +74,7 @@ static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
 static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
 	float dist)
 {
+	hit->object = (t_object *)sphere;
 	hit->impact_point = ft_fvector3_sum(ray->origin,
 			ft_fvector3_scale(ray->direction, dist));
 	hit->normal = ft_fnormalize(ft_fvector3_diff(hit->impact_point,

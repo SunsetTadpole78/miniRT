@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated:   by Juste                              ###   ########.fr       */
+/*   Updated: 2025/05/25 21:20:36 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	if (plane->pattern == 'c')
 		plane->color = checkerboard_pattern(plane, hit);
-	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0),
+	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0, NULL),
 			plane->color);
 	reflect_ray = *ray;
 	specular_reflection(&reflect_ray, &hit, plane->smoothness);
@@ -63,6 +63,7 @@ static inline float	intersection_plane(t_ray ray, t_plane *plane)
 static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_plane *plane,
 	float dist)
 {
+	hit->object = (t_object *)plane;
 	hit->impact_point = ft_fvector3_sum(ray->origin,
 			ft_fvector3_scale(ray->direction, dist));
 	hit->normal = plane->normal;
