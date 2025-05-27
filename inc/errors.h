@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:59:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 21:37:06 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 22:26:41 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@
 # define SP_DIAM_E "Sphere diameter format: [0.0;INT_MAX]\n"
 # define SP_RGB_E "Sphere rgb format: [0;255],[0;255],[0;255]\n"
 # define CY_ARGS_E "Cylinder format: 'cy <position> <normal> <diameter> <height> \
-<color>'\n"
+<color> [<pattern> [color2]] [<smoothness> [mattifying]]'\n"
 # define CY_POS_E "Cylinder position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX]\
 ,[INT_MIN;INT_MAX]\n"
 # define CY_NORM_E "Cylinder normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]\n"

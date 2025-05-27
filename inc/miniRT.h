@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 21:33:02 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 22:22:16 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ typedef struct s_cylinder
 	char		*id;
 	t_object	*next;
 	void		(*render)(t_minirt *, t_ray *, t_object *, int depth);
-	t_rgb		color;
+	t_pattern	pattern;
 	t_fvector3	position;
 	t_fvector3	normal;
 	float		diameter;
@@ -230,7 +230,7 @@ void		update_pitch(t_camera *cam, float theta);
 void		update_fov(t_minirt *mrt, int incrementation);
 
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
-				t_fvector2 size, t_rgb color);
+				t_fvector2 size, t_pattern pattern);
 void		*parse_cylinder(char **values);
 void		render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
