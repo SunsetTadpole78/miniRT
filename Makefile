@@ -61,7 +61,6 @@ all: $(NAME)
 
 $(NAME): $(LIBFTA) $(OFILES)
 ifeq ($(shell uname), Darwin)
-	make -C submodules .
 	make -C $(MLX_OPENGL) CFLAGS="-O3 -DSTRINGPUTX11 -w" > /dev/null
 	$(COMPILATOR) $(FLAGS) $(OFILES) $(LIBFTA) $(MLX_OPENGLA) -o $(NAME) -I $(INC) -I $(LIBFTI) -I $(MLX_OPENGLI) $(EXTRA_FLAGS) $(MLX_OPENGLF)
 else
