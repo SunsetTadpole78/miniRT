@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 22:22:16 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 00:04:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define AMBIANT_ID "A"
 # define CAMERA_ID "C"
 # define CYLINDER_ID "cy"
-# define LIGHT_ID "L"
+# define LIGHT_ID "l"
 # define PLANE_ID "pl"
 # define SPHERE_ID "sp"
 
