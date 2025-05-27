@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:59:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 21:09:53 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:26:29 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define EXTENSION_E "Map file must be respect format: *.rt\n"
 # define REGISTRATION_E "Object Registration Error\n"
 # define MAP_NOT_FOUND_E "Map path not found\n"
+# define NEED_CAMERA_E "Camera element needed\n"
 # define OBJ_E "Invalid object id\n"
 # define UNOPENED_COM_E "Unopened comment\n"
 # define UNCLOSED_COM_E "Unclosed comment\n"

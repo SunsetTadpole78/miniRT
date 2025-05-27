@@ -6,11 +6,12 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 17:56:26 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:26:50 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
+#include "errors.h"
 
 t_minirt	*minirt(void)
 {
@@ -39,8 +40,14 @@ t_minirt	*minirt(void)
 	return (mrt);
 }
 
-int	init_cores(t_minirt *mrt)
+int	check_env(t_minirt *mrt)
 {
 	mrt->cores = sysconf(_SC_NPROCESSORS_ONLN);
-	return (mrt->cores != -1);
+	if (mrt->cores == -1)
+		return (ft_error(CORES_E, ERR_PREFIX, 0));
+	if (!mrt->camera)
+		return (ft_error(NEED_CAMERA_E, ERR_PREFIX, 0));
+	if (!mrt->ambiant)
+		mrt->ambiant = ambiant(0, (t_rgb){0, 0, 0});
+	return (1);
 }
