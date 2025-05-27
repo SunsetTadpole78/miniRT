@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/27 18:00:14 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:04:24 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static inline t_fvector3	primary_ray(t_camera *cam, t_vector2 pos,
 
 void	render_scene(t_minirt *mrt)
 {
-	int	cores;
+	int				cores;
 	t_thread_data	*datas;
 	int				pixels_per_thread;
 	int				i;

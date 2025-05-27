@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 17:57:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:03:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ int	main(int argc, char **argv)
 	}
 	if (!mrt->ambiant)
 		mrt->ambiant = ambiant(0, (t_rgb){0, 0, 0});
-	mlx = mrt->mlx;
-	init_mlx(mlx);
+	mlx = init_mlx(mrt->mlx);
 	render_scene(mrt);
 	handle_events(mrt);
 	mlx_loop_hook(mlx->mlx_ptr, loop_hook, mrt);
