@@ -6,17 +6,18 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:59:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 10:56:47 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 10:13:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERRORS_H
 # define ERRORS_H
 
-# define ERR_PREFIX "\033[91mminiRT: "
+# define ERR_PREFIX "Error:\n\033[91mminiRT: "
 
 # define USAGE_E "Usage: /miniRT <map_path>\n"
 # define MALLOC_E "Malloc Error.\n"
+# define EXTENSION_E "Map file must be respect format: *.rt\n"
 # define REGISTRATION_E "Object Registration Error\n"
 # define MAP_NOT_FOUND_E "Map path not found\n"
 # define OBJ_E "Invalid object id\n"

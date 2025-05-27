@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:52:59 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 10:58:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 10:13:17 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,23 @@ static int	parse_object(char *line);
 
 int	parse_map(char *path)
 {
+	int		len;
 	int		fd;
 	char	*content;
 	int		code;
 
+	len = ft_strlen(path);
+	if (len < 3 || ft_strncmp(path + (len - 3), ".rt", 4) != 0)
+		return (ft_error(EXTENSION_E, ERR_PREFIX, 1));
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
-		return (ft_error(MAP_NOT_FOUND_E, ERR_PREFIX, 1));
+		return (ft_error(MAP_NOT_FOUND_E, ERR_PREFIX, 2));
 	content = ft_get_contents(fd);
 	if (!content)
-		return (ft_error(MALLOC_E, ERR_PREFIX, 2));
+		return (ft_error(MALLOC_E, ERR_PREFIX, 3));
 	code = parse_lines(content);
 	if (code != 0)
-		code += 2;
+		code += 3;
 	free(content);
 	close(fd);
 	return (code);
