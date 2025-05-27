@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 19:27:29 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:56:26 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,10 @@ t_minirt	*minirt(void)
 		register_type(SPHERE_ID, parse_sphere, render_sphere);
 	}
 	return (mrt);
+}
+
+int	init_cores(t_minirt *mrt)
+{
+	mrt->cores = sysconf(_SC_NPROCESSORS_ONLN);
+	return (mrt->cores != -1);
 }

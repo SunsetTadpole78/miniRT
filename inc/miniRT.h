@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 17:25:23 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:59:53 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,7 @@ typedef struct s_minirt
 	t_ambiant	*ambiant;
 	t_camera	*camera;
 	t_mlx		*mlx;
+	int			cores;
 }	t_minirt;
 
 typedef struct s_hit_data
@@ -198,6 +199,7 @@ typedef struct s_thread_data
 }	t_thread_data;
 
 t_minirt	*minirt(void);
+int		init_cores(t_minirt *mrt);
 void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
 // mlx

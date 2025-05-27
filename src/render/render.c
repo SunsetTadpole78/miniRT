@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/27 17:41:04 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:00:14 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,13 @@ static inline t_fvector3	primary_ray(t_camera *cam, t_vector2 pos,
 
 void	render_scene(t_minirt *mrt)
 {
-	int				cores;
-	t_mlx			*mlx;
-	int				i;
-	int				pixels_per_thread;
+	int	cores;
 	t_thread_data	*datas;
+	int				pixels_per_thread;
+	int				i;
+	t_mlx			*mlx;
 
-	cores = sysconf(_SC_NPROCESSORS_ONLN);
-	if (cores == -1)
-		return ;
+	cores = mrt->cores;
 	datas = malloc(sizeof(t_thread_data) * cores);
 	if (!datas)
 		return ;

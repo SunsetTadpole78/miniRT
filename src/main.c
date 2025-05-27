@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/22 17:42:29 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:57:41 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@ int	main(int argc, char **argv)
 	mrt = minirt();
 	if (!mrt)
 		return (ft_error(MALLOC_E, ERR_PREFIX, 2));
+	if (!init_cores(mrt))
+		return (ft_error(CORES_E, ERR_PREFIX, 3));
 	code = parse_map(argv[1]);
 	if (code != 0)
 	{
 		destruct_minirt(mrt, 0);
-		return (2 + code);
+		return (3 + code);
 	}
 	if (!mrt->ambiant)
 		mrt->ambiant = ambiant(0, (t_rgb){0, 0, 0});
