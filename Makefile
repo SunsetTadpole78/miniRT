@@ -53,7 +53,7 @@ endif
 
 OFILES = $(FILES:%.c=$(OBJS)/%.o)
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -O3
 EXTRA_FLAGS = -g
 COMPILATOR = cc
 

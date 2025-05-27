@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/25 21:22:21 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:04:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
+# include <pthread.h>
 
 # include "libft.h"
 # include "mlx.h"
@@ -176,6 +177,7 @@ typedef struct s_minirt
 	t_ambiant	*ambiant;
 	t_camera	*camera;
 	t_mlx		*mlx;
+	int			cores;
 }	t_minirt;
 
 typedef struct s_hit_data
@@ -186,11 +188,22 @@ typedef struct s_hit_data
 	t_fvector3	position;
 }	t_hit_data;
 
+typedef struct s_thread_data
+{
+	t_minirt	*mrt;
+	int			start;
+	int			end;
+	t_camera	*camera;
+	pthread_t	thread;
+	float		ratio;
+}	t_thread_data;
+
 t_minirt	*minirt(void);
+int			init_cores(t_minirt *mrt);
 void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
 // mlx
-void		init_mlx(t_mlx *mlx);
+t_mlx		*init_mlx(t_mlx *mlx);
 void		destruct_mlx(t_mlx *mlx);
 int			key_hook(int keycode, t_minirt *mrt);
 int			loop_hook(t_minirt *mrt);
