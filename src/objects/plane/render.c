@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/27 20:15:20 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 01:55:53 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ float	intersect_plane(t_ray ray, t_object *object)
 
 	plane = (t_plane *)object;
 	denominator = ft_fdot_product(ray.direction, plane->normal);
-	if (fabs(denominator) < 0.000001f)
+	if (fabsf(denominator) < EPSILON)
 		return (-1.0f);
 	x = ft_fdot_product(ft_fvector3_diff(plane->position, ray.origin),
 			plane->normal) / denominator;
