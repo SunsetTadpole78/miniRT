@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 21:13:01 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:29:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,6 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_pattern pattern)
 	sp->radius = diameter / 2.0f;
 	sp->render = get_render_by_id(SPHERE_ID);
 	return (sp);
-}
-
-void	init_pattern(t_pattern *pattern)
-{
-	pattern->id = '\0';
-	pattern->secondary_color = (t_rgb){0, 0, 0};
-	pattern->smoothness = 1.0f;
-	pattern->mattifying = 0.0f;
 }
 
 void	*parse_sphere(char **values)

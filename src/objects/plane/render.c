@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/25 21:20:36 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:34:36 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	if (ft_fdot_product(ray->direction, hit.normal) > 0)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0, NULL),
-			plane->color);
+			plane->pattern.main_color);
 	reflect_ray = *ray;
-	specular_reflection(&reflect_ray, &hit, plane->smoothness);
-	ray->color = ft_rgb_lerp(ray->color,
-			ray_tracer(mrt, &reflect_ray, depth + 1), plane->mat);
+	specular_reflection(&reflect_ray, &hit, plane->pattern.smoothness);
+	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
+				depth + 1), plane->pattern.mattifying);
 	ray->dist = dist;
 }
 

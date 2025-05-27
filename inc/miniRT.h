@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 21:25:43 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:33:02 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,11 +126,9 @@ typedef struct s_plane
 	char		*id;
 	t_object	*next;
 	void		(*render)(t_minirt *, t_ray *, t_object *, int depth);
-	t_rgb		color;
+	t_pattern	pattern;
 	t_fvector3	position;
 	t_fvector3	normal;
-	float		smoothness;
-	float		mat;
 }	t_plane;
 
 typedef struct s_cylinder
@@ -247,7 +245,7 @@ int			is_inside_cylinder(t_hit_data hit, t_fvector3 point);
 t_light		*light(t_fvector3 position, float level, t_rgb color);
 void		*parse_light(char **values);
 
-t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
+t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_pattern pattern);
 void		*parse_plane(char **values);
 void		render_plane(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
@@ -276,5 +274,6 @@ int			parse_normal(char *value, t_fvector3 *normal);
 int			parse_color(char *value, t_rgb *rgb);
 int			parse_pattern(char **values, t_pattern *pattern);
 void		*error_and_null(char *error);
+void		init_pattern(t_pattern *pattern);
 
 #endif
