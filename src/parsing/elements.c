@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 03:08:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 16:32:20 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:06:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	parse_fvector3(char *value, t_fvector3 *v3)
 	char	**splited;
 	int		valid;
 
+	if (value[ft_strlen(value) - 1] == ',')
+		return (0);
 	splited = ft_split(value, ',');
 	if (!splited[0] || !splited[1] || !splited[2] || splited[3]
 		|| !ft_isnumeric(splited[0]) || !ft_isnumeric(splited[1])

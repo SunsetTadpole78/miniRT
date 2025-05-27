@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 17:05:57 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:07:47 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ void	*parse_light(char **values)
 		return (error_and_null(L_ARGS_E));
 	if (!parse_fvector3(values[0], &position))
 		return (error_and_null(L_POS_E));
+	if (!ft_isnumeric(values[1]))
+		return (error_and_null(L_LVL_E));
 	level = ft_atof(values[1]);
 	if (level < 0.0f || level > 1.0f)
 		return (error_and_null(L_LVL_E));
