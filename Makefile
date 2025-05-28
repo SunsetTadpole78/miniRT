@@ -29,6 +29,7 @@ FILES =		destructor.c				\
 		objects/camera/keys.c			\
 		objects/cylinder/caps.c			\
 		objects/cylinder/cylinder.c		\
+		objects/cylinder/keys.c			\
 		objects/cylinder/side.c			\
 		objects/cylinder/utils.c		\
 		objects/factory.c			\
