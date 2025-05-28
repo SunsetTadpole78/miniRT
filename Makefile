@@ -24,9 +24,9 @@ FILES =		destructor.c				\
 		main.c					\
 		mlx/mlx.c				\
 		mlx/mlx_key.c				\
-		objects/actions/camera.c		\
 		objects/ambiant.c			\
-		objects/camera.c			\
+		objects/camera/camera.c			\
+		objects/camera/keys.c			\
 		objects/cylinder/caps.c			\
 		objects/cylinder/cylinder.c		\
 		objects/cylinder/side.c			\
@@ -37,6 +37,7 @@ FILES =		destructor.c				\
 		objects/plane/render.c			\
 		objects/sphere/sphere.c			\
 		objects/sphere/render.c			\
+		objects/sphere/keys.c			\
 		objects/types_factory.c			\
 		parsing/elements.c			\
 		parsing/parser.c			\

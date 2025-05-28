@@ -6,12 +6,14 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 15:15:44 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:55:08 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "errors.h"
+
+static inline void	register_types(void);
 
 t_minirt	*minirt(void)
 {
@@ -30,16 +32,23 @@ t_minirt	*minirt(void)
 		mrt->mlx = malloc(sizeof(t_mlx));
 		if (!mrt->mlx)
 			return (NULL);
-		register_type(AMBIANT_ID, parse_ambiant, NULL, NULL);
-		register_type(CAMERA_ID, parse_camera, NULL, NULL);
-		register_type(CYLINDER_ID, parse_cylinder, render_cylinder,
-			intersect_cylinder);
-		register_type(LIGHT_ID, parse_light, NULL, NULL);
-		register_type(PLANE_ID, parse_plane, render_plane, intersect_plane);
-		register_type(SPHERE_ID, parse_sphere, render_sphere, intersect_sphere);
 		mrt->selected = NULL;
+		register_types();
 	}
 	return (mrt);
+}
+
+static inline void	register_types(void)
+{
+	register_type(AMBIANT_ID, init_methods(parse_ambiant, NULL, NULL, NULL));
+	register_type(CAMERA_ID, init_methods(parse_camera, NULL, NULL, NULL));
+	register_type(CYLINDER_ID, init_methods(parse_cylinder, render_cylinder,
+			intersect_cylinder, NULL));
+	register_type(LIGHT_ID, init_methods(parse_light, NULL, NULL, NULL));
+	register_type(PLANE_ID, init_methods(parse_plane, render_plane,
+			intersect_plane, NULL));
+	register_type(SPHERE_ID, init_methods(parse_sphere, render_sphere,
+			intersect_sphere, on_press_key_sphere));
 }
 
 int	check_env(t_minirt *mrt)

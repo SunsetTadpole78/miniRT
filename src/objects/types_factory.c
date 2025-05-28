@@ -6,15 +6,13 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:11:12 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/26 12:22:00 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:55:58 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	register_type(char *id, void *(*parser)(char **),
-	void (*render)(t_minirt *, t_ray *, t_object *, int depth),
-	float (*intersect)(t_ray, t_object *))
+int	register_type(char *id, t_methods *methods)
 {
 	t_type		*type;
 	t_minirt	*mrt;
@@ -25,9 +23,7 @@ int	register_type(char *id, void *(*parser)(char **),
 	if (!type)
 		return (0);
 	type->id = id;
-	type->parser = parser;
-	type->render = render;
-	type->intersect = intersect;
+	type->methods = methods;
 	mrt = minirt();
 	type->next = mrt->types;
 	mrt->types = type;
@@ -50,50 +46,35 @@ int	exist_type(char *id)
 	return (0);
 }
 
-void	*get_parser_by_id(char *id)
+t_methods	*init_methods(void *(*parser)(char **),
+		void (*render)(t_minirt *, t_ray *, t_object *, int depth),
+		float (*intersect)(t_ray, t_object *),
+		void (*on_press_key)(t_object *, int keycode, t_camera *camera))
 {
-	t_type	*types;
-	int		len;
+	t_methods	*methods;
 
-	types = minirt()->types;
-	len = ft_strlen(id) + 1;
-	while (types)
-	{
-		if (ft_strncmp(types->id, id, len) == 0)
-			return (types->parser);
-		types = types->next;
-	}
-	return (NULL);
+	methods = malloc(sizeof(t_methods));
+	if (!methods)
+		return (NULL);
+	methods->parser = parser;
+	methods->render = render;
+	methods->intersect = intersect;
+	methods->on_press_key = on_press_key;
+	return (methods);
 }
 
-void	*get_render_by_id(char *id)
+t_methods	*get_methods_by_id(char *id)
 {
-	t_type	*types;
+	t_type	*cur;
 	int		len;
 
-	types = minirt()->types;
-	len = ft_strlen(id) + 1;
-	while (types)
+	cur = minirt()->types;
+	len = ft_strlen(id);
+	while (cur)
 	{
-		if (ft_strncmp(types->id, id, len) == 0)
-			return (types->render);
-		types = types->next;
-	}
-	return (NULL);
-}
-
-void	*get_intersect_by_id(char *id)
-{
-	t_type	*types;
-	int		len;
-
-	types = minirt()->types;
-	len = ft_strlen(id) + 1;
-	while (types)
-	{
-		if (ft_strncmp(types->id, id, len) == 0)
-			return (types->intersect);
-		types = types->next;
+		if (ft_strncmp(cur->id, id, len + 1) == 0)
+			return (cur->methods);
+		cur = cur->next;
 	}
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/28 15:46:34 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:36:32 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,18 @@ static inline void	init_ray(t_ray *ray, t_minirt *mrt, t_vector2 pos);
 
 int	on_press_key(int keycode, t_minirt *mrt)
 {
+	void	(*on_press_key)(t_object *, int, t_camera *);
+
 	if (keycode == OGLK_ESC || keycode == XK_ESC)
 		close_window(mrt);
 	else if (!mrt->selected)
-		update_camera(mrt->camera, keycode);
+		on_press_key_camera(mrt->camera, keycode);
 	else
-		printf("objs\n");
+	{
+		on_press_key = mrt->selected->methods->on_press_key;
+		if (on_press_key)
+			on_press_key(mrt->selected, keycode, mrt->camera);
+	}
 	mrt->mlx->count = 0;
 	mrt->mlx->update = 1;
 	return (0);
@@ -43,7 +49,7 @@ int	on_click(int id, int x, int y, t_minirt *mrt)
 	init_ray(&ray, mrt, (t_vector2){x, y});
 	while (cur)
 	{
-		intersect = cur->intersect;
+		intersect = cur->methods->intersect;
 		if (intersect)
 		{
 			d = intersect(ray, cur);

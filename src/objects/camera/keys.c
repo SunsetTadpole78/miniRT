@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   camera.c                                           :+:      :+:    :+:   */
+/*   keys.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 13:35:52 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 15:46:18 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:08:11 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static inline t_fvector3	sum_inversed(t_fvector3 position,
 							t_fvector3 normal);
 /* -------------------------------------------------------------------------- */
 
-void	update_camera(t_camera *camera, int keycode)
+void	on_press_key_camera(t_camera *camera, int keycode)
 {
 	if (keycode == OGLK_A || keycode == XK_A)
 		camera->position = ft_fvector3_sum(camera->position, camera->right);

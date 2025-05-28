@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:06:06 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 13:44:09 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:37:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov)
 	c->up = ft_fcross_product(c->right, c->normal);
 	c->fov = fov;
 	c->iplane_scale = tan((fov / 2) * (M_PI / 180.0f));
-	c->render = get_render_by_id(CAMERA_ID);
-	c->intersect = get_intersect_by_id(CAMERA_ID);
+	c->methods = get_methods_by_id(CAMERA_ID);
 	return (c);
 }
 

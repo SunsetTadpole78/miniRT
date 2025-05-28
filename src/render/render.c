@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/28 11:26:31 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:49:27 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 	cur = mrt->objects;
 	while (cur)
 	{
-		render = cur->render;
+		render = cur->methods->render;
 		if (render)
 			render(mrt, ray, cur, depth);
 		cur = cur->next;
