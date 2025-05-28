@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/28 17:36:32 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:07:13 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	on_click(int id, int x, int y, t_minirt *mrt)
 			if (d != -1.0f && d < ray.dist)
 			{
 				mrt->selected = cur;
+				mrt->selected->selected = 1;
 				ray.dist = d;
 			}
 		}
@@ -73,5 +74,7 @@ static inline void	init_ray(t_ray *ray, t_minirt *mrt, t_vector2 pos)
 	ray->direction = primary_ray(camera, pos, ((float)WIN_WIDTH
 				/ (float)WIN_HEIGHT) * camera->iplane_scale);
 	ray->dist = 3.4E+38;
+	if (mrt->selected)
+		mrt->selected->selected = 0;
 	mrt->selected = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 17:59:20 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:02:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,16 +158,16 @@ typedef struct s_cylinder
 
 typedef struct s_mlx
 {
-	void		*mlx_ptr;
-	void		*win_ptr;
-	void		*img_ptr;
-	char		*data;
-	int			bpp;
-	int			ll;
-	int			cl;
-	int			endian;
-	int			update;
-	int			count;
+	void	*mlx_ptr;
+	void	*win_ptr;
+	void	*img_ptr;
+	char	*data;
+	int		bpp;
+	int		ll;
+	int		cl;
+	int		endian;
+	int		update;
+	int		count;
 }	t_mlx;
 
 typedef struct s_type

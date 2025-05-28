@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 17:41:46 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:04:56 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_light	*light(t_fvector3 position, float level, t_rgb color)
 	l->level = level;
 	l->color = color;
 	l->methods = get_methods_by_id(LIGHT_ID);
+	l->selected = 0;
 	return (l);
 }
 

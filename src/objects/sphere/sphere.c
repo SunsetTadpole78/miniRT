@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 17:56:24 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:05:13 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_pattern pattern)
 	sp->diameter = diameter;
 	sp->radius = diameter / 2.0f;
 	sp->methods = get_methods_by_id(SPHERE_ID);
+	sp->selected = 0;
 	return (sp);
 }
 

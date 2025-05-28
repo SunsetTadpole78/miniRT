@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 17:38:02 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:05:19 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_pattern pattern)
 	pl->normal = ft_fnormalize(normal);
 	pl->pattern = pattern;
 	pl->methods = get_methods_by_id(PLANE_ID);
+	pl->selected = 0;
 	return (pl);
 }
 
