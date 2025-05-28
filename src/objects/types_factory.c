@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:11:12 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 17:55:58 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:48:58 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ t_methods	*get_methods_by_id(char *id)
 	int		len;
 
 	cur = minirt()->types;
-	len = ft_strlen(id);
+	len = ft_strlen(id) + 1;
 	while (cur)
 	{
-		if (ft_strncmp(cur->id, id, len + 1) == 0)
+		if (ft_strncmp(cur->id, id, len) == 0)
 			return (cur->methods);
 		cur = cur->next;
 	}
