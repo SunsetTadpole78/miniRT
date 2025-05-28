@@ -18,14 +18,14 @@ static inline t_fvector3	random_seed(t_fvector3 center, float phi,
 								float cosTheta, float sinTheta);
 /* -------------------------------------------------------------------------- */
 
-void	specular_reflection(t_ray *ray, t_hit_data *hit, t_pattern pattern)
+void	specular_reflection(t_ray *ray, t_hit_data *hit, float smoothness)
 {
 	float	max_angle;
 	float	phi;
 	float	cos_theta;
 	float	sin_theta;
 
-	max_angle = 0.785398f * (1.0f - pattern.smoothness);
+	max_angle = 0.785398f * (1.0f - smoothness);
 	phi = 2.0f * M_PI * ((float)rand() / (float)RAND_MAX);
 	cos_theta = 1.0f - (1.0f - cosf(max_angle))
 		* ((float)rand() / (float)RAND_MAX);
