@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/27 20:16:04 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 02:06:33 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	if (inside)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside,
-				is_inside_sphere), sphere->color);
+				is_inside_sphere), sphere->pattern.main_color);
 	reflect_ray = *ray;
-	specular_reflection(&reflect_ray, &hit, sphere->smoothness);
-	ray->color = ft_rgb_lerp(ray->color,
-			ray_tracer(mrt, &reflect_ray, depth + 1), sphere->mat);
+	specular_reflection(&reflect_ray, &hit, sphere->pattern.smoothness);
+	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
+				depth + 1), sphere->pattern.mattifying);
 	ray->dist = dist;
 }
 
