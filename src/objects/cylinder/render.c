@@ -41,12 +41,9 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	inside = is_inside_cylinder(hit, ray->origin);
 	if (inside)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
-	if (cylinder->pattern.id == 'c')
-		cylinder->pattern.main_color
-			= checkerboard_pattern(cylinder, hit, cylinder->pattern);
 	ray->color = apply_lights_modifier(
 			get_lights_modifier(mrt, hit, inside, is_inside_cylinder),
-			cylinder->pattern.main_color);
+			checkerboard_pattern(cylinder, hit, cylinder->pattern));
 	ray->dist = dist;
 }
 
@@ -102,6 +99,8 @@ static inline t_rgb	checkerboard_pattern(t_cylinder *cy, t_hit_data hit,
 	float		h;
 	float		angle;
 
+	if (pattern.id != 'c')
+		return (pattern.main_color);
 	diff = ft_fvector3_diff(hit.impact_point, cy->position);
 	h = ft_fdot_product(diff, cy->normal);
 	proj = ft_fvector3_diff(diff, ft_fvector3_scale(cy->normal, h));
@@ -109,8 +108,8 @@ static inline t_rgb	checkerboard_pattern(t_cylinder *cy, t_hit_data hit,
 			ft_fdot_product(proj, cy->right));
 	if (angle < 0)
 		angle += 2.0f * M_PI;
-	if ((int)(floor(angle * 4.0f)
-		+ floor((h + cy->half_height) * 0.2f)) % 2 == 0)
+	if ((int)(floor(angle * 3.0f + EPSILON)
+		+ floor((h + cy->half_height) * 0.3f + EPSILON)) % 2 == 0)
 		return (pattern.main_color);
 	else
 		return (pattern.secondary_color);

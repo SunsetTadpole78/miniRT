@@ -34,11 +34,8 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	init_hit(ray, &hit, plane, dist);
 	if (ft_fdot_product(ray->direction, hit.normal) > 0)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
-	if (plane->pattern.id == 'c')
-		plane->pattern.main_color = checkerboard_pattern(plane, hit,
-				plane->pattern);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0, NULL),
-			plane->pattern.main_color);
+			checkerboard_pattern(plane, hit, plane->pattern));
 	reflect_ray = *ray;
 	specular_reflection(&reflect_ray, &hit, plane->pattern.smoothness);
 	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
@@ -78,6 +75,8 @@ static inline t_rgb	checkerboard_pattern(t_plane *plane, t_hit_data hit,
 {
 	t_fvector3	diff;
 
+	if (pattern.id != 'c')
+		return (pattern.main_color);
 	diff = ft_fvector3_diff(hit.impact_point, hit.position);
 	if ((int)((floor(ft_fdot_product(diff, plane->right) * 0.05f))
 		+ (floor(ft_fdot_product(diff, plane->up) * 0.05f))) % 2 == 0)
