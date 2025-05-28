@@ -26,7 +26,10 @@ FILES =		destructor.c				\
 		mlx/mlx_key.c				\
 		objects/ambiant.c			\
 		objects/camera.c			\
-		objects/cylinder.c			\
+		objects/cylinder/caps.c			\
+		objects/cylinder/cylinder.c		\
+		objects/cylinder/side.c			\
+		objects/cylinder/utils.c		\
 		objects/factory.c			\
 		objects/light.c				\
 		objects/plane/plane.c			\
@@ -50,7 +53,7 @@ endif
 
 OFILES = $(FILES:%.c=$(OBJS)/%.o)
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -O3
 EXTRA_FLAGS = -g
 COMPILATOR = cc
 
@@ -66,6 +69,7 @@ else
 endif
 
 $(LIBFTA):
+	@make submodules
 	make -C $(LIBFT) > /dev/null
 
 clean:
@@ -91,7 +95,10 @@ else
 endif
 
 submodules:
-	git submodule update --remote --init --recursive
+	@if [ ! -d $(LIBFT) ]; then \
+		echo "Fetching submodules..."; \
+		git submodule update --remote --init --recursive; \
+	fi
 
 clean-branches:
 	@echo "Fetching and pruning remote branches...";
