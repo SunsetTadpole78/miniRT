@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:11:12 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/26 12:22:00 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 23:26:54 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	register_type(char *id, void *(*parser)(char **),
 	void (*render)(t_minirt *, t_ray *, t_object *, int depth),
-	float (*intersect)(t_ray, t_object *))
+	float (*intersect)(t_ray *, t_object *))
 {
 	t_type		*type;
 	t_minirt	*mrt;

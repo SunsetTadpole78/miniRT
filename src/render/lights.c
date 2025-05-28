@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:44:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 20:36:33 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 23:43:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ static inline int	is_light_blocked(t_minirt *mrt, t_ray *ray, t_light *light)
 	{
 		if (cur->intersect)
 		{
-			dist = cur->intersect(*ray, cur);
+			dist = cur->intersect(ray, cur);
 			if (dist > 0.0f && dist < max_dist)
 				return (1);
 		}

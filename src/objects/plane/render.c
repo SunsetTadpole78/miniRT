@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/28 02:07:12 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 23:26:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	t_plane		*plane;
 	t_hit_data	hit;
 
-	dist = intersect_plane(*ray, object);
+	dist = intersect_plane(ray, object);
 	if (dist <= 0 || dist > ray->dist)
 		return ;
 	plane = (t_plane *)object;
@@ -41,17 +41,17 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	ray->dist = dist;
 }
 
-float	intersect_plane(t_ray ray, t_object *object)
+float	intersect_plane(t_ray *ray, t_object *object)
 {
 	t_plane	*plane;
 	float	denominator;
 	float	x;
 
 	plane = (t_plane *)object;
-	denominator = ft_fdot_product(ray.direction, plane->normal);
+	denominator = ft_fdot_product(ray->direction, plane->normal);
 	if (fabsf(denominator) < 0.0001f)
 		return (-1.0f);
-	x = ft_fdot_product(ft_fvector3_diff(plane->position, ray.origin),
+	x = ft_fdot_product(ft_fvector3_diff(plane->position, ray->origin),
 			plane->normal) / denominator;
 	if (x >= 0.0f)
 		return (x);

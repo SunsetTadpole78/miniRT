@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 02:05:36 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 23:55:59 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,14 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 
 	(void)depth;
 	cylinder = (t_cylinder *)object;
-	dist = intersect_cylinder(*ray, object);
+	dist = intersect_cylinder(ray, object);
 	if (dist < 0.0f || dist > ray->dist)
 		return ;
 	hit.object = object;
 	hit.position = cylinder->position;
 	hit.impact_point = ft_fvector3_sum(ray->origin,
 			ft_fvector3_scale(ray->direction, dist));
-	hit.normal = get_normal(cylinder->type, hit.impact_point, cylinder);
+	hit.normal = get_normal(ray->extra, hit.impact_point, cylinder);
 	inside = is_inside_cylinder(hit, ray->origin);
 	if (inside)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
@@ -93,7 +93,7 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	ray->dist = dist;
 }
 
-float	intersect_cylinder(t_ray ray, t_object *object)
+float	intersect_cylinder(t_ray *ray, t_object *object)
 {
 	t_cylinder	*cylinder;
 	t_fvector3	local_origin;
@@ -102,7 +102,7 @@ float	intersect_cylinder(t_ray ray, t_object *object)
 	t_fvector2	caps_t;
 
 	cylinder = (t_cylinder *)object;
-	normalize_side(&local_origin, &local_dir, ray, cylinder);
+	normalize_side(&local_origin, &local_dir, *ray, cylinder);
 	t = apply_side_equation(local_origin, local_dir, cylinder);
 	if (fabsf(local_dir.y) < 1e-6f)
 		return (t);
@@ -110,12 +110,12 @@ float	intersect_cylinder(t_ray ray, t_object *object)
 			-(cylinder->half_height));
 	caps_t.y = intersect_cap(local_origin, local_dir, cylinder->radius,
 			cylinder->half_height);
-	cylinder->type = caps_t.x > EPSILON && (t < 0 || caps_t.x < t);
-	if (cylinder->type == 1)
+	ray->extra = caps_t.x > EPSILON && (t < 0 || caps_t.x < t);
+	if (ray->extra == 1)
 		t = caps_t.x;
 	if (caps_t.y > EPSILON && (t < 0 || caps_t.y < t))
 	{
-		cylinder->type = 2;
+		ray->extra = 2;
 		t = caps_t.y;
 	}
 	return (t);
