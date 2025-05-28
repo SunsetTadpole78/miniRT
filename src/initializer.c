@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 18:22:52 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:38:39 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static inline void	register_types(void)
 			intersect_cylinder, on_press_key_cylinder));
 	register_type(LIGHT_ID, init_methods(parse_light, NULL, NULL, NULL));
 	register_type(PLANE_ID, init_methods(parse_plane, render_plane,
-			intersect_plane, NULL));
+			intersect_plane, on_press_key_plane));
 	register_type(SPHERE_ID, init_methods(parse_sphere, render_sphere,
 			intersect_sphere, on_press_key_sphere));
 }

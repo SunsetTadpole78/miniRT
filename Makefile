@@ -34,6 +34,7 @@ FILES =		destructor.c				\
 		objects/cylinder/utils.c		\
 		objects/factory.c			\
 		objects/light.c				\
+		objects/plane/keys.c			\
 		objects/plane/plane.c			\
 		objects/plane/render.c			\
 		objects/sphere/sphere.c			\
