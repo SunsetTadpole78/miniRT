@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 02:03:39 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 21:22:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,7 @@ int			key_hook(int keycode, t_minirt *mrt);
 int			loop_hook(t_minirt *mrt);
 int			close_window(t_minirt *mrt);
 void		handle_events(t_minirt *mrt);
+int			on_expose(t_mlx *mlx);
 
 // render
 void		render_scene(t_minirt *mrt);
