@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 21:07:47 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 02:05:57 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_light	*light(t_fvector3 position, float level, t_rgb color)
 	l->level = level;
 	l->color = color;
 	l->render = get_render_by_id(LIGHT_ID);
+	l->intersect = get_intersect_by_id(LIGHT_ID);
 	return (l);
 }
 
