@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/25 21:22:21 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 02:03:39 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
+# include <pthread.h>
 
 # include "libft.h"
 # include "mlx.h"
@@ -27,7 +28,7 @@
 # define AMBIANT_ID "A"
 # define CAMERA_ID "C"
 # define CYLINDER_ID "cy"
-# define LIGHT_ID "L"
+# define LIGHT_ID "l"
 # define PLANE_ID "pl"
 # define SPHERE_ID "sp"
 
@@ -47,30 +48,34 @@
 
 // Structures
 
-typedef struct s_minirt	t_minirt;
-typedef struct s_ray	t_ray;
-typedef struct s_object	t_object;
+typedef struct s_minirt		t_minirt;
+typedef struct s_ray		t_ray;
+typedef struct s_object		t_object;
+typedef struct s_pattern	t_pattern;
+
+typedef struct s_pattern
+{
+	char	id;
+	t_rgb	main_color;
+	t_rgb	secondary_color;
+	float	smoothness;
+	float	mattifying;
+}	t_pattern;
 
 typedef struct s_object
 {
 	char		*id;
 	t_object	*next;
 	void		(*render)(t_minirt *, t_ray *, t_object *, int depth);
+	float		(*intersect)(t_ray, t_object *);
 }	t_object;
-
-typedef struct s_color_object
-{
-	char		*id;
-	t_object	*next;
-	void		(*render)(t_minirt *, t_ray *, t_object *, int depth);
-	t_rgb		color;
-}	t_color_object;
 
 typedef struct s_ambiant
 {
 	char		*id;
 	t_object	*next;
 	void		(*render)(t_minirt *, t_ray *, t_object *, int depth);
+	float		(*intersect)(t_ray, t_object *);
 	t_rgb		color;
 	float		level;
 }	t_ambiant;
@@ -88,6 +93,7 @@ typedef struct s_camera
 	char		*id;
 	t_object	*next;
 	void		(*render)(t_minirt *, t_ray *, t_object *, int depth);
+	float		(*intersect)(t_ray, t_object *);
 	t_fvector3	position;
 	t_fvector3	normal;
 	t_fvector3	right;
@@ -101,6 +107,7 @@ typedef struct s_light
 	char		*id;
 	t_object	*next;
 	void		(*render)(t_minirt *, t_ray *, t_object *, int depth);
+	float		(*intersect)(t_ray, t_object *);
 	t_rgb		color;
 	t_fvector3	position;
 	float		level;
@@ -112,13 +119,11 @@ typedef struct s_sphere
 	char		*id;
 	t_object	*next;
 	void		(*render)(t_minirt *, t_ray *, t_object *, int depth);
-	t_rgb		color;
+	float		(*intersect)(t_ray, t_object *);
+	t_pattern	pattern;
 	t_fvector3	position;
 	float		diameter;
 	float		radius;
-	float		smoothness;
-	float		mat;
-	char		pattern;
 }	t_sphere;
 
 typedef struct s_plane
@@ -126,14 +131,10 @@ typedef struct s_plane
 	char		*id;
 	t_object	*next;
 	void		(*render)(t_minirt *, t_ray *, t_object *, int depth);
-	t_rgb		color;
+	float		(*intersect)(t_ray, t_object *);
+	t_pattern	pattern;
 	t_fvector3	position;
 	t_fvector3	normal;
-	t_fvector3	right;
-	t_fvector3	up;
-	float		smoothness;
-	float		mat;
-	char		pattern;
 }	t_plane;
 
 typedef struct s_cylinder
@@ -141,13 +142,15 @@ typedef struct s_cylinder
 	char		*id;
 	t_object	*next;
 	void		(*render)(t_minirt *, t_ray *, t_object *, int depth);
-	t_rgb		color;
+	float		(*intersect)(t_ray, t_object *);
+	t_pattern	pattern;
 	t_fvector3	position;
 	t_fvector3	normal;
 	float		diameter;
 	float		radius;
 	float		height;
 	float		half_height;
+	int			type;
 }	t_cylinder;
 
 typedef struct s_mlx
@@ -169,6 +172,7 @@ typedef struct s_type
 	char			*id;
 	void			*(*parser)(char **);
 	void			(*render)(t_minirt *, t_ray *, t_object *, int depth);
+	float			(*intersect)(t_ray, t_object *);
 	struct s_type	*next;
 }	t_type;
 
@@ -180,6 +184,7 @@ typedef struct s_minirt
 	t_ambiant	*ambiant;
 	t_camera	*camera;
 	t_mlx		*mlx;
+	int			cores;
 }	t_minirt;
 
 typedef struct s_hit_data
@@ -190,11 +195,22 @@ typedef struct s_hit_data
 	t_fvector3	position;
 }	t_hit_data;
 
+typedef struct s_thread_data
+{
+	t_minirt	*mrt;
+	int			start;
+	int			end;
+	t_camera	*camera;
+	pthread_t	thread;
+	float		ratio;
+}	t_thread_data;
+
 t_minirt	*minirt(void);
+int			check_env(t_minirt *mrt);
 void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
 // mlx
-void		init_mlx(t_mlx *mlx);
+t_mlx		*init_mlx(t_mlx *mlx);
 void		destruct_mlx(t_mlx *mlx);
 int			key_hook(int keycode, t_minirt *mrt);
 int			loop_hook(t_minirt *mrt);
@@ -209,8 +225,7 @@ t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside,
 				int (*check_method)(t_hit_data, t_fvector3));
 t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 void		blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos);
-void		specular_reflection(t_ray *ray, t_hit_data *hit,
-				float smoothness);
+void		specular_reflection(t_ray *ray, t_hit_data *hit, t_pattern pattern);
 
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);
@@ -223,7 +238,7 @@ void		update_pitch(t_camera *cam, float theta);
 void		update_fov(t_minirt *mrt, int incrementation);
 
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
-				t_fvector2 size, t_rgb color);
+				t_fvector2 size, t_pattern pattern);
 void		*parse_cylinder(char **values);
 void		render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
@@ -233,40 +248,45 @@ void		normalize_side(t_fvector3 *local_origin, t_fvector3 *local_dir,
 				t_ray ray, t_cylinder *cylinder);
 float		apply_side_equation(t_fvector3 local_origin, t_fvector3 local_dir,
 				t_cylinder *cylinder);
+float		intersect_cylinder(t_ray, t_object *object);
 int			is_inside_cylinder(t_hit_data hit, t_fvector3 point);
 
 t_light		*light(t_fvector3 position, float level, t_rgb color);
 void		*parse_light(char **values);
 
-t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_rgb color);
+t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_pattern pattern);
 void		*parse_plane(char **values);
 void		render_plane(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
+float		intersect_plane(t_ray, t_object *object);
 
-t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color);
+t_sphere	*sphere(t_fvector3 position, float diameter, t_pattern pattern);
 void		*parse_sphere(char **values);
 void		render_sphere(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
+float		intersect_sphere(t_ray, t_object *object);
 int			is_inside_sphere(t_hit_data hit, t_fvector3 point);
 
-int			register_object(void *object);
+int			register_object(t_object *object);
 int			register_light(t_light *light);
 int			set_ambiant(t_ambiant *ambiant);
 int			set_camera(t_camera *camera);
 
 int			register_type(char *id, void *(*parser)(char **),
-				void (*render)(t_minirt *, t_ray *, t_object *, int depth));
+				void (*render)(t_minirt *, t_ray *, t_object *, int depth),
+				float (*intersect)(t_ray, t_object *));
 int			exist_type(char *id);
 void		*get_parser_by_id(char *id);
 void		*get_render_by_id(char *id);
+void		*get_intersect_by_id(char *id);
 
 //parsing
 int			parse_map(char *path);
-int			parse_fvector3(char *value, t_fvector3 *v3,
-				char *invalid_format_error);
-int			parse_normal(char *value, t_fvector3 *normal,
-				char *invalid_format_error);
-int			parse_color(char *value, t_rgb *rgb, char *invalid_format_error);
+int			parse_fvector3(char *value, t_fvector3 *v3);
+int			parse_normal(char *value, t_fvector3 *normal);
+int			parse_color(char *value, t_rgb *rgb);
+int			parse_pattern(char **values, t_pattern *pattern);
 void		*error_and_null(char *error);
+void		init_pattern(t_pattern *pattern);
 
 #endif

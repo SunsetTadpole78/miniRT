@@ -6,14 +6,14 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/20 01:15:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:03:42 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "keys.h"
 
-void	init_mlx(t_mlx *mlx)
+t_mlx	*init_mlx(t_mlx *mlx)
 {
 	mlx->mlx_ptr = mlx_init();
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr,
@@ -24,6 +24,7 @@ void	init_mlx(t_mlx *mlx)
 	mlx->cl = mlx->bpp / 8;
 	mlx->update = 0;
 	mlx->count = 0;
+	return (mlx);
 }
 
 void	handle_events(t_minirt *mrt)

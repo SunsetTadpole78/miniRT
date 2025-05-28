@@ -6,44 +6,69 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/22 18:42:38 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:04:24 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
+static inline void		*render_part(void *value);
+static inline void		init_thread_data(t_thread_data *data, int cores, int i,
+							int pixels_per_thread);
 static inline t_fvector3	primary_ray(t_camera *cam, t_vector2 pos,
-								float ratio);
+							float ratio);
 /* -------------------------------------------------------------------------- */
 
 void	render_scene(t_minirt *mrt)
 {
-	t_vector2	pos;
-	t_ray		ray;
-	t_camera	*camera;
-	t_mlx		*mlx;
-	float		ratio;
+	int				cores;
+	t_thread_data	*datas;
+	int				pixels_per_thread;
+	int				i;
+	t_mlx			*mlx;
 
-	pos.y = 0;
-	mlx = mrt->mlx;
-	camera = mrt->camera;
-	ratio = ((float)WIN_WIDTH / (float)WIN_HEIGHT) * camera->iplane_scale;
-	ray.origin = mrt->camera->position;
-	while (pos.y < WIN_HEIGHT)
+	cores = mrt->cores;
+	datas = malloc(sizeof(t_thread_data) * cores);
+	if (!datas)
+		return ;
+	pixels_per_thread = (WIN_WIDTH * WIN_HEIGHT) / cores;
+	i = -1;
+	while (++i < cores)
 	{
-		pos.x = 0;
-		while (pos.x < WIN_WIDTH)
-		{
-			ray.direction = primary_ray(camera, pos, ratio);
-			ray_tracer(mrt, &ray, 0);
-			blend_colors(mrt, &ray, pos);
-			pos.x++;
-		}
-		pos.y++;
+		datas[i].mrt = mrt;
+		init_thread_data(&datas[i], cores, i, pixels_per_thread);
+		pthread_create(&datas[i].thread, NULL, render_part, &datas[i]);
 	}
+	i = -1;
+	while (++i < cores)
+		pthread_join(datas[i].thread, NULL);
+	free(datas);
+	mlx = mrt->mlx;
 	mlx->count++;
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img_ptr, 0, 0);
+}
+
+static inline void	*render_part(void *value)
+{
+	t_thread_data	*data;
+	t_vector2		pos;
+	t_ray			ray;
+	int				index;
+
+	data = (t_thread_data *)value;
+	ray.origin = data->camera->position;
+	index = data->start;
+	while (index < data->end)
+	{
+		pos.x = index % WIN_WIDTH;
+		pos.y = index / WIN_WIDTH;
+		ray.direction = primary_ray(data->camera, pos, data->ratio);
+		ray_tracer(data->mrt, &ray, 0);
+		blend_colors(data->mrt, &ray, pos);
+		index++;
+	}
+	return (NULL);
 }
 
 static inline t_fvector3	primary_ray(t_camera *cam,
@@ -63,6 +88,19 @@ static inline t_fvector3	primary_ray(t_camera *cam,
 				(t_fvector3){cam->up.x * ndc_vec.y,
 				cam->up.y * ndc_vec.y, cam->up.z * ndc_vec.y}),
 		cam->normal)));
+}
+
+inline void	init_thread_data(t_thread_data *data, int cores, int i,
+		int pixels_per_thread)
+{
+	data->start = i * pixels_per_thread;
+	if (i == cores - 1)
+		data->end = WIN_WIDTH * WIN_HEIGHT;
+	else
+		data->end = (i + 1) * pixels_per_thread;
+	data->camera = data->mrt->camera;
+	data->ratio = ((float)WIN_WIDTH / (float)WIN_HEIGHT)
+		* data->camera->iplane_scale;
 }
 
 t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)

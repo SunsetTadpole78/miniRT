@@ -53,7 +53,7 @@ endif
 
 OFILES = $(FILES:%.c=$(OBJS)/%.o)
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -O3
 EXTRA_FLAGS = -g
 COMPILATOR = cc
 
@@ -69,6 +69,7 @@ else
 endif
 
 $(LIBFTA):
+	@make submodules
 	make -C $(LIBFT) > /dev/null
 
 clean:
@@ -94,7 +95,10 @@ else
 endif
 
 submodules:
-	git submodule update --remote --init --recursive
+	@if [ ! -d $(LIBFT) ]; then \
+		echo "Fetching submodules..."; \
+		git submodule update --remote --init --recursive; \
+	fi
 
 clean-branches:
 	@echo "Fetching and pruning remote branches...";

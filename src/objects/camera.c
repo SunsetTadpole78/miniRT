@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:06:06 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/19 11:37:37 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 02:05:25 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov)
 	c->fov = fov;
 	c->iplane_scale = tan((fov / 2) * (M_PI / 180.0f));
 	c->render = get_render_by_id(CAMERA_ID);
+	c->intersect = get_intersect_by_id(CAMERA_ID);
 	return (c);
 }
 
@@ -40,9 +41,10 @@ void	*parse_camera(char **values)
 
 	if (!values[0] || !values[1] || !values[2] || values[3])
 		return (error_and_null(C_ARGS_E));
-	if (!parse_fvector3(values[0], &position, C_POS_E)
-		|| !parse_normal(values[1], &normal, C_NORM_E))
-		return (NULL);
+	if (!parse_fvector3(values[0], &position))
+		return (error_and_null(C_POS_E));
+	if (!parse_normal(values[1], &normal))
+		return (error_and_null(C_NORM_E));
 	if (!ft_isnumeric(values[2]) || ft_isoutint(values[2]))
 		return (error_and_null(C_FOV_E));
 	fov = ft_atoi(values[2]);
