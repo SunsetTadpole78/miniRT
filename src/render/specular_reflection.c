@@ -15,25 +15,23 @@
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline t_fvector3	perfect_reflection(t_fvector3 v, t_fvector3 n);
 static inline t_fvector3	random_seed(t_fvector3 center, float phi,
-								float cosTheta, float sinTheta);
+								float cos_theta,
+								float sin_theta);
 /* -------------------------------------------------------------------------- */
 
 void	specular_reflection(t_ray *ray, t_hit_data *hit, float smoothness)
 {
-	float	max_angle;
-	float	phi;
 	float	cos_theta;
-	float	sin_theta;
 
-	max_angle = 0.785398f * (1.0f - smoothness);
-	phi = 2.0f * M_PI * ((float)rand() / (float)RAND_MAX);
-	cos_theta = 1.0f - (1.0f - cosf(max_angle))
+	cos_theta = 1.0f - (1.0f - cosf(RAD_ANGLE * (1.0f - smoothness)))
 		* ((float)rand() / (float)RAND_MAX);
-	sin_theta = sqrtf(1.0f - cos_theta * cos_theta);
 	ray->origin = ft_fvector3_sum(hit->impact_point,
 			ft_fvector3_scale(hit->normal, EPSILON));
 	ray->direction = random_seed(perfect_reflection(
-				ray->direction, hit->normal), phi, cos_theta, sin_theta);
+				ray->direction, hit->normal),
+			2.0f * M_PI * ((float)rand() / (float)RAND_MAX),
+			cos_theta,
+			sqrtf(1.0f - cos_theta * cos_theta));
 }
 
 static inline t_fvector3	perfect_reflection(t_fvector3 v, t_fvector3 n)
