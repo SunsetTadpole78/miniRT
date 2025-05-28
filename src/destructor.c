@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/16 13:52:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:40:55 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static void	free_types(t_type *types)
 	while (types)
 	{
 		tmp = types->next;
+		free(types->methods);
 		free(types);
 		types = tmp;
 	}
