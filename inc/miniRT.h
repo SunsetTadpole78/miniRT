@@ -44,7 +44,7 @@
 # define LINEAR_ATTENUATION_COEF 0.0004f
 # define QUADRATIC_ATTENUATION_COEF 0.004f
 
-# define MAX_DEPTH 3
+# define MAX_DEPTH 10
 
 // Structures
 
@@ -225,8 +225,7 @@ t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside,
 				int (*check_method)(t_hit_data, t_fvector3));
 t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 void		blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos);
-void		specular_reflection(t_ray *ray, t_hit_data *hit,
-				float smoothness);
+void		specular_reflection(t_ray *ray, t_hit_data *hit, t_pattern pattern);
 
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);

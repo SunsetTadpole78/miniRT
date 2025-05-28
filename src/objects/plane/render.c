@@ -35,7 +35,7 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0, NULL),
 			plane->pattern.main_color);
 	reflect_ray = *ray;
-	specular_reflection(&reflect_ray, &hit, plane->pattern.smoothness);
+	specular_reflection(&reflect_ray, &hit, plane->pattern);
 	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
 				depth + 1), plane->pattern.mattifying);
 	ray->dist = dist;
@@ -49,7 +49,7 @@ float	intersect_plane(t_ray ray, t_object *object)
 
 	plane = (t_plane *)object;
 	denominator = ft_fdot_product(ray.direction, plane->normal);
-	if (fabsf(denominator) < EPSILON)
+	if (fabsf(denominator) < 0.0001f)
 		return (-1.0f);
 	x = ft_fdot_product(ft_fvector3_diff(plane->position, ray.origin),
 			plane->normal) / denominator;

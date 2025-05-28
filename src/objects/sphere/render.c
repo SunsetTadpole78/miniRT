@@ -38,7 +38,7 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside,
 				is_inside_sphere), sphere->pattern.main_color);
 	reflect_ray = *ray;
-	specular_reflection(&reflect_ray, &hit, sphere->pattern.smoothness);
+	specular_reflection(&reflect_ray, &hit, sphere->pattern);
 	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
 				depth + 1), sphere->pattern.mattifying);
 	ray->dist = dist;
