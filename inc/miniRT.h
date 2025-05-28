@@ -226,7 +226,7 @@ t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside,
 				int (*check_method)(t_hit_data, t_fvector3));
 t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 void		blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos);
-void		specular_reflection(t_ray *ray, t_hit_data *hit, t_pattern pattern);
+void		specular_reflection(t_ray *ray, t_hit_data *hit, float smoothness);
 
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);
