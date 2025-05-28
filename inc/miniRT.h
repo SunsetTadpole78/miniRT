@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 18:02:00 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 00:31:21 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,7 @@ int			on_click(int id, int x, int y, t_minirt *mrt);
 int			loop_hook(t_minirt *mrt);
 int			close_window(t_minirt *mrt);
 void		handle_events(t_minirt *mrt);
+int			on_expose(t_mlx *mlx);
 
 // render
 void		render_scene(t_minirt *mrt);

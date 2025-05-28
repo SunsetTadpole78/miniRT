@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/28 18:43:32 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 00:31:58 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,10 @@ static inline void	init_ray(t_ray *ray, t_minirt *mrt, t_vector2 pos)
 	if (mrt->selected)
 		mrt->selected->selected = 0;
 	mrt->selected = NULL;
+}
+
+int	on_expose(t_mlx *mlx)
+{
+	mlx->update = 1;
+	return (0);
 }

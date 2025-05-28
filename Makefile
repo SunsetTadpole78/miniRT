@@ -99,9 +99,13 @@ else
 endif
 
 submodules:
-	@if [ ! -d $(LIBFT) ]; then \
-		echo "Fetching submodules..."; \
+	@if [ -f .gitmodules ]; then \
+	  STATUS="$$(git submodule status --recursive)"; \
+	  if echo "$$STATUS" | grep -qE '^[-+]'; then \
+	  	echo "Fetching submodules..."; \
 		git submodule update --remote --init --recursive; \
+		git submodule update > /dev/null; \
+	  fi; \
 	fi
 
 clean-branches:
