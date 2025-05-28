@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated:   by Juste                              ###   ########.fr       */
+/*   Updated: 2025/05/26 12:22:35 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_rgb color)
 	pl->render = get_render_by_id(PLANE_ID);
 	pl->smoothness = 1.0f;
 	pl->mat = 0.7f;
+	pl->intersect = get_intersect_by_id(PLANE_ID);
 	return (pl);
 }
 

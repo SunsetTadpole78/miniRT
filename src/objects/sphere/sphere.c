@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/25 22:54:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:16:17 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_rgb color)
 	sp->radius = diameter / 2.0f;
 	sp->color = color;
 	sp->render = get_render_by_id(SPHERE_ID);
+	sp->intersect = get_intersect_by_id(SPHERE_ID);
 	sp->smoothness = 0.7f;
 	sp->mat = 0.9f;
 	return (sp);

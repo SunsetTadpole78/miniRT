@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/25 21:20:36 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 01:55:53 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "errors.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline float	intersection_plane(t_ray ray, t_plane *plane);
 static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_plane *plane,
 						float dist);
 /* -------------------------------------------------------------------------- */
@@ -22,14 +21,14 @@ static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_plane *plane,
 void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 {
 	t_ray		reflect_ray;
-	t_plane		*plane;
 	float		dist;
+	t_plane		*plane;
 	t_hit_data	hit;
 
-	plane = (t_plane *)object;
-	dist = intersection_plane(*ray, plane);
+	dist = intersect_plane(*ray, object);
 	if (dist <= 0 || dist > ray->dist)
 		return ;
+	plane = (t_plane *)object;
 	init_hit(ray, &hit, plane, dist);
 	if (ft_fdot_product(ray->direction, hit.normal) > 0)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
@@ -42,13 +41,15 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	ray->dist = dist;
 }
 
-static inline float	intersection_plane(t_ray ray, t_plane *plane)
+float	intersect_plane(t_ray ray, t_object *object)
 {
+	t_plane	*plane;
 	float	denominator;
 	float	x;
 
+	plane = (t_plane *)object;
 	denominator = ft_fdot_product(ray.direction, plane->normal);
-	if (fabs(denominator) < 0.000001f)
+	if (fabsf(denominator) < EPSILON)
 		return (-1.0f);
 	x = ft_fdot_product(ft_fvector3_diff(plane->position, ray.origin),
 			plane->normal) / denominator;
