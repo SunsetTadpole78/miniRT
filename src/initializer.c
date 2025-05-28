@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 02:05:00 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 15:15:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_minirt	*minirt(void)
 		register_type(LIGHT_ID, parse_light, NULL, NULL);
 		register_type(PLANE_ID, parse_plane, render_plane, intersect_plane);
 		register_type(SPHERE_ID, parse_sphere, render_sphere, intersect_sphere);
+		mrt->selected = NULL;
 	}
 	return (mrt);
 }
