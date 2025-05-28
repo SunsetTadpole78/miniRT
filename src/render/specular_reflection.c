@@ -19,7 +19,7 @@ static inline t_fvector3	random_seed(t_fvector3 center, float phi,
 								float sin_theta);
 /* -------------------------------------------------------------------------- */
 
-void	specular_reflection(t_ray *ray, t_hit_data *hit, t_pattern pattern)
+void	specular_reflection(t_ray *ray, t_hit_data *hit, float smoothness)
 {
 	float	cos_theta;
 

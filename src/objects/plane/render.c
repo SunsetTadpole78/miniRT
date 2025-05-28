@@ -40,7 +40,7 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0, NULL),
 			plane->pattern.main_color);
 	reflect_ray = *ray;
-	specular_reflection(&reflect_ray, &hit, plane->pattern);
+	specular_reflection(&reflect_ray, &hit, plane->pattern.smoothness);
 	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
 				depth + 1), plane->pattern.mattifying);
 	ray->dist = dist;
