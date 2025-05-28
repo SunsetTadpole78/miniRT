@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated:   by Juste                              ###   ########.fr       */
+/*   Updated: 2025/05/28 21:22:47 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,10 @@ static void	key_hook_next(int keycode, t_minirt *mrt)
 		close_window(mrt);
 	mlx->count = 0;
 	mlx->update = 1;
+}
+
+int	on_expose(t_mlx *mlx)
+{
+	mlx->update = 1;
+	return (0);
 }

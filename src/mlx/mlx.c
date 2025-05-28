@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/27 18:03:42 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 21:22:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	handle_events(t_minirt *mrt)
 	mlx = mrt->mlx;
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_hook, mrt);
 	mlx_hook(mlx->win_ptr, 17, 1L << 17, close_window, mrt);
+	mlx_hook(mlx->win_ptr, 12, 1L << 15, on_expose, mlx);
 }
 
 int	loop_hook(t_minirt *mrt)
