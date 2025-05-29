@@ -17,7 +17,6 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	t_fvector2 size, t_pattern pattern)
 {
 	t_cylinder	*cy;
-	t_fvector3	ref;
 
 	cy = malloc(sizeof(t_cylinder));
 	if (!cy)
@@ -25,11 +24,8 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	cy->id = CYLINDER_ID;
 	cy->position = position;
 	cy->normal = ft_fnormalize(normal);
-	if (fabsf(cy->normal.x) < 0.9f)
-		ref = (t_fvector3){1, 0, 0};
-	else
-		ref = (t_fvector3){0, 1, 0};
-	cy->right = ft_fnormalize(ft_fcross_product(cy->normal, ref));
+	cy->right = ft_fnormalize(ft_fcross_product(cy->normal,
+				(t_fvector3){1, 0, 0}));
 	cy->up = ft_fnormalize(ft_fcross_product(cy->right, cy->normal));
 	cy->pattern = pattern;
 	cy->diameter = size.x;
