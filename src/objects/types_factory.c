@@ -6,13 +6,13 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:11:12 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 18:48:58 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 14:47:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	register_type(char *id, t_methods *methods)
+int	register_type(char *id, void *(*parser)(char **), t_methods *methods)
 {
 	t_type		*type;
 	t_minirt	*mrt;
@@ -23,6 +23,7 @@ int	register_type(char *id, t_methods *methods)
 	if (!type)
 		return (0);
 	type->id = id;
+	methods->parser = parser;
 	type->methods = methods;
 	mrt = minirt();
 	type->next = mrt->types;
@@ -46,20 +47,36 @@ int	exist_type(char *id)
 	return (0);
 }
 
-t_methods	*init_methods(void *(*parser)(char **),
-		void (*render)(t_minirt *, t_ray *, t_object *, int depth),
-		float (*intersect)(t_ray, t_object *),
-		void (*on_press_key)(t_object *, int keycode, t_camera *camera))
+t_methods	*init_methods(void (*render)(t_minirt *, t_ray *, t_object *, int),
+		float (*intersect)(t_ray *, t_object *, float),
+		int (*is_inside)(t_object *, t_fvector3),
+		void (*on_press_key)(t_object *, int, t_camera *))
 {
 	t_methods	*methods;
 
 	methods = malloc(sizeof(t_methods));
 	if (!methods)
 		return (NULL);
-	methods->parser = parser;
+	methods->parser = NULL;
 	methods->render = render;
 	methods->intersect = intersect;
+	methods->is_inside = is_inside;
 	methods->on_press_key = on_press_key;
+	return (methods);
+}
+
+t_methods	*empty_methods(void)
+{
+	t_methods	*methods;
+
+	methods = malloc(sizeof(t_methods));
+	if (!methods)
+		return (NULL);
+	methods->parser = NULL;
+	methods->render = NULL;
+	methods->intersect = NULL;
+	methods->is_inside = NULL;
+	methods->on_press_key = NULL;
 	return (methods);
 }
 

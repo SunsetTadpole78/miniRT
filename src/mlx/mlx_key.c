@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/29 00:31:58 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 14:36:42 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	on_click(int id, int x, int y, t_minirt *mrt)
 {
 	t_object	*cur;
 	t_ray		ray;
-	float		(*intersect)(t_ray, t_object *);
+	float		(*intersect)(t_ray *, t_object *, float);
 	float		d;
 
 	if (id != 1)
@@ -62,7 +62,7 @@ int	on_click(int id, int x, int y, t_minirt *mrt)
 		intersect = cur->methods->intersect;
 		if (intersect)
 		{
-			d = intersect(ray, cur);
+			d = intersect(&ray, cur, 1.0f);
 			if (d != -1.0f && d < ray.dist)
 			{
 				mrt->selected = cur;
