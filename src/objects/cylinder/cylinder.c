@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/29 12:49:38 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 13:01:09 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,28 +98,27 @@ float	intersect_cylinder(t_ray *ray, t_object *object, float amplifier)
 	t_cylinder	*cylinder;
 	t_fvector3	local_origin;
 	t_fvector3	local_dir;
-	float		t;
-	t_fvector2	caps_t;
+	t_fvector3	t;
+	t_fvector2	amplified;
 
-	(void)amplifier;
 	cylinder = (t_cylinder *)object;
 	normalize_side(&local_origin, &local_dir, *ray, cylinder);
-	t = apply_side_equation(local_origin, local_dir, cylinder, amplifier);
+	t.z = apply_side_equation(local_origin, local_dir, cylinder, amplifier);
 	if (fabsf(local_dir.y) < 1e-6f)
-		return (t);
-	caps_t.x = intersect_cap(local_origin, local_dir, cylinder->radius
-			* amplifier, -(cylinder->half_height * amplifier));
-	caps_t.y = intersect_cap(local_origin, local_dir, cylinder->radius
-			* amplifier, cylinder->half_height * amplifier);
-	ray->extra = caps_t.x > EPSILON && (t < 0 || caps_t.x < t);
+		return (t.z);
+	amplified = (t_fvector2){cylinder->radius * amplifier,
+		cylinder->half_height * amplifier};
+	t.x = intersect_cap(local_origin, local_dir, amplified.x, -(amplified.y));
+	t.y = intersect_cap(local_origin, local_dir, amplified.x, amplified.y);
+	ray->extra = t.x > EPSILON && (t.z < 0 || t.x < t.z);
 	if (ray->extra == 1)
-		t = caps_t.x;
-	if (caps_t.y > EPSILON && (t < 0 || caps_t.y < t))
+		t.z = t.x;
+	if (t.y > EPSILON && (t.z < 0 || t.y < t.z))
 	{
 		ray->extra = 2;
-		t = caps_t.y;
+		t.z = t.y;
 	}
-	return (t);
+	return (t.z);
 }
 
 static inline t_fvector3	get_normal(int type, t_fvector3 impact_point,
