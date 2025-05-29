@@ -25,14 +25,22 @@ FILES =		destructor.c				\
 		mlx/mlx.c				\
 		mlx/mlx_key.c				\
 		objects/ambiant.c			\
-		objects/camera.c			\
-		objects/cylinder.c			\
+		objects/camera/camera.c			\
+		objects/camera/keys.c			\
+		objects/cylinder/caps.c			\
+		objects/cylinder/cylinder.c		\
+		objects/cylinder/render.c		\
+		objects/cylinder/keys.c			\
+		objects/cylinder/side.c			\
+		objects/cylinder/utils.c		\
 		objects/factory.c			\
 		objects/light.c				\
+		objects/plane/keys.c			\
 		objects/plane/plane.c			\
 		objects/plane/render.c			\
 		objects/sphere/sphere.c			\
 		objects/sphere/render.c			\
+		objects/sphere/keys.c			\
 		objects/types_factory.c			\
 		parsing/elements.c			\
 		parsing/parser.c			\
@@ -50,7 +58,7 @@ endif
 
 OFILES = $(FILES:%.c=$(OBJS)/%.o)
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -O3
 EXTRA_FLAGS = -g
 COMPILATOR = cc
 
@@ -66,6 +74,7 @@ else
 endif
 
 $(LIBFTA):
+	@make submodules
 	make -C $(LIBFT) > /dev/null
 
 clean:
@@ -91,7 +100,14 @@ else
 endif
 
 submodules:
-	git submodule update --remote --init --recursive
+	@if [ -f .gitmodules ]; then \
+	  STATUS="$$(git submodule status --recursive)"; \
+	  if echo "$$STATUS" | grep -qE '^[-+]'; then \
+	  	echo "Fetching submodules..."; \
+		git submodule update --remote --init --recursive; \
+		git submodule update > /dev/null; \
+	  fi; \
+	fi
 
 clean-branches:
 	@echo "Fetching and pruning remote branches...";

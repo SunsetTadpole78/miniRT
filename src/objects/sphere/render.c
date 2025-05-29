@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated:   by Juste                              ###   ########.fr       */
+/*   Updated: 2025/05/29 12:50:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,67 +14,79 @@
 #include "errors.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline float	intersection_sphere(t_ray ray, t_sphere *sphere);
 static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
 						float dist);
+static inline t_rgb	get_base_color(t_fvector3 normal, t_pattern pattern);
 /* -------------------------------------------------------------------------- */
 
 void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 {
 	t_ray		reflect_ray;
-	t_sphere	*sphere;
 	float		dist;
+	t_sphere	*sphere;
 	t_hit_data	hit;
 	int			inside;
 
-	sphere = (t_sphere *)object;
-	dist = intersection_sphere(*ray, sphere);
+	dist = intersect_sphere(ray, object, 1.0f);
 	if (dist <= 0 || dist > ray->dist)
 		return ;
+	sphere = (t_sphere *)object;
 	init_hit(ray, &hit, sphere, dist);
 	inside = ft_fvector3_length(ft_fvector3_diff(ray->origin,
 				sphere->position)) < sphere->radius;
 	if (inside)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
-	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit,
-				sphere->radius * ((!inside) * -1 + (inside))),
-			sphere->color);
+	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
+			get_base_color(hit.normal, sphere->pattern));
 	reflect_ray = *ray;
-	specular_reflection(&reflect_ray, &hit, sphere->smoothness);
-	ray->color = ft_rgb_lerp(ray->color,
-			ray_tracer(mrt, &reflect_ray, depth + 1), sphere->mat);
+	specular_reflection(&reflect_ray, &hit, sphere->pattern.smoothness);
+	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
+				depth + 1), sphere->pattern.mattifying);
 	ray->dist = dist;
 }
 
-static inline float	intersection_sphere(t_ray ray, t_sphere *sphere)
+float	intersect_sphere(t_ray *ray, t_object *object, float amplifier)
 {
+	t_sphere	*sphere;
 	t_fvector3	oc;
 	float		b;
 	float		delta;
-	float		x1;
-	float		x2;
+	float		x;
 
-	oc = ft_fvector3_diff(ray.origin, sphere->position);
-	b = 2.0f * ft_fdot_product(oc, ray.direction);
-	delta = b * b - 4.0f
-		* (ft_fdot_product(oc, oc) - (sphere->radius * sphere->radius));
-	if (delta < 0)
+	sphere = (t_sphere *)object;
+	oc = ft_fvector3_diff(ray->origin, sphere->position);
+	b = 2.0f * ft_fdot_product(oc, ray->direction);
+	delta = b * b - 4.0f * (ft_fdot_product(oc, oc)
+			- (sphere->radius * sphere->radius * amplifier));
+	if (delta < 0.0f)
 		return (-1.0f);
-	x1 = (-b - sqrtf(delta)) / 2.0f;
-	x2 = (-b + sqrtf(delta)) / 2.0f;
-	if (x1 > 0.001f)
-		return (x1);
-	if (x2 > 0.001f)
-		return (x2);
+	x = (-b - sqrtf(delta)) / 2.0f;
+	if (x > EPSILON)
+		return (x);
+	x = (-b + sqrtf(delta)) / 2.0f;
+	if (x > EPSILON)
+		return (x);
 	return (-1.0f);
 }
 
 static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
 	float dist)
 {
+	hit->object = (t_object *)sphere;
 	hit->impact_point = ft_fvector3_sum(ray->origin,
 			ft_fvector3_scale(ray->direction, dist));
 	hit->normal = ft_fnormalize(ft_fvector3_diff(hit->impact_point,
 				sphere->position));
 	hit->position = sphere->position;
+}
+
+static inline t_rgb	get_base_color(t_fvector3 normal, t_pattern pattern)
+{
+	if (pattern.id != 'c')
+		return (pattern.main_color);
+	if ((int)((floor((0.5f + atan2f(normal.z, normal.x)
+					/ (2.0f * M_PI)) * 10.0f))
+		+ (floor((0.5f - asinf(normal.y) / M_PI) * 10.0f))) % 2 == 0)
+		return (pattern.secondary_color);
+	return (pattern.main_color);
 }

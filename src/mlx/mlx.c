@@ -6,14 +6,14 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/20 01:15:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 00:31:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "keys.h"
 
-void	init_mlx(t_mlx *mlx)
+t_mlx	*init_mlx(t_mlx *mlx)
 {
 	mlx->mlx_ptr = mlx_init();
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr,
@@ -24,6 +24,7 @@ void	init_mlx(t_mlx *mlx)
 	mlx->cl = mlx->bpp / 8;
 	mlx->update = 0;
 	mlx->count = 0;
+	return (mlx);
 }
 
 void	handle_events(t_minirt *mrt)
@@ -31,7 +32,9 @@ void	handle_events(t_minirt *mrt)
 	t_mlx	*mlx;
 
 	mlx = mrt->mlx;
-	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_hook, mrt);
+	mlx_hook(mlx->win_ptr, 2, 1L << 0, on_press_key, mrt);
+	mlx_hook(mlx->win_ptr, 4, 1L << 2, on_click, mrt);
+	mlx_hook(mlx->win_ptr, 12, 1L << 15, on_expose, mlx);
 	mlx_hook(mlx->win_ptr, 17, 1L << 17, close_window, mrt);
 }
 
