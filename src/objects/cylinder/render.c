@@ -16,8 +16,7 @@
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline t_fvector3	get_normal(int type, t_fvector3 impact_point,
 								t_cylinder *cylinder);
-static inline t_rgb		checkerboard_pattern(t_cylinder *cy,
-								t_hit_data hit,
+static inline t_rgb		get_base_color(t_cylinder *cy, t_hit_data hit,
 								t_pattern pattern);
 /* -------------------------------------------------------------------------- */
 
@@ -43,7 +42,7 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	ray->color = apply_lights_modifier(
 			get_lights_modifier(mrt, hit, inside, is_inside_cylinder),
-			checkerboard_pattern(cylinder, hit, cylinder->pattern));
+			get_base_color(cylinder, hit, cylinder->pattern));
 	ray->dist = dist;
 }
 
@@ -91,7 +90,7 @@ static inline t_fvector3	get_normal(int type, t_fvector3 impact_point,
 							cylinder->normal))))));
 }
 
-static inline t_rgb	checkerboard_pattern(t_cylinder *cy, t_hit_data hit,
+static inline t_rgb	get_base_color(t_cylinder *cy, t_hit_data hit,
 	t_pattern pattern)
 {
 	t_fvector3	diff;
@@ -110,7 +109,6 @@ static inline t_rgb	checkerboard_pattern(t_cylinder *cy, t_hit_data hit,
 		angle += 2.0f * M_PI;
 	if ((int)(floor(angle * 3.0f + EPSILON)
 		+ floor((h + cy->half_height) * 0.3f + EPSILON)) % 2 == 0)
-		return (pattern.main_color);
-	else
 		return (pattern.secondary_color);
+	return (pattern.main_color);
 }
