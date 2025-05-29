@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 18:18:09 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 18:36:01 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:01:36 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ static inline void	update_size(t_cylinder *cylinder, float incrementation)
 	float	diameter;
 	float	scale_factor;
 
-	if (cylinder->diameter + incrementation <= 0)
-		return ;
 	diameter = cylinder->diameter;
+	if ((diameter + incrementation) <= 0)
+		return ;
 	scale_factor = (diameter + incrementation) / diameter;
 	cylinder->diameter *= scale_factor;
 	cylinder->radius *= scale_factor;
