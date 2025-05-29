@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 18:18:09 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/29 15:01:36 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 23:15:51 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 static inline void		update_size(t_cylinder *cylinder, float incrementation);
 static inline t_fvector3	sum_inversed(t_fvector3 position,
 							t_fvector3 normal);
+static inline void	rotate_x(t_cylinder *cylinder, float theta);
+static inline void	rotate_y(t_cylinder *cylinder, float theta);
+static inline void	rotate_z(t_cylinder *cylinder, float theta);
 /* -------------------------------------------------------------------------- */
 
 void	on_press_key_cylinder(t_object *object, int keycode, t_camera *camera)
@@ -41,6 +44,18 @@ void	on_press_key_cylinder(t_object *object, int keycode, t_camera *camera)
 		cylinder->position.y += 1.0f;
 	else if (keycode == OGLK_SHIFT || keycode == XK_SHIFT)
 		cylinder->position.y -= 1.0f;
+	else if (keycode == OGLK_U || keycode == XK_U)
+		rotate_x(cylinder, -0.1f);
+	else if (keycode == OGLK_J || keycode == XK_J)
+		rotate_x(cylinder, 0.1f);
+	else if (keycode == OGLK_I || keycode == XK_I)
+		rotate_y(cylinder, -0.1f);
+	else if (keycode == OGLK_K || keycode == XK_K)
+		rotate_y(cylinder, 0.1f);
+	else if (keycode == OGLK_O || keycode == XK_O)
+		rotate_z(cylinder, -0.1f);
+	else if (keycode == OGLK_L || keycode == XK_L)
+		rotate_z(cylinder, 0.1f);
 }
 
 static inline void	update_size(t_cylinder *cylinder, float incrementation)

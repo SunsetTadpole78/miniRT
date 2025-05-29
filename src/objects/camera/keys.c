@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 13:35:52 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 17:08:11 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:46:14 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static inline void	update_yaw(t_camera *camera, float theta)
 	float		cos_t;
 	float		sin_t;
 	t_fvector3	world;
+	t_fvector3	normal;
 
 	world = (t_fvector3){0, 1, 0};
 	if (ft_fdot_product(camera->up, world) < 0)
@@ -63,25 +64,32 @@ static inline void	update_yaw(t_camera *camera, float theta)
 	}
 	cos_t = cosf(theta);
 	sin_t = sinf(theta);
-	camera->normal = ft_fnormalize(
-			(t_fvector3){camera->normal.x * cos_t - camera->normal.z * sin_t,
-			camera->normal.y,
-			camera->normal.x * sin_t + camera->normal.z * cos_t});
+	normal = camera->normal;
+	camera->normal = ft_fnormalize((t_fvector3){
+			normal.x * cos_t - normal.z * sin_t,
+			normal.y,
+			normal.x * sin_t + normal.z * cos_t
+			});
 	camera->right = ft_fnormalize(ft_fcross_product(camera->normal, world));
 	camera->up = ft_fcross_product(camera->right, camera->normal);
 }
 
 static inline void	update_pitch(t_camera *camera, float theta)
 {
-	float	cos_t;
-	float	sin_t;
+	float		cos_t;
+	float		sin_t;
+	t_fvector3	normal;
+	t_fvector3	up;
 
 	cos_t = cosf(theta);
 	sin_t = sinf(theta);
-	camera->normal = ft_fnormalize(
-			(t_fvector3){camera->normal.x * cos_t + camera->up.x * sin_t,
-			camera->normal.y * cos_t + camera->up.y * sin_t,
-			camera->normal.z * cos_t + camera->up.z * sin_t});
+	normal = camera->normal;
+	up = camera->up;
+	camera->normal = ft_fnormalize((t_fvector3){
+			normal.x * cos_t + up.x * sin_t,
+			normal.y * cos_t + up.y * sin_t,
+			normal.z * cos_t + up.z * sin_t
+			});
 	camera->up = ft_fnormalize(ft_fcross_product(camera->right,
 				camera->normal));
 }
