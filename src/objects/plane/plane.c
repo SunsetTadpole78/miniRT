@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 02:06:19 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 12:39:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_pattern pattern)
 	pl->pattern = pattern;
 	pl->render = get_render_by_id(PLANE_ID);
 	pl->intersect = get_intersect_by_id(PLANE_ID);
+	pl->is_inside = NULL;
 	return (pl);
 }
 

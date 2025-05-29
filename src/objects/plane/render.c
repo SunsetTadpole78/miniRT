@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/28 02:07:12 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 12:43:45 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	t_plane		*plane;
 	t_hit_data	hit;
 
-	dist = intersect_plane(*ray, object);
+	dist = intersect_plane(ray, object, 1.0f);
 	if (dist <= 0 || dist > ray->dist)
 		return ;
 	plane = (t_plane *)object;
 	init_hit(ray, &hit, plane, dist);
 	if (ft_fdot_product(ray->direction, hit.normal) > 0)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
-	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0, NULL),
+	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0),
 			get_base_color(plane, hit, plane->pattern));
 	reflect_ray = *ray;
 	specular_reflection(&reflect_ray, &hit, plane->pattern.smoothness);
@@ -43,17 +43,18 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	ray->dist = dist;
 }
 
-float	intersect_plane(t_ray ray, t_object *object)
+float	intersect_plane(t_ray *ray, t_object *object, float amplifier)
 {
 	t_plane	*plane;
 	float	denominator;
 	float	x;
 
+	(void)amplifier;
 	plane = (t_plane *)object;
-	denominator = ft_fdot_product(ray.direction, plane->normal);
+	denominator = ft_fdot_product(ray->direction, plane->normal);
 	if (fabsf(denominator) < 0.0001f)
 		return (-1.0f);
-	x = ft_fdot_product(ft_fvector3_diff(plane->position, ray.origin),
+	x = ft_fdot_product(ft_fvector3_diff(plane->position, ray->origin),
 			plane->normal) / denominator;
 	if (x >= 0.0f)
 		return (x);

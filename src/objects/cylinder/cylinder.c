@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 02:05:36 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 13:03:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	cy->half_height = size.y / 2.0f;
 	cy->render = get_render_by_id(CYLINDER_ID);
 	cy->intersect = get_intersect_by_id(CYLINDER_ID);
+	cy->is_inside = is_inside_cylinder;
 	return (cy);
 }
 

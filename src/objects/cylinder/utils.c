@@ -6,20 +6,20 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 18:34:10 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/26 19:43:54 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 12:37:11 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	is_inside_cylinder(t_hit_data hit, t_fvector3 point)
+int	is_inside_cylinder(t_object *object, t_fvector3 point)
 {
 	t_cylinder	*cylinder;
 	t_fvector3	diff;
 	float		projection;
 	t_fvector3	radial;
 
-	cylinder = (t_cylinder *)hit.object;
+	cylinder = (t_cylinder *)object;
 	diff = ft_fvector3_diff(point, cylinder->position);
 	projection = ft_fdot_product(diff, cylinder->normal);
 	if (fabsf(projection) > cylinder->half_height)
@@ -28,7 +28,7 @@ int	is_inside_cylinder(t_hit_data hit, t_fvector3 point)
 		diff.x - projection * cylinder->normal.x,
 		diff.y - projection * cylinder->normal.y,
 		diff.z - projection * cylinder->normal.z};
-	if (ft_fdot_product(radial, radial) <= cylinder->radius * cylinder->radius)
+	if (ft_fdot_product(radial, radial) < cylinder->radius * cylinder->radius)
 		return (1);
 	return (0);
 }
