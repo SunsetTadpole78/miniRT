@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 02:05:36 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 13:03:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	cy->half_height = size.y / 2.0f;
 	cy->render = get_render_by_id(CYLINDER_ID);
 	cy->intersect = get_intersect_by_id(CYLINDER_ID);
+	cy->is_inside = is_inside_cylinder;
 	return (cy);
 }
 
@@ -76,49 +77,48 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 
 	(void)depth;
 	cylinder = (t_cylinder *)object;
-	dist = intersect_cylinder(*ray, object);
+	dist = intersect_cylinder(ray, object, 1.0f);
 	if (dist < 0.0f || dist > ray->dist)
 		return ;
 	hit.object = object;
 	hit.position = cylinder->position;
 	hit.impact_point = ft_fvector3_sum(ray->origin,
 			ft_fvector3_scale(ray->direction, dist));
-	hit.normal = get_normal(cylinder->type, hit.impact_point, cylinder);
-	inside = is_inside_cylinder(hit, ray->origin);
+	hit.normal = get_normal(ray->extra, hit.impact_point, cylinder);
+	inside = is_inside_cylinder(object, ray->origin);
 	if (inside)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
-	ray->color = apply_lights_modifier(
-			get_lights_modifier(mrt, hit, inside, is_inside_cylinder),
+	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			cylinder->pattern.main_color);
 	ray->dist = dist;
 }
 
-float	intersect_cylinder(t_ray ray, t_object *object)
+float	intersect_cylinder(t_ray *ray, t_object *object, float amplifier)
 {
 	t_cylinder	*cylinder;
 	t_fvector3	local_origin;
 	t_fvector3	local_dir;
-	float		t;
-	t_fvector2	caps_t;
+	t_fvector3	t;
+	t_fvector2	amplified;
 
 	cylinder = (t_cylinder *)object;
-	normalize_side(&local_origin, &local_dir, ray, cylinder);
-	t = apply_side_equation(local_origin, local_dir, cylinder);
+	normalize_side(&local_origin, &local_dir, *ray, cylinder);
+	t.z = apply_side_equation(local_origin, local_dir, cylinder, amplifier);
 	if (fabsf(local_dir.y) < 1e-6f)
-		return (t);
-	caps_t.x = intersect_cap(local_origin, local_dir, cylinder->radius,
-			-(cylinder->half_height));
-	caps_t.y = intersect_cap(local_origin, local_dir, cylinder->radius,
-			cylinder->half_height);
-	cylinder->type = caps_t.x > EPSILON && (t < 0 || caps_t.x < t);
-	if (cylinder->type == 1)
-		t = caps_t.x;
-	if (caps_t.y > EPSILON && (t < 0 || caps_t.y < t))
+		return (t.z);
+	amplified = (t_fvector2){cylinder->radius * amplifier,
+		cylinder->half_height * amplifier};
+	t.x = intersect_cap(local_origin, local_dir, amplified.x, -amplified.y);
+	t.y = intersect_cap(local_origin, local_dir, amplified.x, amplified.y);
+	ray->extra = t.x > EPSILON && (t.z < 0 || t.x < t.z);
+	if (ray->extra == 1)
+		t.z = t.x;
+	if (t.y > EPSILON && (t.z < 0 || t.y < t.z))
 	{
-		cylinder->type = 2;
-		t = caps_t.y;
+		ray->extra = 2;
+		t.z = t.y;
 	}
-	return (t);
+	return (t.z);
 }
 
 static inline t_fvector3	get_normal(int type, t_fvector3 impact_point,
