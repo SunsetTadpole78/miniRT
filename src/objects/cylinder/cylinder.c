@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 23:55:59 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 10:20:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	t_cylinder	*cylinder;
 	t_hit_data	hit;
 	int			inside;
+	t_ray		reflect_ray;
 
-	(void)depth;
 	cylinder = (t_cylinder *)object;
 	dist = intersect_cylinder(ray, object);
 	if (dist < 0.0f || dist > ray->dist)
@@ -87,9 +87,12 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	inside = is_inside_cylinder(hit, ray->origin);
 	if (inside)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
-	ray->color = apply_lights_modifier(
-			get_lights_modifier(mrt, hit, inside, is_inside_cylinder),
-			cylinder->pattern.main_color);
+	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside,
+				is_inside_cylinder), cylinder->pattern.main_color);
+	reflect_ray = *ray;
+	specular_reflection(&reflect_ray, &hit, cylinder->pattern.smoothness);
+	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
+				depth + 1), cylinder->pattern.mattifying);
 	ray->dist = dist;
 }
 
