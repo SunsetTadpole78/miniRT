@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:59:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 22:26:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 01:18:34 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define L_POS_E "Light position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX]\
 ,[INT_MIN;INT_MAX]\n"
 # define L_LVL_E "Light level format: [0.0;1.0]\n"
+# define L_SCALE_E "Light scale format: [0.0;INT_MAX]"
 # define L_RGB_E "Light rgb format: [0;255],[0;255],[0;255]\n"
 # define PL_ARGS_E "Plane format: 'pl <position> <normal> <color> [<pattern>\
  [color2]] [<smoothness> [mattifying]]'\n"

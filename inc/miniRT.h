@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 00:29:07 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 01:16:53 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ typedef struct s_light
 	t_rgb		color;
 	t_fvector3	position;
 	float		level;
-	t_rgb		render_color;
+	float		scale;
 }	t_light;
 
 typedef struct s_sphere
@@ -269,7 +269,7 @@ int			is_inside_cylinder(t_object *object, t_fvector3 point);
 void		on_press_key_cylinder(t_object *object, int keycode,
 				t_camera *camera);
 
-t_light		*light(t_fvector3 position, float level, t_rgb color);
+t_light		*light(t_fvector3 position, float level, t_rgb color, float scale);
 void		*parse_light(char **values);
 void		show_light(t_ray *ray, t_light *light);
 
