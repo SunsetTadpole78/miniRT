@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/28 21:22:47 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 14:36:42 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,60 +14,79 @@
 #include "keys.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static void	key_hook_next(int keycode, t_minirt *mrt);
+static inline void	init_ray(t_ray *ray, t_minirt *mrt, t_vector2 pos);
 /* -------------------------------------------------------------------------- */
 
-int	key_hook(int keycode, t_minirt *mrt)
+int	on_press_key(int keycode, t_minirt *mrt)
 {
-	if (keycode == OGLK_FOVP || keycode == XK_FOVP)
-		update_fov(mrt, -1);
-	else if (keycode == OGLK_FOVM || keycode == XK_FOVM)
-		update_fov(mrt, 1);
-	else if (keycode == OGLK_LEFT || keycode == XK_LEFT)
-		mrt->camera->position = ft_fvector3_sum(mrt->camera->position,
-				mrt->camera->right);
-	else if (keycode == OGLK_RIGHT || keycode == XK_RIGHT)
-		mrt->camera->position = ft_fvector3_sum(mrt->camera->position,
-				ft_fvector3_scale(mrt->camera->right, -1.0f));
-	else if (keycode == OGLK_SPACE || keycode == XK_SPACE)
-		mrt->camera->position.y += 1.0f;
-	else if (keycode == OGLK_SHIFT || keycode == XK_SHIFT)
-		mrt->camera->position.y -= 1.0f;
-	else if (keycode == OGLK_FORWARD || keycode == XK_FORWARD)
-		mrt->camera->position = ft_fvector3_sum(mrt->camera->position,
-				mrt->camera->normal);
-	else if (keycode == OGLK_BACKWARD || keycode == XK_BACKWARD)
-		mrt->camera->position = ft_fvector3_sum(mrt->camera->position,
-				ft_fvector3_scale(mrt->camera->normal, -1.0f));
-	key_hook_next(keycode, mrt);
-	return (0);
-}
+	void	(*on_press_key)(t_object *, int, t_camera *);
+	t_mlx	*mlx;
 
-static void	key_hook_next(int keycode, t_minirt *mrt)
-{
-	t_mlx		*mlx;
-
-	mlx = mrt->mlx;
-	if (keycode == OGLK_ARROW_LEFT || keycode == XK_ARROW_LEFT)
-		update_yaw(mrt->camera, 0.1f);
-	else if (keycode == OGLK_ARROW_RIGHT || keycode == XK_ARROW_RIGHT)
-		update_yaw(mrt->camera, -0.1f);
-	else if (keycode == OGLK_ARROW_UP || keycode == XK_ARROW_UP)
-		update_pitch(mrt->camera, 0.1f);
-	else if (keycode == OGLK_ARROW_DOWN || keycode == XK_ARROW_DOWN)
-		update_pitch(mrt->camera, -0.1f);
+	if (keycode == OGLK_ESC || keycode == XK_ESC)
+		close_window(mrt);
+	else if (!mrt->selected)
+		on_press_key_camera(mrt->camera, keycode);
 	else if (keycode == OGLK_R || keycode == XK_R)
 	{
+		mlx = mrt->mlx;
 		if (mlx->update == 2)
 			mlx->update = 1;
 		else
 			mlx->update = 2;
-		return ;
+		return (0);
 	}
-	else if (keycode == OGLK_ESC || keycode == XK_ESC)
-		close_window(mrt);
-	mlx->count = 0;
-	mlx->update = 1;
+	else
+	{
+		on_press_key = mrt->selected->methods->on_press_key;
+		if (on_press_key)
+			on_press_key(mrt->selected, keycode, mrt->camera);
+	}
+	mrt->mlx->count = 0;
+	mrt->mlx->update = 1;
+	return (0);
+}
+
+int	on_click(int id, int x, int y, t_minirt *mrt)
+{
+	t_object	*cur;
+	t_ray		ray;
+	float		(*intersect)(t_ray *, t_object *, float);
+	float		d;
+
+	if (id != 1)
+		return (0);
+	cur = mrt->objects;
+	init_ray(&ray, mrt, (t_vector2){x, y});
+	while (cur)
+	{
+		intersect = cur->methods->intersect;
+		if (intersect)
+		{
+			d = intersect(&ray, cur, 1.0f);
+			if (d != -1.0f && d < ray.dist)
+			{
+				mrt->selected = cur;
+				mrt->selected->selected = 1;
+				ray.dist = d;
+			}
+		}
+		cur = cur->next;
+	}
+	return (0);
+}
+
+static inline void	init_ray(t_ray *ray, t_minirt *mrt, t_vector2 pos)
+{
+	t_camera	*camera;
+
+	camera = mrt->camera;
+	ray->origin = camera->position;
+	ray->direction = primary_ray(camera, pos, ((float)WIN_WIDTH
+				/ (float)WIN_HEIGHT) * camera->iplane_scale);
+	ray->dist = 3.4E+38;
+	if (mrt->selected)
+		mrt->selected->selected = 0;
+	mrt->selected = NULL;
 }
 
 int	on_expose(t_mlx *mlx)
