@@ -140,6 +140,8 @@ typedef struct s_plane
 	t_pattern	pattern;
 	t_fvector3	position;
 	t_fvector3	normal;
+	t_fvector3	right;
+	t_fvector3	up;
 }	t_plane;
 
 typedef struct s_cylinder
@@ -151,6 +153,8 @@ typedef struct s_cylinder
 	t_pattern	pattern;
 	t_fvector3	position;
 	t_fvector3	normal;
+	t_fvector3	right;
+	t_fvector3	up;
 	float		diameter;
 	float		radius;
 	float		height;
