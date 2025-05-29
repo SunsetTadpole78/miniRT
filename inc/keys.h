@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 19:14:13 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 12:13:24 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:42:50 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define KEYS_H
 
 /*
-  *	OPENGL KEYS
+ *	OPENGL KEYS
  */
 # define OGLK_A 0
 # define OGLK_S 1
@@ -32,7 +32,7 @@
 # define OGLK_SHIFT 257
 
 /*
-  *	X11 KEYS
+ *	X11 KEYS
  */
 # define XK_A 'a'
 # define XK_S 's'
