@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated:   by Juste                              ###   ########.fr       */
+/*   Updated: 2025/05/29 14:50:33 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,15 @@ static inline unsigned int	rgb_to_uint(t_rgb color)
 	return ((color.r & 0xFF) << 16
 		| ((color.g & 0xFF) << 8)
 		| (color.b & 0xFF));
+}
+
+t_rgb	apply_lights_modifier(t_frgb modifier, t_rgb base)
+{
+	base.r = (unsigned char) fmin(powf(powf((float)base.r / 255.0f, GAMMA)
+				* fmin(modifier.r, 1.0f), 1.0f / GAMMA) * 255.0f, 255.0f);
+	base.g = (unsigned char) fmin(powf(powf((float)base.g / 255.0f, GAMMA)
+				* fmin(modifier.g, 1.0f), 1.0f / GAMMA) * 255.0f, 255.0f);
+	base.b = (unsigned char) fmin(powf(powf((float)base.b / 255.0f, GAMMA)
+				* fmin(modifier.b, 1.0f), 1.0f / GAMMA) * 255.0f, 255.0f);
+	return (base);
 }

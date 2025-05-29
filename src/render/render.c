@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/27 18:04:24 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:49:27 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 static inline void		*render_part(void *value);
 static inline void		init_thread_data(t_thread_data *data, int cores, int i,
 							int pixels_per_thread);
-static inline t_fvector3	primary_ray(t_camera *cam, t_vector2 pos,
-							float ratio);
 /* -------------------------------------------------------------------------- */
 
 void	render_scene(t_minirt *mrt)
@@ -71,8 +69,7 @@ static inline void	*render_part(void *value)
 	return (NULL);
 }
 
-static inline t_fvector3	primary_ray(t_camera *cam,
-	t_vector2 pos, float ratio)
+t_fvector3	primary_ray(t_camera *cam, t_vector2 pos, float ratio)
 {
 	t_fvector3	ndc_vec;
 
@@ -114,7 +111,7 @@ t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 	cur = mrt->objects;
 	while (cur)
 	{
-		render = cur->render;
+		render = cur->methods->render;
 		if (render)
 			render(mrt, ray, cur, depth);
 		cur = cur->next;

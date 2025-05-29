@@ -16,7 +16,7 @@
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline t_fvector3	get_normal(int type, t_fvector3 impact_point,
 								t_cylinder *cylinder);
-static inline t_rgb		get_base_color(t_cylinder *cy, t_hit_data hit,
+static inline t_rgb		get_base_color(t_cylinder *cy, t_fvector3 impact_point,
 								t_pattern pattern);
 /* -------------------------------------------------------------------------- */
 
@@ -41,7 +41,7 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	if (inside)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
-			get_base_color(cylinder, hit, cylinder->pattern));
+			get_base_color(cylinder, hit.impact_point, cylinder->pattern));
 	ray->dist = dist;
 }
 
@@ -89,7 +89,7 @@ static inline t_fvector3	get_normal(int type, t_fvector3 impact_point,
 							cylinder->normal))))));
 }
 
-static inline t_rgb	get_base_color(t_cylinder *cy, t_hit_data hit,
+static inline t_rgb	get_base_color(t_cylinder *cy, t_fvector3 impact_point,
 	t_pattern pattern)
 {
 	t_fvector3	diff;
@@ -99,7 +99,7 @@ static inline t_rgb	get_base_color(t_cylinder *cy, t_hit_data hit,
 
 	if (pattern.id != 'c')
 		return (pattern.main_color);
-	diff = ft_fvector3_diff(hit.impact_point, cy->position);
+	diff = ft_fvector3_diff(impact_point, cy->position);
 	h = ft_fdot_product(diff, cy->normal);
 	proj = ft_fvector3_diff(diff, ft_fvector3_scale(cy->normal, h));
 	angle = atan2f(ft_fdot_product(proj, cy->up),
