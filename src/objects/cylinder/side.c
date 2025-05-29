@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 02:56:19 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/26 19:44:06 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 12:29:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	normalize_side(t_fvector3 *local_origin, t_fvector3 *local_dir,
 }
 
 float	apply_side_equation(t_fvector3 local_origin, t_fvector3 local_dir,
-	t_cylinder *cylinder)
+	t_cylinder *cylinder, float amplifier)
 {
 	float	a;
 	float	b;
@@ -56,7 +56,7 @@ float	apply_side_equation(t_fvector3 local_origin, t_fvector3 local_dir,
 	a = horizontal_magnitude(local_dir);
 	b = 2 * (local_origin.x * local_dir.x + local_origin.z * local_dir.z);
 	delta = b * b - 4 * a * (horizontal_magnitude(local_origin)
-			- cylinder->radius * cylinder->radius);
+			- cylinder->radius * cylinder->radius * amplifier);
 	if (delta <= 0.0f)
 		return (-1.0f);
 	t = find_candidate(sqrtf(delta), a, b);
