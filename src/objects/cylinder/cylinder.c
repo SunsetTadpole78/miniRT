@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/29 13:01:09 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/29 13:03:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ float	intersect_cylinder(t_ray *ray, t_object *object, float amplifier)
 		return (t.z);
 	amplified = (t_fvector2){cylinder->radius * amplifier,
 		cylinder->half_height * amplifier};
-	t.x = intersect_cap(local_origin, local_dir, amplified.x, -(amplified.y));
+	t.x = intersect_cap(local_origin, local_dir, amplified.x, -amplified.y);
 	t.y = intersect_cap(local_origin, local_dir, amplified.x, amplified.y);
 	ray->extra = t.x > EPSILON && (t.z < 0 || t.x < t.z);
 	if (ray->extra == 1)
