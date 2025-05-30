@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 14:05:09 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:42:54 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,8 +242,9 @@ void		render_scene(t_minirt *mrt);
 t_rgb		ray_tracer(t_minirt *mrt, t_ray *ray, int depth);
 t_fvector3	primary_ray(t_camera *cam, t_vector2 pos, float ratio);
 t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside);
-t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 void		blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos);
+t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
+void		apply_selection_effect(t_rgb *color);
 void		specular_reflection(t_ray *ray, t_hit_data *hit, float smoothness);
 
 //objects

@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/29 12:50:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:28:18 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	specular_reflection(&reflect_ray, &hit, sphere->pattern.smoothness);
 	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
 				depth + 1), sphere->pattern.mattifying);
+	if (sphere->selected)
+		apply_selection_effect(&ray->color);
 	ray->dist = dist;
 }
 
