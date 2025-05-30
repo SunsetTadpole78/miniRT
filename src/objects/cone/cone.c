@@ -6,14 +6,15 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 16:20:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 16:45:39 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 17:09:18 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "errors.h"
 
-t_cone	*cone(t_fvector3 position, t_fvector3 normal, t_fvector2 size, t_pattern pattern)
+t_cone	*cone(t_fvector3 position, t_fvector3 normal, t_fvector2 size,
+		t_pattern pattern)
 {
 	t_cone	*co;
 
