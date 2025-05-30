@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/29 14:36:42 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 00:35:35 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ int	on_press_key(int keycode, t_minirt *mrt)
 
 	if (keycode == OGLK_ESC || keycode == XK_ESC)
 		close_window(mrt);
-	else if (!mrt->selected)
-		on_press_key_camera(mrt->camera, keycode);
 	else if (keycode == OGLK_R || keycode == XK_R)
 	{
 		mlx = mrt->mlx;
@@ -35,6 +33,8 @@ int	on_press_key(int keycode, t_minirt *mrt)
 			mlx->update = 2;
 		return (0);
 	}
+	else if (!mrt->selected)
+		on_press_key_camera(mrt->camera, keycode);
 	else
 	{
 		on_press_key = mrt->selected->methods->on_press_key;
