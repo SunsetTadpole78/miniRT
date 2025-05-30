@@ -22,8 +22,10 @@ MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 FILES =		destructor.c				\
 		initializer.c				\
 		main.c					\
+		mlx/listeners/click.c			\
+		mlx/listeners/expose.c			\
+		mlx/listeners/press_key.c		\
 		mlx/mlx.c				\
-		mlx/mlx_key.c				\
 		objects/ambiant.c			\
 		objects/camera/camera.c			\
 		objects/camera/keys.c			\
@@ -34,7 +36,8 @@ FILES =		destructor.c				\
 		objects/cylinder/side.c			\
 		objects/cylinder/utils.c		\
 		objects/factory.c			\
-		objects/light.c				\
+		objects/light/light.c			\
+		objects/light/keys.c			\
 		objects/plane/keys.c			\
 		objects/plane/plane.c			\
 		objects/plane/render.c			\
