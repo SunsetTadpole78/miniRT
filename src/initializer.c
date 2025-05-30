@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 15:27:42 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:51:02 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static inline void	register_types(void)
 {
 	register_type(AMBIANT_ID, parse_ambiant, empty_methods());
 	register_type(CAMERA_ID, parse_camera, empty_methods());
+	register_type(CONE_ID, parse_cone, empty_methods());
 	register_type(CYLINDER_ID, parse_cylinder, init_methods(render_cylinder,
 			intersect_cylinder, is_inside_cylinder, on_press_key_cylinder));
 	register_type(LIGHT_ID, parse_light, init_methods(NULL, NULL, NULL,
