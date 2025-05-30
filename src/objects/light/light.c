@@ -6,17 +6,12 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 14:04:16 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 15:34:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "errors.h"
-
-/* ------------------------------- PROTOTYPE -------------------------------- */
-static inline float	intersect_light(t_ray *ray, t_light *light,
-						float amplifier);
-/* -------------------------------------------------------------------------- */
 
 t_light	*light(t_fvector3 position, float level, t_rgb color, float scale)
 {
@@ -32,6 +27,7 @@ t_light	*light(t_fvector3 position, float level, t_rgb color, float scale)
 	l->scale = scale;
 	l->methods = get_methods_by_id(LIGHT_ID);
 	l->selected = 0;
+	l->radius = level * scale;
 	l->visible = scale != 0.0f && level != 0.0f;
 	return (l);
 }
@@ -68,7 +64,7 @@ void	show_light(t_ray *ray, t_light *light)
 {
 	float		dist;
 
-	dist = intersect_light(ray, light, 1.0f);
+	dist = intersect_light(ray, (t_object *)light, 1.0f);
 	if (dist > 0.0f && dist <= ray->dist)
 	{
 		ray->color = light->color;
@@ -76,21 +72,21 @@ void	show_light(t_ray *ray, t_light *light)
 	}
 }
 
-static inline float	intersect_light(t_ray *ray, t_light *light, float amplifier)
+float	intersect_light(t_ray *ray, t_object *object, float amplifier)
 {
+	t_light		*light;
 	t_fvector3	oc;
 	float		b;
 	float		delta;
 	float		x;
-	float		radius;
 
+	light = (t_light *)object;
 	if (light->scale == 0.0f)
 		return (-1.0f);
 	oc = ft_fvector3_diff(ray->origin, light->position);
 	b = 2.0f * ft_fdot_product(oc, ray->direction);
-	radius = light->level * light->scale;
 	delta = b * b - 4.0f * (ft_fdot_product(oc, oc)
-			- (radius * radius * amplifier));
+			- (light->radius * light->radius * amplifier));
 	if (delta < 0.0f)
 		return (-1.0f);
 	x = (-b - sqrtf(delta)) / 2.0f;

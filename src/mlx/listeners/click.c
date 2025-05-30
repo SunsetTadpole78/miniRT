@@ -1,57 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mlx_key.c                                          :+:      :+:    :+:   */
+/*   click.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By:                                            +#+  +:+       +#+        */
+/*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/30 00:35:35 by lroussel         ###   ########.fr       */
+/*   Created: 2025/05/30 14:52:27 by lroussel          #+#    #+#             */
+/*   Updated: 2025/05/30 15:29:39 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include "keys.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline void	init_ray(t_ray *ray, t_minirt *mrt, t_vector2 pos);
+static inline void	check_object(t_object *object, t_ray *ray,
+						float (*intersect)(t_ray *, t_object *, float),
+						t_minirt *mrt);
 /* -------------------------------------------------------------------------- */
-
-int	on_press_key(int keycode, t_minirt *mrt)
-{
-	void	(*on_press_key)(t_object *, int, t_camera *);
-	t_mlx	*mlx;
-
-	if (keycode == OGLK_ESC || keycode == XK_ESC)
-		close_window(mrt);
-	else if (keycode == OGLK_R || keycode == XK_R)
-	{
-		mlx = mrt->mlx;
-		if (mlx->update == 2)
-			mlx->update = 1;
-		else
-			mlx->update = 2;
-		return (0);
-	}
-	else if (!mrt->selected)
-		on_press_key_camera(mrt->camera, keycode);
-	else
-	{
-		on_press_key = mrt->selected->methods->on_press_key;
-		if (on_press_key)
-			on_press_key(mrt->selected, keycode, mrt->camera);
-	}
-	mrt->mlx->count = 0;
-	mrt->mlx->update = 1;
-	return (0);
-}
 
 int	on_click(int id, int x, int y, t_minirt *mrt)
 {
 	t_object	*cur;
 	t_ray		ray;
 	float		(*intersect)(t_ray *, t_object *, float);
-	float		d;
 
 	if (id != 1)
 		return (0);
@@ -61,15 +33,13 @@ int	on_click(int id, int x, int y, t_minirt *mrt)
 	{
 		intersect = cur->methods->intersect;
 		if (intersect)
-		{
-			d = intersect(&ray, cur, 1.0f);
-			if (d != -1.0f && d < ray.dist)
-			{
-				mrt->selected = cur;
-				mrt->selected->selected = 1;
-				ray.dist = d;
-			}
-		}
+			check_object(cur, &ray, intersect, mrt);
+		cur = cur->next;
+	}
+	cur = (t_object *)mrt->lights;
+	while (cur)
+	{
+		check_object(cur, &ray, intersect_light, mrt);
 		cur = cur->next;
 	}
 	return (0);
@@ -89,8 +59,16 @@ static inline void	init_ray(t_ray *ray, t_minirt *mrt, t_vector2 pos)
 	mrt->selected = NULL;
 }
 
-int	on_expose(t_mlx *mlx)
+static inline void	check_object(t_object *object, t_ray *ray,
+		float (*intersect)(t_ray *, t_object *, float), t_minirt *mrt)
 {
-	mlx->update = 1;
-	return (0);
+	float		d;
+
+	d = intersect(ray, object, 1.0f);
+	if (d != -1.0f && d < ray->dist)
+	{
+		mrt->selected = object;
+		mrt->selected->selected = 1;
+		ray->dist = d;
+	}
 }

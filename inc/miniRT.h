@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 14:05:09 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 15:50:31 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ typedef struct s_light
 	t_fvector3	position;
 	float		level;
 	float		scale;
+	float		radius;
 	int			visible;
 }	t_light;
 
@@ -273,6 +274,8 @@ void		on_press_key_cylinder(t_object *object, int keycode,
 t_light		*light(t_fvector3 position, float level, t_rgb color, float scale);
 void		*parse_light(char **values);
 void		show_light(t_ray *ray, t_light *light);
+float		intersect_light(t_ray *ray, t_object *object, float amplifier);
+void		on_press_key_light(t_object *object, int keycode, t_camera *camera);
 
 t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_pattern pattern);
 void		*parse_plane(char **values);
