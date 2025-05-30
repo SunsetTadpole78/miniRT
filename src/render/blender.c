@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/29 14:50:33 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:27:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,11 @@ t_rgb	apply_lights_modifier(t_frgb modifier, t_rgb base)
 	base.b = (unsigned char) fmin(powf(powf((float)base.b / 255.0f, GAMMA)
 				* fmin(modifier.b, 1.0f), 1.0f / GAMMA) * 255.0f, 255.0f);
 	return (base);
+}
+
+void	apply_selection_effect(t_rgb *color)
+{
+	color->r += (0.2f * ((255 - color->r) - color->r));
+	color->g += (0.2f * ((255 - color->g) - color->g));
+	color->b += (0.2f * ((255 - color->b) - color->b));
 }

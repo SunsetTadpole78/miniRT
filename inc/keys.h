@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 19:14:13 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/29 15:42:50 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:34:59 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,18 @@
 # define OGLK_ARROW_DOWN 125
 # define OGLK_ARROW_UP 126
 # define OGLK_SHIFT 257
+//TODO: set id
+# define OGLK_C -1
 
 /*
  *	X11 KEYS
  */
 # define XK_A 'a'
-# define XK_S 's'
+# define XK_C 'c'
 # define XK_D 'd'
-# define XK_W 'w'
 # define XK_R 'r'
+# define XK_S 's'
+# define XK_W 'w'
 # define XK_EQUAL '='
 # define XK_MINUS '-'
 # define XK_SPACE ' '

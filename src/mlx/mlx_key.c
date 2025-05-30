@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/30 00:35:35 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:36:19 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,21 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline void	init_ray(t_ray *ray, t_minirt *mrt, t_vector2 pos);
+static inline int		refresh_key(t_mlx *mlx);
 /* -------------------------------------------------------------------------- */
 
 int	on_press_key(int keycode, t_minirt *mrt)
 {
 	void	(*on_press_key)(t_object *, int, t_camera *);
-	t_mlx	*mlx;
 
 	if (keycode == OGLK_ESC || keycode == XK_ESC)
 		close_window(mrt);
 	else if (keycode == OGLK_R || keycode == XK_R)
+		return (refresh_key(mrt->mlx));
+	else if ((keycode == OGLK_C || keycode == XK_C) && mrt->selected)
 	{
-		mlx = mrt->mlx;
-		if (mlx->update == 2)
-			mlx->update = 1;
-		else
-			mlx->update = 2;
-		return (0);
+		mrt->selected->selected = 0;
+		mrt->selected = NULL;
 	}
 	else if (!mrt->selected)
 		on_press_key_camera(mrt->camera, keycode);
@@ -87,10 +85,21 @@ static inline void	init_ray(t_ray *ray, t_minirt *mrt, t_vector2 pos)
 	if (mrt->selected)
 		mrt->selected->selected = 0;
 	mrt->selected = NULL;
+	mrt->mlx->update = 1;
+	mrt->mlx->count = 0;
 }
 
 int	on_expose(t_mlx *mlx)
 {
 	mlx->update = 1;
+	return (0);
+}
+
+static inline int	refresh_key(t_mlx *mlx)
+{
+	if (mlx->update == 2)
+		mlx->update = 1;
+	else
+		mlx->update = 2;
 	return (0);
 }
