@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/30 14:52:27 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 15:29:39 by lroussel         ###   ########.fr       */
+/*   Created:   by Juste                               #+#    #+#             */
+/*   Updated: 2025/05/30 16:00:50 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ static inline void	init_ray(t_ray *ray, t_minirt *mrt, t_vector2 pos)
 	if (mrt->selected)
 		mrt->selected->selected = 0;
 	mrt->selected = NULL;
+	mrt->mlx->update = 1;
+	mrt->mlx->count = 0;
 }
 
 static inline void	check_object(t_object *object, t_ray *ray,
@@ -67,6 +69,8 @@ static inline void	check_object(t_object *object, t_ray *ray,
 	d = intersect(ray, object, 1.0f);
 	if (d != -1.0f && d < ray->dist)
 	{
+		if (mrt->selected)
+			mrt->selected->selected = 0;
 		mrt->selected = object;
 		mrt->selected->selected = 1;
 		ray->dist = d;

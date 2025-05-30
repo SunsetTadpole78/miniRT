@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/29 12:43:45 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:28:53 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	specular_reflection(&reflect_ray, &hit, plane->pattern.smoothness);
 	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
 				depth + 1), plane->pattern.mattifying);
+	if (plane->selected)
+		apply_selection_effect(&ray->color);
 	ray->dist = dist;
 }
 

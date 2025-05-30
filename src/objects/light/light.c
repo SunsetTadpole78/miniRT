@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 15:34:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:03:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,12 @@ void	show_light(t_ray *ray, t_light *light)
 	float		dist;
 
 	dist = intersect_light(ray, (t_object *)light, 1.0f);
-	if (dist > 0.0f && dist <= ray->dist)
-	{
-		ray->color = light->color;
-		ray->dist = dist;
-	}
+	if (dist <= 0.0f || dist > ray->dist)
+		return ;
+	ray->color = light->color;
+	ray->dist = dist;
+	if (light->selected)
+		apply_selection_effect(&ray->color);
 }
 
 float	intersect_light(t_ray *ray, t_object *object, float amplifier)
