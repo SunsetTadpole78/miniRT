@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:44:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/29 14:55:08 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 15:53:08 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,9 @@ static inline float	calculate_light_level(t_minirt *mrt, t_light *light,
 	shadow_ray.dist = distance;
 	if (is_light_blocked(mrt, &shadow_ray, light, hit.object))
 		return (0.0f);
-	return (dot * (1.0f / (1.0f + LINEAR_ATTENUATION_COEF * distance
-				+ QUADRATIC_ATTENUATION_COEF * distance * distance)));
+	return (dot * (light->level / (light->level + LINEAR_ATTENUATION_COEF
+				* distance + QUADRATIC_ATTENUATION_COEF
+				* distance * distance)));
 }
 
 static inline void	apply_diffuse_lights(t_minirt *mrt, t_light *light,
