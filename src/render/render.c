@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/30 11:42:49 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:04:47 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,8 @@ t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 	light = mrt->lights;
 	while (light)
 	{
-		show_light(ray, light);
+		if (light->visible)
+			show_light(ray, light);
 		light = (t_light *)light->next;
 	}
 	return (ray->color);

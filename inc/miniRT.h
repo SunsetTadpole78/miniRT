@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 11:42:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:05:09 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ typedef struct s_light
 	t_fvector3	position;
 	float		level;
 	float		scale;
+	int			visible;
 }	t_light;
 
 typedef struct s_sphere

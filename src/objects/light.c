@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 12:16:15 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:04:16 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline float	intersect_light(t_ray *ray, t_light *light,
 						float amplifier);
-static inline float	get_intensity(t_ray *ray, t_light *light, float dist);
 /* -------------------------------------------------------------------------- */
 
 t_light	*light(t_fvector3 position, float level, t_rgb color, float scale)
@@ -33,6 +32,7 @@ t_light	*light(t_fvector3 position, float level, t_rgb color, float scale)
 	l->scale = scale;
 	l->methods = get_methods_by_id(LIGHT_ID);
 	l->selected = 0;
+	l->visible = scale != 0.0f && level != 0.0f;
 	return (l);
 }
 
@@ -67,25 +67,12 @@ void	*parse_light(char **values)
 void	show_light(t_ray *ray, t_light *light)
 {
 	float		dist;
-	float		intensity;
 
 	dist = intersect_light(ray, light, 1.0f);
 	if (dist > 0.0f && dist <= ray->dist)
 	{
-		ray->color.r += (light->color.r - ray->color.r);
-		ray->color.g += (light->color.g - ray->color.g);
-		ray->color.b += (light->color.b - ray->color.b);
-	}
-	else
-	{
-		dist = intersect_light(ray, light, 6.0f * light->scale);
-		if (dist > 0.0f && dist <= ray->dist)
-		{
-			intensity = get_intensity(ray, light, dist);
-			ray->color.r += (intensity * (light->color.r - ray->color.r));
-			ray->color.g += (intensity * (light->color.g - ray->color.g));
-			ray->color.b += (intensity * (light->color.b - ray->color.b));
-		}
+		ray->color = light->color;
+		ray->dist = dist;
 	}
 }
 
@@ -113,25 +100,4 @@ static inline float	intersect_light(t_ray *ray, t_light *light, float amplifier)
 	if (x > EPSILON)
 		return (x);
 	return (-1.0f);
-}
-
-static inline float	get_intensity(t_ray *ray, t_light *light, float dist)
-{
-	float		intensity;
-	t_fvector3	direction;
-
-	direction = ray->direction;
-	intensity = fmax(ft_fdot_product(
-				ft_fnormalize(ft_fvector3_diff(
-						ft_fvector3_sum(ray->origin, ft_fvector3_scale(
-								direction, dist)), light->position
-						)),
-				ft_fnormalize(ft_fvector3_scale(direction, -1.0f))
-				),
-			0.0f
-			);
-	intensity = powf(intensity, 3.0f);
-	if (intensity > 1.0f)
-		intensity = 1.0f;
-	return (intensity);
 }
