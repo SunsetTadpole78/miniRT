@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 17:08:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 15:36:00 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:08:31 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	on_press_key_light(t_object *object, int keycode, t_camera *camera)
 
 static inline void	update_level(t_light *light, float incrementation)
 {
-	if (light->scale + incrementation <= 0)
+	if (light->level + incrementation <= 0)
 		return ;
 	light->level += incrementation;
 	light->radius = light->level * light->scale;

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/30 16:00:50 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:07:54 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,11 @@ static inline void	check_object(t_object *object, t_ray *ray,
 	float		d;
 
 	d = intersect(ray, object, 1.0f);
-	if (d != -1.0f && d < ray->dist)
-	{
-		if (mrt->selected)
-			mrt->selected->selected = 0;
-		mrt->selected = object;
-		mrt->selected->selected = 1;
-		ray->dist = d;
-	}
+	if (d == -1.0f || d >= ray->dist)
+		return ;
+	if (mrt->selected)
+		mrt->selected->selected = 0;
+	mrt->selected = object;
+	mrt->selected->selected = 1;
+	ray->dist = d;
 }
