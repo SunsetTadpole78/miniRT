@@ -51,7 +51,7 @@ declare -A expected_errors=(
 	["overflow_position_c.rt"]="Camera position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
 
 	# Light
-	["too_few_args_l.rt"]="Light format: 'L <position> <level> <color> [scale]'"
+	["too_few_args_l.rt"]="Light format: 'l <position> <level> <color> [scale]'"
 	["innerflow_position_l.rt"]="Light position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
 	["innerflow_lvl_l.rt"]="Light level format: [0.0;1.0]"
 	["innerflow_color_l.rt"]="Light rgb format: [0;255],[0;255],[0;255]"
@@ -65,7 +65,7 @@ declare -A expected_errors=(
 	["overflow_color_l.rt"]="Light rgb format: [0;255],[0;255],[0;255]"
 	["too_few_args_position_l.rt"]="Light position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
 	["too_few_args_color_l.rt"]="Light rgb format: [0;255],[0;255],[0;255]"
-	["too_many_args_l.rt"]="Light format: 'L <position> <level> <color> [scale]'"
+	["too_many_args_l.rt"]="Light format: 'l <position> <level> <color> [scale]'"
 	["too_many_args_position_l.rt"]="Light position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"
 	["too_many_args_color_l.rt"]="Light rgb format: [0;255],[0;255],[0;255]"
 	["invalid_value_position_l.rt"]="Light position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX],[INT_MIN;INT_MAX]"

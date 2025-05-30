@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:59:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 01:28:05 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:14:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 ,[INT_MIN;INT_MAX]\n"
 # define C_NORM_E "Camera normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]\n"
 # define C_FOV_E "Camera fov format: [0;180]\n"
-# define L_ARGS_E "Light format: 'L <position> <level> <color> [scale]'\n"
+# define L_ARGS_E "Light format: 'l <position> <level> <color> [scale]'\n"
 # define L_POS_E "Light position format: [INT_MIN;INT_MAX],[INT_MIN;INT_MAX]\
 ,[INT_MIN;INT_MAX]\n"
 # define L_LVL_E "Light level format: [0.0;1.0]\n"
