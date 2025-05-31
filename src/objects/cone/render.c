@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 00:20:45 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 13:43:42 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 14:17:51 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,23 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 float	intersect_cone(t_ray *ray, t_object *object, float amplifier)
 {
 	t_cone		*cone;
+	t_fvector2	amplified;
 	t_fvector3	o;
 	t_fvector3	d;
 	t_fvector2	t;
 
-	(void)amplifier;
 	cone = (t_cone *)object;
-	if (cone->height <= 0.0f || cone->base_diameter <= 0.0f)
+	amplified = (t_fvector2){
+		cone->base_diameter * amplifier,
+		cone->height * amplifier
+	};
+	if (amplified.y <= 0.0f || amplified.x <= 0.0f)
 		return (-1.0f);
 	normalize_complex_object(&o, &d, *ray, (t_normal_object *)object);
-	t.y = apply_cone_equation(o, d, cone, amplifier);
+	t.y = apply_cone_equation(o, d, cone, amplified.y);
 	if (fabsf(d.y) < 1e-6f)
 		return (t.y);
-	t.x = intersect_cap(o, d, cone->base_diameter / 2.0f, cone->height);
+	t.x = intersect_cap(o, d, amplified.x / 2.0f, amplified.y);
 	ray->extra = t.x > EPSILON && (t.y < 0 || t.x < t.y);
 	if (ray->extra == 1)
 		return (t.x);
@@ -62,7 +66,7 @@ float	intersect_cone(t_ray *ray, t_object *object, float amplifier)
 }
 
 static inline float	apply_cone_equation(t_fvector3 o, t_fvector3 d,
-				t_cone *cone, float amplifier)
+				t_cone *cone, float height)
 {
 	float	a;
 	float	b;
@@ -70,7 +74,6 @@ static inline float	apply_cone_equation(t_fvector3 o, t_fvector3 d,
 	float	t;
 	float	y_hit;
 
-	(void)amplifier;
 	a = d.x * d.x + d.z * d.z - cone->k2 * d.y * d.y;
 	b = 2.0f * (o.x * d.x + o.z * d.z - cone->k2 * o.y * d.y);
 	delta = b * b - 4.0f * a * (o.x * o.x + o.z * o.z - cone->k2 * o.y * o.y);
@@ -80,7 +83,7 @@ static inline float	apply_cone_equation(t_fvector3 o, t_fvector3 d,
 	if (t < 0.0f)
 		return (-1.0f);
 	y_hit = o.y + t * d.y;
-	if (y_hit < 0.0f || y_hit > cone->height)
+	if (y_hit < 0.0f || y_hit > height)
 		return (-1.0f);
 	return (t);
 }
