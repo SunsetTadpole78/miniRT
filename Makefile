@@ -41,6 +41,7 @@ FILES =		destructor.c				\
 		objects/plane/keys.c			\
 		objects/plane/plane.c			\
 		objects/plane/render.c			\
+		objects/rotate_vector.c			\
 		objects/sphere/sphere.c			\
 		objects/sphere/render.c			\
 		objects/sphere/keys.c			\
@@ -52,7 +53,6 @@ FILES =		destructor.c				\
 		render/blender.c			\
 		render/lights.c				\
 		render/render.c				\
-		render/rotate_vector.c			\
 		render/specular_reflection.c		\
 
 ifeq ($(shell uname), Darwin)
