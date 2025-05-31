@@ -29,6 +29,7 @@ t_light	*light(t_fvector3 position, float level, t_rgb color, float scale)
 	l->selected = 0;
 	l->radius = level * scale;
 	l->visible = scale != 0.0f && level != 0.0f;
+	l->texture = (t_texture){NULL, NULL, 0, 0, 0, 0, 0, 0};
 	return (l);
 }
 

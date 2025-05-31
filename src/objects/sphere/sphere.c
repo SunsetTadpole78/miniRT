@@ -27,6 +27,7 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_pattern pattern)
 	sp->radius = diameter / 2.0f;
 	sp->methods = get_methods_by_id(SPHERE_ID);
 	sp->selected = 0;
+	sp->texture = (t_texture){NULL, NULL, 0, 0, 0, 0, 0, 0};
 	return (sp);
 }
 

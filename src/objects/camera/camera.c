@@ -30,6 +30,7 @@ t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov)
 	c->iplane_scale = tan((fov / 2) * (M_PI / 180.0f));
 	c->methods = get_methods_by_id(CAMERA_ID);
 	c->selected = 0;
+	c->texture = (t_texture){NULL, NULL, 0, 0, 0, 0, 0, 0};
 	return (c);
 }
 

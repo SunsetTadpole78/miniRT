@@ -6,12 +6,16 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 16:20:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 18:20:00 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 22:31:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "errors.h"
+
+/* ------------------------------- PROTOTYPE -------------------------------- */
+static inline t_fvector3	get_right_vector(t_fvector3 normal);
+/* -------------------------------------------------------------------------- */
 
 t_cone	*cone(t_fvector3 position, t_fvector3 normal, t_fvector2 size,
 		t_pattern pattern)
@@ -23,22 +27,20 @@ t_cone	*cone(t_fvector3 position, t_fvector3 normal, t_fvector2 size,
 		return (NULL);
 	co->id = CONE_ID;
 	co->position = position;
-	co->position.y += size.y * 0.5f;
 	co->normal = ft_fnormalize(normal);
-	if (fabsf(co->normal.y) < 0.999f)
-		co->right = ft_fnormalize(ft_fcross_product(
-					(t_fvector3){0.0f, 1.0f, 0.0f}, co->normal));
-	else
-		co->right = ft_fnormalize(ft_fcross_product(
-					(t_fvector3){1.0f, 0.0f, 0.0f}, co->normal));
+	co->right = get_right_vector(normal);
 	co->up = ft_fcross_product(co->normal, co->right);
 	co->pattern = pattern;
 	co->base_diameter = size.x;
+	co->infinite = size.y < 0.0f;
+	if (co->infinite)
+		size.y = size.x * 0.6f;
 	co->height = size.y;
-	co->k = (size.x * 0.5f) / size.y;
+	co->k = (size.x * 0.5f) / fabsf(size.y);
 	co->k2 = co->k * co->k;
 	co->methods = get_methods_by_id(CONE_ID);
 	co->selected = 0;
+	co->texture = (t_texture){NULL, NULL, 0, 0, 0, 0, 0, 0};
 	return (co);
 }
 
@@ -60,7 +62,8 @@ void	*parse_cone(char **values)
 	if (!ft_isnumeric(values[2]) || ft_isoutint(values[2]) || size.x < 0.0f)
 		return (error_and_null(CO_DIAM_E));
 	size.y = ft_atof(values[3]);
-	if (!ft_isnumeric(values[3]) || ft_isoutint(values[3]) || size.y < 0.0f)
+	if (!ft_isnumeric(values[3]) || ft_isoutint(values[3])
+		|| (size.y < 0.0f && size.y != -1.0f))
 		return (error_and_null(CO_HEI_E));
 	if (!parse_color(values[4], &pattern.main_color))
 		return (error_and_null(CO_RGB_E));
@@ -68,4 +71,13 @@ void	*parse_cone(char **values)
 	if (values[5] && !parse_pattern(values + 5, &pattern))
 		return (error_and_null(CO_ARGS_E));
 	return (cone(position, normal, size, pattern));
+}
+
+static inline t_fvector3	get_right_vector(t_fvector3 normal)
+{
+	if (fabsf(normal.y) < 0.999f)
+		return (ft_fnormalize(ft_fcross_product(
+					(t_fvector3){0.0f, 1.0f, 0.0f}, normal)));
+	return (ft_fnormalize(ft_fcross_product(
+				(t_fvector3){1.0f, 0.0f, 0.0f}, normal)));
 }

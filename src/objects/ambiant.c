@@ -27,6 +27,7 @@ t_ambiant	*ambiant(float level, t_rgb color)
 	a->color.b = color.b * level;
 	a->methods = get_methods_by_id(AMBIANT_ID);
 	a->selected = 0;
+	a->texture = (t_texture){NULL, NULL, 0, 0, 0, 0, 0, 0};
 	return (a);
 }
 
