@@ -83,7 +83,6 @@ else
 endif
 
 $(LIBFTA):
-	@make submodules
 	make -C $(LIBFT) > /dev/null
 
 clean:
@@ -109,13 +108,7 @@ else
 endif
 
 submodules:
-	@if [ -f .gitmodules ]; then \
-	  STATUS="$$(git submodule status --recursive)"; \
-	  if echo "$$STATUS" | grep -qE '^[- ]'; then \
-	  	echo "Fetching submodules..."; \
-		git submodule update --remote --init --recursive; \
-	  fi; \
-	fi
+	git submodule update --remote --init --recursive
 
 clean-branches:
 	@echo "Fetching and pruning remote branches...";
