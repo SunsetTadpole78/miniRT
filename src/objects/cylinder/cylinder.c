@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/29 14:29:59 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 22:11:31 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	cy->radius = size.x / 2.0f;
 	cy->height = size.y;
 	cy->half_height = size.y / 2.0f;
+	cy->infinite = size.y < 0.0f;
 	cy->methods = get_methods_by_id(CYLINDER_ID);
 	cy->selected = 0;
 	return (cy);
@@ -55,7 +56,8 @@ void	*parse_cylinder(char **values)
 	if (!ft_isnumeric(values[2]) || ft_isoutint(values[2]) || size.x < 0.0f)
 		return (error_and_null(CY_DIAM_E));
 	size.y = ft_atof(values[3]);
-	if (!ft_isnumeric(values[3]) || ft_isoutint(values[3]) || size.y < 0.0f)
+	if (!ft_isnumeric(values[3]) || ft_isoutint(values[3])
+		|| (size.y < 0.0f && size.y != -1.0f))
 		return (error_and_null(CY_HEI_E));
 	if (!parse_color(values[4], &pattern.main_color))
 		return (error_and_null(CY_RGB_E));

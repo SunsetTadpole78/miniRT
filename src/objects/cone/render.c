@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 00:20:45 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 18:23:58 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 21:10:16 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,10 @@ float	intersect_cone(t_ray *ray, t_object *object, float amplifier)
 		cone->base_diameter * amplifier,
 		cone->height * amplifier
 	};
-	if (amplified.y <= 0.0f || amplified.x <= 0.0f)
-		return (-1.0f);
 	normalize_complex_object(&o, &d, *ray, (t_normal_object *)object);
 	t.y = apply_cone_equation(o, d, cone, amplified.y);
-	if (fabsf(d.y) < 1e-6f)
+	ray->extra = 0;
+	if (cone->infinite || fabsf(d.y) < 1e-6f)
 		return (t.y);
 	t.x = intersect_cap(o, d, amplified.x / 2.0f, amplified.y);
 	ray->extra = t.x > EPSILON && (t.y < 0 || t.x < t.y);
@@ -91,7 +90,7 @@ static inline float	apply_cone_equation(t_fvector3 o, t_fvector3 d,
 	if (t < 0.0f)
 		return (-1.0f);
 	y_hit = o.y + t * d.y;
-	if (y_hit < 0.0f || y_hit > height)
+	if (!cone->infinite && (y_hit < 0.0f || y_hit > height))
 		return (-1.0f);
 	return (t);
 }
