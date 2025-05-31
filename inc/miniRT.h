@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 13:59:33 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:16:16 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,8 @@ typedef struct s_cone
 	t_pattern	pattern;
 	t_fvector3	position;
 	t_fvector3	normal;
+	t_fvector3	right;
+	t_fvector3	forward;
 	float		base_diameter;
 	float		height;
 	float		k;
