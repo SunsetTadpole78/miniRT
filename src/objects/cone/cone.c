@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 16:20:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 17:09:18 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 13:07:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ t_cone	*cone(t_fvector3 position, t_fvector3 normal, t_fvector2 size,
 	co->pattern = pattern;
 	co->base_diameter = size.x;
 	co->height = size.y;
+	co->k = (size.x * 0.5f) / size.y;
+	co->k2 = co->k * co->k;
 	co->methods = get_methods_by_id(CONE_ID);
 	co->selected = 0;
 	return (co);
