@@ -22,20 +22,29 @@ MLX_OPENGLF = -framework OpenGL -framework AppKit -DGL_SILENCE_DEPRECATION
 FILES =		destructor.c				\
 		initializer.c				\
 		main.c					\
+		mlx/listeners/click.c			\
+		mlx/listeners/expose.c			\
+		mlx/listeners/press_key.c		\
 		mlx/mlx.c				\
-		mlx/mlx_key.c				\
 		objects/ambiant.c			\
-		objects/camera.c			\
+		objects/camera/camera.c			\
+		objects/camera/keys.c			\
+		objects/cone/cone.c			\
 		objects/cylinder/caps.c			\
 		objects/cylinder/cylinder.c		\
+		objects/cylinder/render.c		\
+		objects/cylinder/keys.c			\
 		objects/cylinder/side.c			\
 		objects/cylinder/utils.c		\
-		objects/factory.c			\
-		objects/light.c				\
+		objects/light/light.c			\
+		objects/light/keys.c			\
+		objects/plane/keys.c			\
 		objects/plane/plane.c			\
 		objects/plane/render.c			\
 		objects/sphere/sphere.c			\
 		objects/sphere/render.c			\
+		objects/sphere/keys.c			\
+		objects/factory.c			\
 		objects/types_factory.c			\
 		parsing/elements.c			\
 		parsing/parser.c			\
@@ -91,7 +100,7 @@ $(OBJS)/%.o: $(SRC)/%.c
 ifeq ($(shell uname), Darwin)
 	$(COMPILATOR) $(FLAGS) $< -c -o $@ -I $(INC) -I $(LIBFTI) -I $(MLX_OPENGLI) $(EXTRA_FLAGS)
 else
-	$(COMPILATOR) $(FLAGS) $< -c -o $@ -I $(INC) -I $(LIBFTI) -I $(MLX_X11I) $(EXTRA_FLAGS) -lm
+	$(COMPILATOR) $(FLAGS) $< -c -o $@ -I $(INC) -I $(LIBFTI) -I $(MLX_X11I) $(EXTRA_FLAGS)
 endif
 
 submodules:

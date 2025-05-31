@@ -6,12 +6,16 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 02:05:00 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:51:02 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "errors.h"
+
+/* ------------------------------- PROTOTYPE -------------------------------- */
+static inline void	register_types(void);
+/* -------------------------------------------------------------------------- */
 
 t_minirt	*minirt(void)
 {
@@ -30,15 +34,25 @@ t_minirt	*minirt(void)
 		mrt->mlx = malloc(sizeof(t_mlx));
 		if (!mrt->mlx)
 			return (NULL);
-		register_type(AMBIANT_ID, parse_ambiant, NULL, NULL);
-		register_type(CAMERA_ID, parse_camera, NULL, NULL);
-		register_type(CYLINDER_ID, parse_cylinder, render_cylinder,
-			intersect_cylinder);
-		register_type(LIGHT_ID, parse_light, NULL, NULL);
-		register_type(PLANE_ID, parse_plane, render_plane, intersect_plane);
-		register_type(SPHERE_ID, parse_sphere, render_sphere, intersect_sphere);
+		mrt->selected = NULL;
+		register_types();
 	}
 	return (mrt);
+}
+
+static inline void	register_types(void)
+{
+	register_type(AMBIANT_ID, parse_ambiant, empty_methods());
+	register_type(CAMERA_ID, parse_camera, empty_methods());
+	register_type(CONE_ID, parse_cone, empty_methods());
+	register_type(CYLINDER_ID, parse_cylinder, init_methods(render_cylinder,
+			intersect_cylinder, is_inside_cylinder, on_press_key_cylinder));
+	register_type(LIGHT_ID, parse_light, init_methods(NULL, NULL, NULL,
+			on_press_key_light));
+	register_type(PLANE_ID, parse_plane, init_methods(render_plane,
+			intersect_plane, NULL, on_press_key_plane));
+	register_type(SPHERE_ID, parse_sphere, init_methods(render_sphere,
+			intersect_sphere, is_inside_sphere, on_press_key_sphere));
 }
 
 int	check_env(t_minirt *mrt)

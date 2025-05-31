@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:52:59 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 23:56:35 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:55:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 #include "errors.h"
 
 /* -------------------------------- PROTOTYPE ------------------------------- */
-static int	parse_lines(char *content);
-static int	parse_object(char *line, int *comment);
-static inline int	check_comments(char **splited, int *comment);
+static inline int		parse_lines(char *content);
+static inline int		parse_object(char *line, int *comment);
+static inline int		check_comments(char **splited, int *comment);
+static inline void	*get_parser_by_id(char *id);
 /* -------------------------------------------------------------------------- */
 
 int	parse_map(char *path)
@@ -119,4 +120,14 @@ static inline int	check_comments(char **splited, int *comment)
 		return (1);
 	}
 	return (*comment);
+}
+
+static inline void	*get_parser_by_id(char *id)
+{
+	t_methods	*methods;
+
+	methods = get_methods_by_id(id);
+	if (!methods)
+		return (NULL);
+	return (methods->parser);
 }

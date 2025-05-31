@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:44:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/29 12:51:11 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 15:53:08 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static inline void	apply_diffuse_lights(t_minirt *mrt, t_light *light,
 						t_hit_data hit, t_frgb *color);
 static inline int		is_light_blocked(t_minirt *mrt, t_ray *ray,
 						t_light *light, t_object *object);
+static inline float	get_distance(t_object *cur, t_fvector3 position, t_ray *ray,
+						float (*intersect)(t_ray *, t_object *, float));
 /* -------------------------------------------------------------------------- */
 
 t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside)
@@ -35,7 +37,7 @@ t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside)
 		(float)powf(mrt->ambiant->color.b / 255.0f, GAMMA)
 		* mrt->ambiant->level};
 	light = mrt->lights;
-	is_inside = hit.object->is_inside;
+	is_inside = hit.object->methods->is_inside;
 	while (light)
 	{
 		if (!inside || (is_inside && is_inside(hit.object, light->position)))
@@ -46,17 +48,6 @@ t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside)
 	color.g = fmin(color.g, 1.0f);
 	color.b = fmin(color.b, 1.0f);
 	return (color);
-}
-
-t_rgb	apply_lights_modifier(t_frgb modifier, t_rgb base)
-{
-	base.r = (unsigned char) fmin(powf(powf((float)base.r / 255.0f, GAMMA)
-				* fmin(modifier.r, 1.0f), 1.0f / GAMMA) * 255.0f, 255.0f);
-	base.g = (unsigned char) fmin(powf(powf((float)base.g / 255.0f, GAMMA)
-				* fmin(modifier.g, 1.0f), 1.0f / GAMMA) * 255.0f, 255.0f);
-	base.b = (unsigned char) fmin(powf(powf((float)base.b / 255.0f, GAMMA)
-				* fmin(modifier.b, 1.0f), 1.0f / GAMMA) * 255.0f, 255.0f);
-	return (base);
 }
 
 static inline float	calculate_light_level(t_minirt *mrt, t_light *light,
@@ -79,8 +70,9 @@ static inline float	calculate_light_level(t_minirt *mrt, t_light *light,
 	shadow_ray.dist = distance;
 	if (is_light_blocked(mrt, &shadow_ray, light, hit.object))
 		return (0.0f);
-	return (dot * (1.0f / (1.0f + LINEAR_ATTENUATION_COEF * distance
-				+ QUADRATIC_ATTENUATION_COEF * distance * distance)));
+	return (dot * (light->level / (light->level + LINEAR_ATTENUATION_COEF
+				* distance + QUADRATIC_ATTENUATION_COEF
+				* distance * distance)));
 }
 
 static inline void	apply_diffuse_lights(t_minirt *mrt, t_light *light,
@@ -101,7 +93,7 @@ static inline int	is_light_blocked(t_minirt *mrt, t_ray *ray, t_light *light,
 	float		dist;
 	float		max_dist;
 	t_fvector3	position;
-	int			(*is_inside)(t_object *, t_fvector3);
+	float		(*intersect)(t_ray *, t_object *, float);
 
 	cur = mrt->objects;
 	max_dist = ft_fvector3_length(ft_fvector3_diff(light->position,
@@ -109,17 +101,25 @@ static inline int	is_light_blocked(t_minirt *mrt, t_ray *ray, t_light *light,
 	position = mrt->camera->position;
 	while (cur)
 	{
-		if (cur != object && cur->intersect)
+		intersect = cur->methods->intersect;
+		if (cur != object && intersect)
 		{
-			is_inside = cur->is_inside;
-			if (is_inside && !is_inside(cur, position))
-				dist = cur->intersect(ray, cur, 0.999f);
-			else
-				dist = cur->intersect(ray, cur, 1.0f);
-			if (dist > -1.0f && dist <= max_dist)
+			dist = get_distance(cur, position, ray, intersect);
+			if (dist > 0.0f && dist <= max_dist)
 				return (1);
 		}
 		cur = cur->next;
 	}
 	return (0);
+}
+
+static inline float	get_distance(t_object *cur, t_fvector3 position, t_ray *ray,
+		float (*intersect)(t_ray *, t_object *, float))
+{
+	int	(*is_inside)(t_object *, t_fvector3);
+
+	is_inside = cur->methods->is_inside;
+	if (is_inside && !is_inside(cur, position))
+		return (intersect(ray, cur, 0.999f));
+	return (intersect(ray, cur, 1.0f));
 }
