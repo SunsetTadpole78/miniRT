@@ -24,9 +24,9 @@ t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_pattern pattern)
 	pl->id = PLANE_ID;
 	pl->position = position;
 	pl->normal = ft_fnormalize(normal);
-	ref = (t_fvector3){0, 1, 0};
+	ref = (t_fvector3){0.0f, 1.0f, 0.0f};
 	if (fabsf(ft_fdot_product(pl->normal, ref)) > 0.999f)
-		ref = (t_fvector3){1, 0, 0};
+		ref = (t_fvector3){1.0f, 0.0f, 0.0f};
 	pl->right = ft_fnormalize(ft_fcross_product(pl->normal, ref));
 	pl->up = ft_fcross_product(pl->right, pl->normal);
 	pl->pattern = pattern;
