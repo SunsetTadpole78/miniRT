@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 00:20:45 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 14:17:51 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:27:13 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 static inline float	apply_cone_equation(t_fvector3 o, t_fvector3 d,
 						t_cone *cone, float amplifier);
 static inline float	find_candidate(float sqrt_delta, float a, float b);
+static inline t_rgb	get_base_color(t_cone *co, t_fvector3 impact_point,
+						t_pattern pattern);
 /* -------------------------------------------------------------------------- */
 
 void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
@@ -35,7 +37,7 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	if (inside)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
-			cone->pattern.main_color);
+			get_base_color(cone, hit.impact_point, cone->pattern));
 	ray->dist = dist;
 }
 
@@ -106,4 +108,28 @@ static inline float	find_candidate(float sqrt_delta, float a, float b)
 	if (t1 > 1e-6f)
 		return (t1);
 	return (-1.0f);
+}
+
+static inline t_rgb	get_base_color(t_cone *cone, t_fvector3 impact_point,
+		t_pattern pattern)
+{
+	t_fvector3	diff;
+	t_fvector3	local;
+	float		angle;
+
+	if (pattern.id != 'c')
+		return (pattern.main_color);
+	diff = ft_fvector3_diff(impact_point, cone->position);
+	local = (t_fvector3){
+		ft_fdot_product(diff, cone->right),
+		ft_fdot_product(diff, ft_fnormalize(cone->normal)),
+		ft_fdot_product(diff, cone->forward)
+	};
+	angle = atan2f(local.z, local.x);
+	if (angle < 0.0f)
+		angle += 2.0f * M_PI;
+	if (((int)(floor(angle * 3.0f + EPSILON))
+		+ (int)(floor(local.y * 0.3f + EPSILON))) % 2 == 0)
+		return (pattern.secondary_color);
+	return (pattern.main_color);
 }
