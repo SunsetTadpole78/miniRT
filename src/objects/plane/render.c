@@ -102,8 +102,8 @@ static inline t_rgb	display_texture(t_plane *plane, t_texture texture,
 	u = ft_fdot_product(diff, plane->right) * size;
 	v = ft_fdot_product(diff, plane->up) * size
 		* ((float)texture.width / (float)texture.height);
-	u = u - floorf(u);
-	v = v - floorf(v);
+	u -= floorf(u);
+	v -= floorf(v);
 	return (texture_pixel_to_rgb(&texture,
 			(int)(u * texture.width) % texture.width,
 		(int)((1.0f - v) * texture.height) % texture.height));
