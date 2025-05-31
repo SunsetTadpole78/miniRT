@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 02:56:19 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 13:27:14 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 21:58:01 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ float	apply_side_equation(t_fvector3 o, t_fvector3 d,
 		return (-1.0f);
 	t = find_candidate(sqrtf(delta), a, b);
 	y_hit = o.y + t * d.y;
-	if (y_hit < -cylinder->half_height || y_hit > cylinder->half_height)
+	if (!cylinder->infinite && (y_hit < -cylinder->half_height
+			|| y_hit > cylinder->half_height))
 		return (-1.0f);
 	return (t);
 }

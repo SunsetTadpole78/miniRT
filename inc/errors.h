@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:59:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 17:07:52 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 19:06:59 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@
 ,[INT_MIN;INT_MAX]\n"
 # define CY_NORM_E "Cylinder normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]\n"
 # define CY_DIAM_E "Cylinder diameter format: [0.0;INT_MAX]\n"
-# define CY_HEI_E "Cylinder height format: [0.0;INT_MAX]\n"
+# define CY_HEI_E "Cylinder height format: [0.0;INT_MAX|-1]\n"
 # define CY_RGB_E "Cylinder rgb format: [0;255],[0;255],[0;255]\n"
 
 # define CO_ARGS_E "Cone format: 'co <position> <normal> <base_diameter> <height> \
@@ -66,7 +66,7 @@
 ,[INT_MIN;INT_MAX]\n"
 # define CO_NORM_E "Cone normal format: [-1.0;1.0],[-1.0;1.0],[-1.0;1.0]\n"
 # define CO_DIAM_E "Cone base diameter format: [0.0;INT_MAX]\n"
-# define CO_HEI_E "Cone height format: [0.0;INT_MAX]\n"
+# define CO_HEI_E "Cone height format: [0.0;INT_MAX|-1]\n"
 # define CO_RGB_E "Cone rgb format: [0;255],[0;255],[0;255]\n"
 
 #endif

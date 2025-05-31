@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 03:08:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 21:06:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 21:49:13 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	parse_color(char *value, t_rgb *color)
 
 int	parse_reflection(char **values, t_pattern *pattern)
 {
+	init_pattern(pattern);
 	if (!ft_isnumeric(values[0]))
 		return (0);
 	pattern->smoothness = ft_atof(values[0]);

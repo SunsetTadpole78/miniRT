@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 18:34:10 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/29 12:37:11 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 20:44:42 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	is_inside_cylinder(t_object *object, t_fvector3 point)
 	cylinder = (t_cylinder *)object;
 	diff = ft_fvector3_diff(point, cylinder->position);
 	projection = ft_fdot_product(diff, cylinder->normal);
-	if (fabsf(projection) > cylinder->half_height)
+	if (!cylinder->infinite && (fabsf(projection) > cylinder->half_height))
 		return (0);
 	radial = (t_fvector3){
 		diff.x - projection * cylinder->normal.x,

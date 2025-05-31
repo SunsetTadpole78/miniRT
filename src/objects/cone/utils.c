@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 12:46:20 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 13:59:50 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 21:54:17 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,18 @@ int	is_inside_cone(t_object *object, t_fvector3 point)
 {
 	t_cone		*cone;
 	t_fvector3	local_point;
-	t_fvector3	right;
 	t_fvector3	oc;
 	float		radius_at_y;
 
 	cone = (t_cone *)object;
 	oc = ft_fvector3_diff(point, cone->position);
-	if (fabsf(cone->normal.y) < 0.999f)
-		right = ft_fnormalize(ft_fcross_product((t_fvector3){0.0f, 1.0f, 0.0f},
-					cone->normal));
-	else
-		right = ft_fnormalize(ft_fcross_product((t_fvector3){1.0f, 0.0f, 0.0f},
-					cone->normal));
 	local_point = (t_fvector3){
-		ft_fdot_product(oc, right),
+		ft_fdot_product(oc, cone->right),
 		ft_fdot_product(oc, ft_fnormalize(cone->normal)),
-		ft_fdot_product(oc, ft_fcross_product(cone->normal, right))
+		ft_fdot_product(oc, cone->up)
 	};
-	if (local_point.y < 0.0f || local_point.y > cone->height)
+	if (!cone->infinite && (local_point.y < 0.0f
+			|| local_point.y > cone->height))
 		return (0);
 	radius_at_y = local_point.y * cone->k;
 	if (ft_fhorizontal_magnitude(local_point) <= radius_at_y * radius_at_y)
