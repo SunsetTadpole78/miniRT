@@ -306,7 +306,7 @@ t_fvector3	rotate_object(t_fvector3 v, t_fvector3 axis, float theta);
 t_ambiant	*ambiant(float level, t_rgb color);
 void		*parse_ambiant(char **values);
 
-t_texture	init_texture(char *pathname, void *mlx_ptr);
+t_texture	init_texture(char *pathname);
 t_rgb		texture_pixel_to_rgb(t_texture *tex, int x, int y);
 
 t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);

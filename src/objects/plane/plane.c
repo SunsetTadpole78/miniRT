@@ -32,8 +32,7 @@ t_plane	*plane(t_fvector3 position, t_fvector3 normal, t_pattern pattern)
 	pl->pattern = pattern;
 	pl->methods = get_methods_by_id(PLANE_ID);
 	pl->selected = 0;
-	pl->texture = init_texture("images/shawn_mendes.xpm",
-			minirt()->mlx->mlx_ptr);
+	pl->texture = init_texture("images/shawn_mendes.xpm");
 	return (pl);
 }
 

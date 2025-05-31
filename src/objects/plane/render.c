@@ -18,6 +18,8 @@ static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_plane *plane,
 						float dist);
 static inline t_rgb	get_base_color(t_plane *plane, t_hit_data hit,
 						t_pattern pattern);
+static inline t_rgb	display_texture(t_plane *plane, t_texture texture,
+						t_fvector3 diff);
 /* -------------------------------------------------------------------------- */
 
 void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
@@ -73,7 +75,23 @@ static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_plane *plane,
 	hit->position = plane->position;
 }
 
-static inline t_rgb	display_texture(t_texture texture, t_plane *plane,
+static inline t_rgb	get_base_color(t_plane *plane, t_hit_data hit,
+	t_pattern pattern)
+{
+	t_fvector3	diff;
+
+	if (pattern.id != 'c' && plane->texture.image == NULL)
+		return (pattern.main_color);
+	diff = ft_fvector3_diff(hit.impact_point, hit.position);
+	if (plane->texture.image != NULL)
+		return (display_texture(plane, plane->texture, diff));
+	if ((int)((floorf(ft_fdot_product(diff, plane->right) * 0.05f))
+		+ (floorf(ft_fdot_product(diff, plane->up) * 0.05f))) % 2 == 0)
+		return (pattern.secondary_color);
+	return (pattern.main_color);
+}
+
+static inline t_rgb	display_texture(t_plane *plane, t_texture texture,
 	t_fvector3 diff)
 {
 	float	size;
@@ -89,20 +107,4 @@ static inline t_rgb	display_texture(t_texture texture, t_plane *plane,
 	return (texture_pixel_to_rgb(&texture,
 			(int)(u * texture.width) % texture.width,
 		(int)((1.0f - v) * texture.height) % texture.height));
-}
-
-static inline t_rgb	get_base_color(t_plane *plane, t_hit_data hit,
-	t_pattern pattern)
-{
-	t_fvector3	diff;
-
-	if (pattern.id != 'c' && plane->texture.image == NULL)
-		return (pattern.main_color);
-	diff = ft_fvector3_diff(hit.impact_point, hit.position);
-	if (plane->texture.image != NULL)
-		return (display_texture(plane->texture, plane, diff));
-	if ((int)((floorf(ft_fdot_product(diff, plane->right) * 0.05f))
-		+ (floorf(ft_fdot_product(diff, plane->up) * 0.05f))) % 2 == 0)
-		return (pattern.secondary_color);
-	return (pattern.main_color);
 }
