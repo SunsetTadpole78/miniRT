@@ -101,5 +101,6 @@ static inline void	rotate_cylinder_pitch(t_cylinder *cylinder, float theta)
 			ft_fcross_product(cylinder->up, cylinder->normal));
 	if (ft_fdot_product(cylinder->right, new_right) < 0.0f)
 		new_right = ft_fnormalize(ft_fvector3_scale(new_right, -1.0f));
-	cylinder->right = new_right;
+	else
+		cylinder->right = new_right;
 }
