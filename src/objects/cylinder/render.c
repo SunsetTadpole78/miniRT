@@ -20,6 +20,9 @@ static inline t_rgb		get_base_color(t_cylinder *cy, t_fvector3 impact_point,
 							t_pattern pattern);
 static inline t_fvector3	get_cylinder_normal(int type,
 							t_fvector3 impact_point, t_cylinder *cylinder);
+static inline t_rgb		display_texture(t_texture texture, t_cylinder *cy,
+							t_fvector3 diff,
+							float h);
 /* -------------------------------------------------------------------------- */
 
 void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
@@ -49,35 +52,6 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	ray->dist = dist;
 }
 
-float	intersect_cylinder(t_ray *ray, t_object *object, float amplifier)
-{
-	t_cylinder	*cylinder;
-	t_fvector3	o;
-	t_fvector3	d;
-	t_fvector3	t;
-	t_fvector2	amplified;
-
-	cylinder = (t_cylinder *)object;
-	normalize_complex_object(&o, &d, *ray, (t_normal_object *)object);
-	t.z = apply_side_equation(o, d, cylinder, amplifier);
-	if (fabsf(d.y) < 1e-6f)
-		return (t.z);
-	ray->extra = 0;
-	if (cylinder->infinite)
-		return (t.z);
-	amplified = (t_fvector2){cylinder->radius * amplifier,
-		cylinder->half_height * amplifier};
-	t.x = intersect_cap(o, d, amplified.x, -amplified.y);
-	t.y = intersect_cap(o, d, amplified.x, amplified.y);
-	ray->extra = t.x > EPSILON && (t.z < 0 || t.x < t.z);
-	if (ray->extra == 1)
-		t.z = t.x;
-	if (t.y < EPSILON || (t.z >= 0 && t.y >= t.z))
-		return (t.z);
-	ray->extra = 2;
-	return (t.y);
-}
-
 static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder,
 	float dist)
 {
@@ -86,29 +60,6 @@ static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder,
 			ft_fvector3_scale(ray->direction, dist));
 	hit->normal = get_cylinder_normal(ray->extra, hit->impact_point, cylinder);
 	hit->position = cylinder->position;
-}
-
-static inline t_rgb	get_base_color(t_cylinder *cy, t_fvector3 impact_point,
-	t_pattern pattern)
-{
-	t_fvector3	diff;
-	t_fvector3	proj;
-	float		h;
-	float		angle;
-
-	if (pattern.id != 'c')
-		return (pattern.main_color);
-	diff = ft_fvector3_diff(impact_point, cy->position);
-	h = ft_fdot_product(diff, cy->normal);
-	proj = ft_fvector3_diff(diff, ft_fvector3_scale(cy->normal, h));
-	angle = atan2f(ft_fdot_product(proj, cy->up),
-			ft_fdot_product(proj, cy->right));
-	if (angle < 0)
-		angle += 2.0f * M_PI;
-	if ((int)(floor(angle * 3.0f + EPSILON)
-		+ floor((h + cy->half_height) * 0.3f + EPSILON)) % 2 == 0)
-		return (pattern.secondary_color);
-	return (pattern.main_color);
 }
 
 static inline t_fvector3	get_cylinder_normal(int type,
@@ -125,4 +76,59 @@ static inline t_fvector3	get_cylinder_normal(int type,
 								impact_point,
 								cylinder->position),
 							cylinder->normal))))));
+}
+
+static inline t_rgb	get_base_color(t_cylinder *cy, t_fvector3 impact_point,
+	t_pattern pattern)
+{
+	t_fvector3	diff;
+	t_fvector3	proj;
+	float		h;
+	float		angle;
+
+	if (pattern.id != 'c' && cy->texture.image == NULL)
+		return (pattern.main_color);
+	diff = ft_fvector3_diff(impact_point, cy->position);
+	h = ft_fdot_product(diff, cy->normal);
+	if (cy->texture.image != NULL)
+		return (display_texture(cy->texture, cy, diff, h));
+	proj = ft_fvector3_diff(diff, ft_fvector3_scale(cy->normal, h));
+	angle = atan2f(ft_fdot_product(proj, cy->up),
+			ft_fdot_product(proj, cy->right));
+	if (angle < 0.0f)
+		angle += 2.0f * M_PI;
+	if ((int)(floor(angle * 3.0f + EPSILON)
+		+ floor((h + cy->half_height) * 0.3f + EPSILON)) % 2 == 0)
+		return (pattern.secondary_color);
+	return (pattern.main_color);
+}
+
+static inline t_rgb	display_texture(t_texture texture, t_cylinder *cy,
+	t_fvector3 diff, float h)
+{
+	float		u;
+	float		v;
+	t_fvector3	proj;
+	float		angle;
+
+	if (fabsf(fabsf(h) - cy->half_height) < EPSILON)
+	{
+		u = ft_fdot_product(diff, cy->right) / (2.0f * cy->radius) + 0.5f;
+		v = ft_fdot_product(diff, cy->up) / (2.0f * cy->radius) + 0.5f;
+	}
+	else
+	{
+		proj = ft_fvector3_diff(diff, ft_fvector3_scale(cy->normal, h));
+		angle = atan2f(ft_fdot_product(proj, cy->up),
+				ft_fdot_product(proj, cy->right));
+		if (angle < 0.0f)
+			angle += 2.0f * M_PI;
+		u = (angle / (2.0f * M_PI)) * 2.5f;
+		v = ((h + cy->half_height) / (2.0f * cy->half_height));
+	}
+	u -= floorf(u);
+	v -= floorf(v);
+	return (texture_pixel_to_rgb(&texture,
+			(int)(u * texture.width) % texture.width,
+		(int)(v * texture.height) % texture.height));
 }

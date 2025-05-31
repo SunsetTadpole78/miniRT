@@ -35,7 +35,7 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	cy->infinite = size.y < 0.0f;
 	cy->methods = get_methods_by_id(CYLINDER_ID);
 	cy->selected = 0;
-	cy->texture = (t_texture){NULL, NULL, 0, 0, 0, 0, 0, 0};
+	cy->texture = init_texture("images/shawn_mendes.xpm");
 	return (cy);
 }
 

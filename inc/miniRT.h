@@ -329,6 +329,7 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 void		*parse_cylinder(char **values);
 void		render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
+float		intersect_cylinder(t_ray *ray, t_object *object, float amplifier);
 float		intersect_cap(t_fvector3 o, t_fvector3 d, float radius,
 				float half_height);
 float		apply_side_equation(t_fvector3 o, t_fvector3 d,
