@@ -50,6 +50,8 @@ FILES =		destructor.c				\
 		objects/cap.c				\
 		objects/complex.c			\
 		objects/factory.c			\
+		objects/texture.c			\
+		objects/texture_pixel_to_rgb.c		\
 		objects/types_factory.c			\
 		parsing/elements.c			\
 		parsing/parser.c			\

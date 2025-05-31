@@ -67,12 +67,25 @@ typedef struct s_pattern
 	float	mattifying;
 }	t_pattern;
 
+typedef struct s_texture
+{
+	void	*image;
+	char	*data;
+	int		width;
+	int		height;
+	int		bpp;
+	int		ll;
+	int		cl;
+	int		endian;
+}	t_texture;
+
 typedef struct s_object
 {
 	char		*id;
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
+	t_texture	texture;
 }	t_object;
 
 typedef struct s_normal_object
@@ -81,6 +94,7 @@ typedef struct s_normal_object
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
+	t_texture	texture;
 	t_pattern	pattern;
 	t_fvector3	position;
 	t_fvector3	normal;
@@ -92,6 +106,7 @@ typedef struct s_ambiant
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
+	t_texture	texture;
 	t_rgb		color;
 	float		level;
 }	t_ambiant;
@@ -111,6 +126,7 @@ typedef struct s_camera
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
+	t_texture	texture;
 	t_fvector3	position;
 	t_fvector3	normal;
 	t_fvector3	right;
@@ -125,6 +141,7 @@ typedef struct s_light
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
+	t_texture	texture;
 	t_rgb		color;
 	t_fvector3	position;
 	float		level;
@@ -139,6 +156,7 @@ typedef struct s_sphere
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
+	t_texture	texture;
 	t_pattern	pattern;
 	t_fvector3	position;
 	float		diameter;
@@ -151,6 +169,7 @@ typedef struct s_plane
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
+	t_texture	texture;
 	t_pattern	pattern;
 	t_fvector3	position;
 	t_fvector3	normal;
@@ -164,6 +183,7 @@ typedef struct s_cylinder
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
+	t_texture	texture;
 	t_pattern	pattern;
 	t_fvector3	position;
 	t_fvector3	normal;
@@ -181,6 +201,7 @@ typedef struct s_cone
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
+	t_texture	texture;
 	t_pattern	pattern;
 	t_fvector3	position;
 	t_fvector3	normal;
@@ -282,6 +303,9 @@ t_fvector3	rotate_object(t_fvector3 v, t_fvector3 axis, float theta);
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);
 void		*parse_ambiant(char **values);
+
+t_texture	init_texture(char *pathname, void *mlx_ptr);
+t_rgb		texture_pixel_to_rgb(t_texture *tex, int x, int y);
 
 t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
 void		*parse_camera(char **values);

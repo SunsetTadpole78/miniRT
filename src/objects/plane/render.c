@@ -73,16 +73,36 @@ static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_plane *plane,
 	hit->position = plane->position;
 }
 
+static inline t_rgb	display_texture(t_texture texture, t_plane *plane,
+	t_fvector3 diff)
+{
+	float	size;
+	float	u;
+	float	v;
+
+	size = 0.05f;
+	u = ft_fdot_product(diff, plane->right) * size;
+	v = ft_fdot_product(diff, plane->up) * size
+		* ((float)texture.width / (float)texture.height);
+	u = u - floorf(u);
+	v = v - floorf(v);
+	return (texture_pixel_to_rgb(&texture,
+			(int)(u * texture.width) % texture.width,
+		(int)((1.0f - v) * texture.height) % texture.height));
+}
+
 static inline t_rgb	get_base_color(t_plane *plane, t_hit_data hit,
 	t_pattern pattern)
 {
 	t_fvector3	diff;
 
-	if (pattern.id != 'c')
+	if (pattern.id != 'c' && plane->texture.image == NULL)
 		return (pattern.main_color);
 	diff = ft_fvector3_diff(hit.impact_point, hit.position);
-	if ((int)((floor(ft_fdot_product(diff, plane->right) * 0.05f))
-		+ (floor(ft_fdot_product(diff, plane->up) * 0.05f))) % 2 == 0)
+	if (plane->texture.image != NULL)
+		return (display_texture(plane->texture, plane, diff));
+	if ((int)((floorf(ft_fdot_product(diff, plane->right) * 0.05f))
+		+ (floorf(ft_fdot_product(diff, plane->up) * 0.05f))) % 2 == 0)
 		return (pattern.secondary_color);
 	return (pattern.main_color);
 }
