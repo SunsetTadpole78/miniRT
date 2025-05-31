@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 00:20:45 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 13:39:37 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 13:43:42 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,21 @@ float	intersect_cone(t_ray *ray, t_object *object, float amplifier)
 	t_cone		*cone;
 	t_fvector3	o;
 	t_fvector3	d;
+	t_fvector2	t;
 
 	(void)amplifier;
 	cone = (t_cone *)object;
 	if (cone->height <= 0.0f || cone->base_diameter <= 0.0f)
 		return (-1.0f);
 	normalize_complex_object(&o, &d, *ray, (t_normal_object *)object);
-	ray->extra = 0;
-	return (apply_cone_equation(o, d, cone, amplifier));
+	t.y = apply_cone_equation(o, d, cone, amplifier);
+	if (fabsf(d.y) < 1e-6f)
+		return (t.y);
+	t.x = intersect_cap(o, d, cone->base_diameter / 2.0f, cone->height);
+	ray->extra = t.x > EPSILON && (t.y < 0 || t.x < t.y);
+	if (ray->extra == 1)
+		return (t.x);
+	return (t.y);
 }
 
 static inline float	apply_cone_equation(t_fvector3 o, t_fvector3 d,
