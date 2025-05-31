@@ -30,7 +30,7 @@ FILES =		destructor.c				\
 		objects/camera/camera.c			\
 		objects/camera/keys.c			\
 		objects/cone/cone.c			\
-		objects/cone/keys.c			\
+		objects/cone/key.c			\
 		objects/cone/render.c			\
 		objects/cone/utils.c			\
 		objects/cylinder/cylinder.c		\
@@ -83,7 +83,6 @@ else
 endif
 
 $(LIBFTA):
-	@make submodules
 	make -C $(LIBFT) > /dev/null
 
 clean:
@@ -109,13 +108,7 @@ else
 endif
 
 submodules:
-	@if [ -f .gitmodules ]; then \
-	  STATUS="$$(git submodule status --recursive)"; \
-	  if echo "$$STATUS" | grep -qE '^[- ]'; then \
-	  	echo "Fetching submodules..."; \
-		git submodule update --remote --init --recursive; \
-	  fi; \
-	fi
+	git submodule update --remote --init --recursive;
 
 clean-branches:
 	@echo "Fetching and pruning remote branches...";
