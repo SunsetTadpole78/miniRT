@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 16:20:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 21:53:00 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 22:00:49 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ t_cone	*cone(t_fvector3 position, t_fvector3 normal, t_fvector2 size,
 		return (NULL);
 	co->id = CONE_ID;
 	co->position = position;
-	co->position.y += size.y * 0.5f;
 	co->normal = ft_fnormalize(normal);
 	co->right = get_right_vector(normal);
 	co->up = ft_fcross_product(co->normal, co->right);
