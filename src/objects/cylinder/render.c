@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/31 13:17:47 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 21:10:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,9 @@ float	intersect_cylinder(t_ray *ray, t_object *object, float amplifier)
 	t.z = apply_side_equation(o, d, cylinder, amplifier);
 	if (fabsf(d.y) < 1e-6f)
 		return (t.z);
+	ray->extra = 0;
+	if (cylinder->infinite)
+		return (t.z);
 	amplified = (t_fvector2){cylinder->radius * amplifier,
 		cylinder->half_height * amplifier};
 	t.x = intersect_cap(o, d, amplified.x, -amplified.y);
@@ -69,12 +72,10 @@ float	intersect_cylinder(t_ray *ray, t_object *object, float amplifier)
 	ray->extra = t.x > EPSILON && (t.z < 0 || t.x < t.z);
 	if (ray->extra == 1)
 		t.z = t.x;
-	if (t.y > EPSILON && (t.z < 0 || t.y < t.z))
-	{
-		ray->extra = 2;
-		t.z = t.y;
-	}
-	return (t.z);
+	if (t.y < EPSILON || (t.z >= 0 && t.y >= t.z))
+		return (t.z);
+	ray->extra = 2;
+	return (t.y);
 }
 
 static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder,
