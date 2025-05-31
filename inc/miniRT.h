@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 17:16:16 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 18:17:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ typedef struct s_cone
 	t_fvector3	position;
 	t_fvector3	normal;
 	t_fvector3	right;
-	t_fvector3	forward;
+	t_fvector3	up;
 	float		base_diameter;
 	float		height;
 	float		k;
@@ -296,6 +296,7 @@ float		intersect_cone(t_ray *ray, t_object *object, float amplifier);
 int			is_inside_cone(t_object *object, t_fvector3 point);
 void		init_cone_hit(t_ray *ray, t_hit_data *hit, t_cone *cone,
 				float dist);
+void		on_press_key_cone(t_object *object, int keycode, t_camera *camera);
 
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_pattern pattern);
