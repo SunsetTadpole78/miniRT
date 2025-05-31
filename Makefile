@@ -41,6 +41,7 @@ FILES =		destructor.c				\
 		objects/plane/keys.c			\
 		objects/plane/plane.c			\
 		objects/plane/render.c			\
+		objects/rotations.c			\
 		objects/sphere/sphere.c			\
 		objects/sphere/render.c			\
 		objects/sphere/keys.c			\
