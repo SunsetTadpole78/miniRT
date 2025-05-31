@@ -30,7 +30,7 @@ FILES =		destructor.c				\
 		objects/camera/camera.c			\
 		objects/camera/keys.c			\
 		objects/cone/cone.c			\
-		objects/cone/key.c			\
+		objects/cone/keys.c			\
 		objects/cone/render.c			\
 		objects/cone/utils.c			\
 		objects/cylinder/cylinder.c		\
@@ -108,7 +108,7 @@ else
 endif
 
 submodules:
-	git submodule update --remote --init --recursive;
+	git submodule update --remote --init --recursive
 
 clean-branches:
 	@echo "Fetching and pruning remote branches...";
