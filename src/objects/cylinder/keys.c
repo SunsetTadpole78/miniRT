@@ -91,16 +91,10 @@ static inline void	rotate_cylinder_yaw(t_cylinder *cylinder, float theta)
 
 static inline void	rotate_cylinder_pitch(t_cylinder *cylinder, float theta)
 {
-	t_fvector3	new_right;
-
 	cylinder->normal = ft_fnormalize(
 			rotate_object(cylinder->normal, cylinder->right, theta));
 	cylinder->up = ft_fnormalize(
 			rotate_object(cylinder->up, cylinder->right, theta));
-	new_right = ft_fnormalize(
-			ft_fcross_product(cylinder->up, cylinder->normal));
-	if (ft_fdot_product(cylinder->right, new_right) < 0.0f)
-		new_right = ft_fnormalize(ft_fvector3_scale(new_right, -1.0f));
-	else
-		cylinder->right = new_right;
+	cylinder->right = ft_fnormalize(ft_fvector3_scale(
+				ft_fcross_product(cylinder->up, cylinder->normal), -1.0f));
 }
