@@ -30,6 +30,7 @@ FILES =		destructor.c				\
 		objects/camera/camera.c			\
 		objects/camera/keys.c			\
 		objects/cone/cone.c			\
+		objects/cone/keys.c			\
 		objects/cone/render.c			\
 		objects/cone/utils.c			\
 		objects/cylinder/cylinder.c		\
