@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 16:45:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 13:59:33 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,17 @@ typedef struct s_object
 	t_methods	*methods;
 	int			selected;
 }	t_object;
+
+typedef struct s_normal_object
+{
+	char		*id;
+	t_object	*next;
+	t_methods	*methods;
+	int			selected;
+	t_pattern	pattern;
+	t_fvector3	position;
+	t_fvector3	normal;
+}	t_normal_object;
 
 typedef struct s_ambiant
 {
@@ -175,6 +186,8 @@ typedef struct s_cone
 	t_fvector3	normal;
 	float		base_diameter;
 	float		height;
+	float		k;
+	float		k2;
 }	t_cone;
 
 typedef struct s_mlx
@@ -275,17 +288,21 @@ void		on_press_key_camera(t_camera *camera, int keycode);
 t_cone		*cone(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_pattern pattern);
 void		*parse_cone(char **values);
+void		render_cone(t_minirt *mrt, t_ray *ray, t_object *object,
+				int depth);
+float		intersect_cone(t_ray *ray, t_object *object, float amplifier);
+int			is_inside_cone(t_object *object, t_fvector3 point);
+void		init_cone_hit(t_ray *ray, t_hit_data *hit, t_cone *cone,
+				float dist);
 
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_pattern pattern);
 void		*parse_cylinder(char **values);
 void		render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
-float		intersect_cap(t_fvector3 local_origin, t_fvector3 local_dir,
-				float radius, float half_height);
-void		normalize_side(t_fvector3 *local_origin, t_fvector3 *local_dir,
-				t_ray ray, t_cylinder *cylinder);
-float		apply_side_equation(t_fvector3 local_origin, t_fvector3 local_dir,
+float		intersect_cap(t_fvector3 o, t_fvector3 d, float radius,
+				float half_height);
+float		apply_side_equation(t_fvector3 o, t_fvector3 d,
 				t_cylinder *cylinder, float amplifier);
 float		intersect_cylinder(t_ray *ray, t_object *object, float amplifier);
 int			is_inside_cylinder(t_object *object, t_fvector3 point);
@@ -328,6 +345,9 @@ t_methods	*init_methods(void (*render)(t_minirt *, t_ray *, t_object *, int),
 				void (*on_press_key)(t_object *, int, t_camera *));
 t_methods	*empty_methods(void);
 t_methods	*get_methods_by_id(char *id);
+
+void		normalize_complex_object(t_fvector3 *o, t_fvector3 *d, t_ray ray,
+				t_normal_object *object);
 
 //parsing
 int			parse_map(char *path);
