@@ -29,13 +29,13 @@ FILES =		destructor.c				\
 		objects/ambiant.c			\
 		objects/camera/camera.c			\
 		objects/camera/keys.c			\
+		objects/cone/cone.c			\
 		objects/cylinder/caps.c			\
 		objects/cylinder/cylinder.c		\
 		objects/cylinder/render.c		\
 		objects/cylinder/keys.c			\
 		objects/cylinder/side.c			\
 		objects/cylinder/utils.c		\
-		objects/factory.c			\
 		objects/light/light.c			\
 		objects/light/keys.c			\
 		objects/plane/keys.c			\
@@ -44,6 +44,7 @@ FILES =		destructor.c				\
 		objects/sphere/sphere.c			\
 		objects/sphere/render.c			\
 		objects/sphere/keys.c			\
+		objects/factory.c			\
 		objects/types_factory.c			\
 		parsing/elements.c			\
 		parsing/parser.c			\

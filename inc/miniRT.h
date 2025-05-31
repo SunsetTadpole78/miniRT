@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 15:56:43 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:45:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 
 # define AMBIANT_ID "A"
 # define CAMERA_ID "C"
+# define CONE_ID "co"
 # define CYLINDER_ID "cy"
 # define LIGHT_ID "l"
 # define PLANE_ID "pl"
@@ -163,6 +164,19 @@ typedef struct s_cylinder
 	float		half_height;
 }	t_cylinder;
 
+typedef struct s_cone
+{
+	char		*id;
+	t_object	*next;
+	t_methods	*methods;
+	int			selected;
+	t_pattern	pattern;
+	t_fvector3	position;
+	t_fvector3	normal;
+	float		base_diameter;
+	float		height;
+}	t_cone;
+
 typedef struct s_mlx
 {
 	void	*mlx_ptr;
@@ -257,6 +271,10 @@ void		*parse_ambiant(char **values);
 t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
 void		*parse_camera(char **values);
 void		on_press_key_camera(t_camera *camera, int keycode);
+
+t_cone		*cone(t_fvector3 position, t_fvector3 normal,
+				t_fvector2 size, t_pattern pattern);
+void		*parse_cone(char **values);
 
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_pattern pattern);
