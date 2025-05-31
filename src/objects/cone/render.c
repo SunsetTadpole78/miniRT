@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 00:20:45 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 17:27:13 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 18:23:58 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	t_cone		*cone;
 	t_hit_data	hit;
 	int			inside;
+	t_ray		reflect_ray;
 
-	(void)depth;
 	dist = intersect_cone(ray, object, 1.0f);
 	if (dist < 0.0f || dist > ray->dist)
 		return ;
@@ -38,6 +38,12 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(cone, hit.impact_point, cone->pattern));
+	reflect_ray = *ray;
+	specular_reflection(&reflect_ray, &hit, cone->pattern.smoothness);
+	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
+				depth + 1), cone->pattern.mattifying);
+	if (cone->selected)
+		apply_selection_effect(&ray->color);
 	ray->dist = dist;
 }
 
@@ -123,7 +129,7 @@ static inline t_rgb	get_base_color(t_cone *cone, t_fvector3 impact_point,
 	local = (t_fvector3){
 		ft_fdot_product(diff, cone->right),
 		ft_fdot_product(diff, ft_fnormalize(cone->normal)),
-		ft_fdot_product(diff, cone->forward)
+		ft_fdot_product(diff, cone->up)
 	};
 	angle = atan2f(local.z, local.x);
 	if (angle < 0.0f)
