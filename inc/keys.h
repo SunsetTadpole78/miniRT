@@ -19,6 +19,7 @@
 # define OGLK_A 0
 # define OGLK_S 1
 # define OGLK_D 2
+# define OGLK_C 8
 # define OGLK_W 13
 # define OGLK_R 15
 # define OGLK_EQUAL 24
@@ -30,8 +31,6 @@
 # define OGLK_ARROW_DOWN 125
 # define OGLK_ARROW_UP 126
 # define OGLK_SHIFT 257
-//TODO: set id
-# define OGLK_C -1
 
 /*
  *	X11 KEYS

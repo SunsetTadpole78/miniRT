@@ -30,7 +30,8 @@ FILES =		destructor.c				\
 		objects/camera/camera.c			\
 		objects/camera/keys.c			\
 		objects/cone/cone.c			\
-		objects/cylinder/caps.c			\
+		objects/cone/render.c			\
+		objects/cone/utils.c			\
 		objects/cylinder/cylinder.c		\
 		objects/cylinder/render.c		\
 		objects/cylinder/keys.c			\
@@ -41,9 +42,12 @@ FILES =		destructor.c				\
 		objects/plane/keys.c			\
 		objects/plane/plane.c			\
 		objects/plane/render.c			\
+		objects/rotations.c			\
 		objects/sphere/sphere.c			\
 		objects/sphere/render.c			\
 		objects/sphere/keys.c			\
+		objects/cap.c				\
+		objects/complex.c			\
 		objects/factory.c			\
 		objects/types_factory.c			\
 		parsing/elements.c			\
@@ -106,10 +110,9 @@ endif
 submodules:
 	@if [ -f .gitmodules ]; then \
 	  STATUS="$$(git submodule status --recursive)"; \
-	  if echo "$$STATUS" | grep -qE '^[-+]'; then \
+	  if echo "$$STATUS" | grep -qE '^[- ]'; then \
 	  	echo "Fetching submodules..."; \
 		git submodule update --remote --init --recursive; \
-		git submodule update > /dev/null; \
 	  fi; \
 	fi
 
