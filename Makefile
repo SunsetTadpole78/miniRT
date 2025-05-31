@@ -51,6 +51,7 @@ FILES =		destructor.c				\
 		render/blender.c			\
 		render/lights.c				\
 		render/render.c				\
+		render/rotate_vector.c			\
 		render/specular_reflection.c		\
 
 ifeq ($(shell uname), Darwin)

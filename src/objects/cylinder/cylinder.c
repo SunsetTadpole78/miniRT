@@ -25,7 +25,7 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	cy->position = position;
 	cy->normal = ft_fnormalize(normal);
 	cy->right = ft_fnormalize(ft_fcross_product(cy->normal,
-				(t_fvector3){1, 0, 0}));
+				(t_fvector3){0.0f, 1.0f, 0.0f}));
 	cy->up = ft_fnormalize(ft_fcross_product(cy->right, cy->normal));
 	cy->pattern = pattern;
 	cy->diameter = size.x;

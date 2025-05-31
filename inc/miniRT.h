@@ -248,6 +248,8 @@ t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 void		apply_selection_effect(t_rgb *color);
 void		specular_reflection(t_ray *ray, t_hit_data *hit, float smoothness);
 
+t_fvector3	rotate_object(t_fvector3 v, t_fvector3 axis, float theta);
+
 //objects
 t_ambiant	*ambiant(float level, t_rgb color);
 void		*parse_ambiant(char **values);
