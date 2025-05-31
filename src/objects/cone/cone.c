@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 16:20:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 22:17:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 22:31:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_cone	*cone(t_fvector3 position, t_fvector3 normal, t_fvector2 size,
 	if (co->infinite)
 		size.y = size.x * 0.6f;
 	co->height = size.y;
-	co->k = (size.x * 0.5f) / fabs(size.y);
+	co->k = (size.x * 0.5f) / fabsf(size.y);
 	co->k2 = co->k * co->k;
 	co->methods = get_methods_by_id(CONE_ID);
 	co->selected = 0;
