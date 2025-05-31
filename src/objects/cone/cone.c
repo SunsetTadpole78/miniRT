@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 16:20:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 22:00:49 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 22:11:42 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	*parse_cone(char **values)
 		return (error_and_null(CO_HEI_E));
 	if (!parse_color(values[4], &pattern.main_color))
 		return (error_and_null(CO_RGB_E));
+	init_pattern(&pattern);
 	if (values[5] && !parse_pattern(values + 5, &pattern))
 		return (error_and_null(CO_ARGS_E));
 	return (cone(position, normal, size, pattern));
