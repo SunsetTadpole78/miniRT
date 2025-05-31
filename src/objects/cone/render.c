@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 00:20:45 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 14:17:51 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:46:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	t_cone		*cone;
 	t_hit_data	hit;
 	int			inside;
+	t_ray		reflect_ray;
 
-	(void)depth;
 	dist = intersect_cone(ray, object, 1.0f);
 	if (dist < 0.0f || dist > ray->dist)
 		return ;
@@ -36,6 +36,10 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			cone->pattern.main_color);
+	reflect_ray = *ray;
+	specular_reflection(&reflect_ray, &hit, cone->pattern.smoothness);
+	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
+				depth + 1), cone->pattern.mattifying);
 	ray->dist = dist;
 }
 
