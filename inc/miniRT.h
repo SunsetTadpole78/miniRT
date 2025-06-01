@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 21:47:31 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 01:55:14 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,26 +224,6 @@ typedef struct s_methods
 	int		(*is_inside)(t_object *, t_fvector3);
 }	t_methods;
 
-typedef struct s_minirt
-{
-	t_type		*types;
-	t_object	*objects;
-	t_light		*lights;
-	t_ambiant	*ambiant;
-	t_camera	*camera;
-	t_mlx		*mlx;
-	int			cores;
-	t_object	*selected;
-}	t_minirt;
-
-typedef struct s_hit_data
-{
-	t_object	*object;
-	t_fvector3	impact_point;
-	t_fvector3	normal;
-	t_fvector3	position;
-}	t_hit_data;
-
 typedef struct s_thread_data
 {
 	t_minirt	*mrt;
@@ -253,6 +233,28 @@ typedef struct s_thread_data
 	pthread_t	thread;
 	float		ratio;
 }	t_thread_data;
+
+typedef struct s_minirt
+{
+	t_type			*types;
+	t_object		*objects;
+	t_light			*lights;
+	t_ambiant		*ambiant;
+	t_camera		*camera;
+	t_mlx			*mlx;
+	int				cores;
+	int				pixels_per_thread;
+	t_thread_data	*threads_datas;
+	t_object		*selected;
+}	t_minirt;
+
+typedef struct s_hit_data
+{
+	t_object	*object;
+	t_fvector3	impact_point;
+	t_fvector3	normal;
+	t_fvector3	position;
+}	t_hit_data;
 
 t_minirt	*minirt(void);
 int			check_env(t_minirt *mrt);
