@@ -12,6 +12,12 @@
 
 #include "miniRT.h"
 
+/* ------------------------------- PROTOTYPE -------------------------------- */
+static inline t_fvector3	get_cylinder_normal(int type,
+								t_fvector3 impact_point,
+								t_cylinder *cylinder);
+/* -------------------------------------------------------------------------- */
+
 float	intersect_cylinder(t_ray *ray, t_object *object, float amplifier)
 {
 	t_cylinder	*cylinder;
@@ -39,4 +45,35 @@ float	intersect_cylinder(t_ray *ray, t_object *object, float amplifier)
 		return (t.z);
 	ray->extra = 2;
 	return (t.y);
+}
+
+int	init_cylinder(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder, float dist)
+{
+	int	inside;
+
+	hit->object = (t_object *)cylinder;
+	hit->impact_point = ft_fvector3_sum(ray->origin,
+			ft_fvector3_scale(ray->direction, dist));
+	hit->normal = get_cylinder_normal(ray->extra, hit->impact_point, cylinder);
+	hit->position = cylinder->position;
+	inside = is_inside_cylinder((t_object *)cylinder, ray->origin);
+	if (inside)
+		hit->normal = ft_fvector3_scale(hit->normal, -1);
+	return (inside);
+}
+
+static inline t_fvector3	get_cylinder_normal(int type,
+	t_fvector3 impact_point, t_cylinder *cylinder)
+{
+	if (type == 1)
+		return (ft_fvector3_scale(cylinder->normal, -1.0f));
+	if (type == 2)
+		return (cylinder->normal);
+	return (ft_fnormalize(ft_fvector3_diff(impact_point,
+				ft_fvector3_sum(cylinder->position,
+					ft_fvector3_scale(cylinder->normal,
+						ft_fdot_product(ft_fvector3_diff(
+								impact_point,
+								cylinder->position),
+							cylinder->normal))))));
 }

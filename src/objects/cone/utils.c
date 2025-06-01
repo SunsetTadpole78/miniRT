@@ -17,13 +17,19 @@ static inline t_fvector3	get_cone_normal(int type, t_fvector3 impact_point,
 								t_cone *cone);
 /* -------------------------------------------------------------------------- */
 
-void	init_cone_hit(t_ray *ray, t_hit_data *hit, t_cone *cone, float dist)
+int	init_cone(t_ray *ray, t_hit_data *hit, t_cone *cone, float dist)
 {
+	int	inside;
+
 	hit->object = (t_object *)cone;
 	hit->impact_point = ft_fvector3_sum(ray->origin,
 			ft_fvector3_scale(ray->direction, dist));
 	hit->normal = get_cone_normal(ray->extra, hit->impact_point, cone);
 	hit->position = cone->position;
+	inside = is_inside_cone((t_object *)cone, ray->origin);
+	if (inside)
+		hit->normal = ft_fvector3_scale(hit->normal, -1);
+	return (inside);
 }
 
 static inline t_fvector3	get_cone_normal(int type, t_fvector3 impact_point,
@@ -37,17 +43,6 @@ static inline t_fvector3	get_cone_normal(int type, t_fvector3 impact_point,
 	return (ft_fnormalize(ft_fvector3_diff(apex_to_p, ft_fvector3_scale(
 					ft_fvector3_scale(cone->normal, ft_fdot_product(apex_to_p,
 							cone->normal)), 1 + cone->k2))));
-}
-
-int	is_inside_init_cone(t_object *object, t_fvector3 *origin,
-	t_fvector3 *normal)
-{
-	int	inside;
-
-	inside = is_inside_cone(object, *origin);
-	if (inside)
-		*normal = ft_fvector3_scale(*normal, -1);
-	return (inside);
 }
 
 int	is_inside_cone(t_object *object, t_fvector3 point)

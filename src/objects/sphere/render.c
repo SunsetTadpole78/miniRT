@@ -14,27 +14,22 @@
 #include "errors.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
-						float dist);
-static inline int		is_inside(t_sphere *sphere, t_fvector3 origin,
-						t_fvector3 *normal);
 static inline t_rgb	get_base_color(t_fvector3 normal, t_pattern pattern);
 /* -------------------------------------------------------------------------- */
 
 void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 {
 	t_ray		reflect_ray;
+	float		dist;
 	t_sphere	*sphere;
 	t_hit_data	hit;
-	float		dist;
 	int			inside;
 
 	dist = intersect_sphere(ray, object, 1.0f);
 	if (dist <= 0 || dist > ray->dist)
 		return ;
 	sphere = (t_sphere *)object;
-	init_hit(ray, &hit, sphere, dist);
-	inside = is_inside(sphere, ray->origin, &hit.normal);
+	inside = init_sphere(ray, &hit, sphere, dist);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(hit.normal, sphere->pattern));
 	if (!inside)
@@ -47,29 +42,6 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	if (sphere->selected)
 		apply_selection_effect(&ray->color);
 	ray->dist = dist;
-}
-
-static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
-	float dist)
-{
-	hit->object = (t_object *)sphere;
-	hit->impact_point = ft_fvector3_sum(ray->origin,
-			ft_fvector3_scale(ray->direction, dist));
-	hit->normal = ft_fnormalize(ft_fvector3_diff(hit->impact_point,
-				sphere->position));
-	hit->position = sphere->position;
-}
-
-static inline int	is_inside(t_sphere *sphere, t_fvector3 origin,
-	t_fvector3 *normal)
-{
-	int	inside;
-
-	inside = ft_fvector3_length(ft_fvector3_diff(origin,
-				sphere->position)) < sphere->radius;
-	if (inside)
-		*normal = ft_fvector3_scale(*normal, -1);
-	return (inside);
 }
 
 static inline t_rgb	get_base_color(t_fvector3 normal, t_pattern pattern)
