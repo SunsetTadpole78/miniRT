@@ -295,9 +295,9 @@ void		*parse_cone(char **values);
 void		render_cone(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
 float		intersect_cone(t_ray *ray, t_object *object, float amplifier);
-int			is_inside_cone(t_object *object, t_fvector3 point);
-void		init_cone_hit(t_ray *ray, t_hit_data *hit, t_cone *cone,
+int			init_cone(t_ray *ray, t_hit_data *hit, t_cone *cone,
 				float dist);
+int			is_inside_cone(t_object *object, t_fvector3 point);
 void		on_press_key_cone(t_object *object, int keycode, t_camera *camera);
 
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
@@ -305,6 +305,8 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 void		*parse_cylinder(char **values);
 void		render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
+int			init_cylinder(t_ray *ray, t_hit_data *hit,
+				t_cylinder *cylinder, float dist);
 float		intersect_cap(t_fvector3 o, t_fvector3 d, float radius,
 				float half_height);
 float		apply_side_equation(t_fvector3 o, t_fvector3 d,
@@ -332,6 +334,8 @@ void		*parse_sphere(char **values);
 void		render_sphere(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
 float		intersect_sphere(t_ray *ray, t_object *object, float amplifier);
+int			init_sphere(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
+				float dist);
 int			is_inside_sphere(t_object *object, t_fvector3 point);
 void		on_press_key_sphere(t_object *object, int keycode,
 				t_camera *camera);

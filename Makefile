@@ -32,9 +32,11 @@ FILES =		destructor.c				\
 		objects/cone/cone.c			\
 		objects/cone/keys.c			\
 		objects/cone/render.c			\
+		objects/cone/intersect.c		\
 		objects/cone/utils.c			\
 		objects/cylinder/cylinder.c		\
 		objects/cylinder/render.c		\
+		objects/cylinder/intersect.c		\
 		objects/cylinder/keys.c			\
 		objects/cylinder/side.c			\
 		objects/cylinder/utils.c		\
@@ -43,9 +45,11 @@ FILES =		destructor.c				\
 		objects/plane/keys.c			\
 		objects/plane/plane.c			\
 		objects/plane/render.c			\
+		objects/plane/intersect.c		\
 		objects/rotations.c			\
 		objects/sphere/sphere.c			\
 		objects/sphere/render.c			\
+		objects/sphere/intersect.c		\
 		objects/sphere/keys.c			\
 		objects/cap.c				\
 		objects/complex.c			\
