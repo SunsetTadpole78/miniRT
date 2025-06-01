@@ -33,15 +33,16 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 		return ;
 	cone = (t_cone *)object;
 	init_cone_hit(ray, &hit, cone, dist);
-	inside = is_inside_cone(object, ray->origin);
-	if (inside)
-		hit.normal = ft_fvector3_scale(hit.normal, -1);
+	inside = is_inside_init_cone(object, &ray->origin, &hit.normal);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(cone, hit.impact_point, cone->pattern));
-	reflect_ray = *ray;
-	specular_reflection(&reflect_ray, &hit, cone->pattern.smoothness);
-	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
-				depth + 1), cone->pattern.mattifying);
+	if (!inside)
+	{
+		reflect_ray = *ray;
+		specular_reflection(&reflect_ray, &hit, cone->pattern.smoothness);
+		ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
+					depth + 1), cone->pattern.mattifying);
+	}
 	if (cone->selected)
 		apply_selection_effect(&ray->color);
 	ray->dist = dist;

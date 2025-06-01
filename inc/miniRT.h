@@ -296,6 +296,8 @@ void		render_cone(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
 float		intersect_cone(t_ray *ray, t_object *object, float amplifier);
 int			is_inside_cone(t_object *object, t_fvector3 point);
+int			is_inside_init_cone(t_object *object,
+				t_fvector3 *origin, t_fvector3 *normal);
 void		init_cone_hit(t_ray *ray, t_hit_data *hit, t_cone *cone,
 				float dist);
 void		on_press_key_cone(t_object *object, int keycode, t_camera *camera);
