@@ -46,6 +46,7 @@ FILES =		destructor.c				\
 		objects/rotations.c			\
 		objects/sphere/sphere.c			\
 		objects/sphere/render.c			\
+		objects/sphere/intersect.c		\
 		objects/sphere/keys.c			\
 		objects/cap.c				\
 		objects/complex.c			\
