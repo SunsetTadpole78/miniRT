@@ -14,12 +14,8 @@
 #include "errors.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline void		init_hit(t_ray *ray, t_hit_data *hit,
-							t_cylinder *cylinder, float dist);
 static inline t_rgb		get_base_color(t_cylinder *cy, t_fvector3 impact_point,
 							t_pattern pattern);
-static inline t_fvector3	get_cylinder_normal(int type,
-							t_fvector3 impact_point, t_cylinder *cylinder);
 static inline t_rgb		display_texture(t_texture texture, t_cylinder *cy,
 							t_fvector3 diff,
 							float h);
@@ -37,45 +33,19 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	if (dist < 0.0f || dist > ray->dist)
 		return ;
 	cylinder = (t_cylinder *)object;
-	init_hit(ray, &hit, cylinder, dist);
-	inside = is_inside_cylinder(object, ray->origin);
-	if (inside)
-		hit.normal = ft_fvector3_scale(hit.normal, -1);
+	inside = init_cylinder(ray, &hit, cylinder, dist);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(cylinder, hit.impact_point, cylinder->pattern));
-	reflect_ray = *ray;
-	specular_reflection(&reflect_ray, &hit, cylinder->pattern.smoothness);
-	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
-				depth + 1), cylinder->pattern.mattifying);
+	if (!inside)
+	{
+		reflect_ray = *ray;
+		specular_reflection(&reflect_ray, &hit, cylinder->pattern.smoothness);
+		ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
+					depth + 1), cylinder->pattern.mattifying);
+	}
 	if (cylinder->selected)
 		apply_selection_effect(&ray->color);
 	ray->dist = dist;
-}
-
-static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder,
-	float dist)
-{
-	hit->object = (t_object *)cylinder;
-	hit->impact_point = ft_fvector3_sum(ray->origin,
-			ft_fvector3_scale(ray->direction, dist));
-	hit->normal = get_cylinder_normal(ray->extra, hit->impact_point, cylinder);
-	hit->position = cylinder->position;
-}
-
-static inline t_fvector3	get_cylinder_normal(int type,
-		t_fvector3 impact_point, t_cylinder *cylinder)
-{
-	if (type == 1)
-		return (ft_fvector3_scale(cylinder->normal, -1.0f));
-	if (type == 2)
-		return (cylinder->normal);
-	return (ft_fnormalize(ft_fvector3_diff(impact_point,
-				ft_fvector3_sum(cylinder->position,
-					ft_fvector3_scale(cylinder->normal,
-						ft_fdot_product(ft_fvector3_diff(
-								impact_point,
-								cylinder->position),
-							cylinder->normal))))));
 }
 
 static inline t_rgb	get_base_color(t_cylinder *cy, t_fvector3 impact_point,

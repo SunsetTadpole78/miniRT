@@ -27,7 +27,7 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_pattern pattern)
 	sp->radius = diameter / 2.0f;
 	sp->methods = get_methods_by_id(SPHERE_ID);
 	sp->selected = 0;
-	sp->texture = init_texture("images/shawn_mendes.xpm");
+	sp->texture = init_texture("images/nebuleuse.xpm");
 	return (sp);
 }
 

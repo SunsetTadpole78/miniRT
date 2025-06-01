@@ -14,8 +14,6 @@
 #include "errors.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
-						float dist);
 static inline t_rgb	get_base_color(t_fvector3 normal, t_pattern pattern,
 						t_sphere *sphere);
 static inline t_rgb	display_texture(t_texture texture, t_fvector3 normal);
@@ -33,55 +31,19 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	if (dist <= 0 || dist > ray->dist)
 		return ;
 	sphere = (t_sphere *)object;
-	init_hit(ray, &hit, sphere, dist);
-	inside = ft_fvector3_length(ft_fvector3_diff(ray->origin,
-				sphere->position)) < sphere->radius;
-	if (inside)
-		hit.normal = ft_fvector3_scale(hit.normal, -1);
+	inside = init_sphere(ray, &hit, sphere, dist);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(hit.normal, sphere->pattern, sphere));
-	reflect_ray = *ray;
-	specular_reflection(&reflect_ray, &hit, sphere->pattern.smoothness);
-	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
-				depth + 1), sphere->pattern.mattifying);
+	if (!inside)
+	{
+		reflect_ray = *ray;
+		specular_reflection(&reflect_ray, &hit, sphere->pattern.smoothness);
+		ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
+					depth + 1), sphere->pattern.mattifying);
+	}
 	if (sphere->selected)
 		apply_selection_effect(&ray->color);
 	ray->dist = dist;
-}
-
-float	intersect_sphere(t_ray *ray, t_object *object, float amplifier)
-{
-	t_sphere	*sphere;
-	t_fvector3	oc;
-	float		b;
-	float		delta;
-	float		x;
-
-	sphere = (t_sphere *)object;
-	oc = ft_fvector3_diff(ray->origin, sphere->position);
-	b = 2.0f * ft_fdot_product(oc, ray->direction);
-	delta = b * b - 4.0f * (ft_fdot_product(oc, oc)
-			- (sphere->radius * sphere->radius * amplifier));
-	if (delta < 0.0f)
-		return (-1.0f);
-	x = (-b - sqrtf(delta)) / 2.0f;
-	if (x > EPSILON)
-		return (x);
-	x = (-b + sqrtf(delta)) / 2.0f;
-	if (x > EPSILON)
-		return (x);
-	return (-1.0f);
-}
-
-static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
-	float dist)
-{
-	hit->object = (t_object *)sphere;
-	hit->impact_point = ft_fvector3_sum(ray->origin,
-			ft_fvector3_scale(ray->direction, dist));
-	hit->normal = ft_fnormalize(ft_fvector3_diff(hit->impact_point,
-				sphere->position));
-	hit->position = sphere->position;
 }
 
 static inline t_rgb	get_base_color(t_fvector3 normal, t_pattern pattern,
