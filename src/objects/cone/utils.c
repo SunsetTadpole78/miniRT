@@ -13,7 +13,7 @@
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline t_fvector3	get_cone_normal(int type, t_fvector3 impact_point,
+static inline t_fvector3	get_normal(int type, t_fvector3 impact_point,
 								t_cone *cone);
 /* -------------------------------------------------------------------------- */
 
@@ -24,7 +24,7 @@ int	init_cone(t_ray *ray, t_hit_data *hit, t_cone *cone, float dist)
 	hit->object = (t_object *)cone;
 	hit->impact_point = ft_fvector3_sum(ray->origin,
 			ft_fvector3_scale(ray->direction, dist));
-	hit->normal = get_cone_normal(ray->extra, hit->impact_point, cone);
+	hit->normal = get_normal(ray->extra, hit->impact_point, cone);
 	hit->position = cone->position;
 	inside = is_inside_cone((t_object *)cone, ray->origin);
 	if (inside)
@@ -32,7 +32,7 @@ int	init_cone(t_ray *ray, t_hit_data *hit, t_cone *cone, float dist)
 	return (inside);
 }
 
-static inline t_fvector3	get_cone_normal(int type, t_fvector3 impact_point,
+static inline t_fvector3	get_normal(int type, t_fvector3 impact_point,
 		t_cone *cone)
 {
 	t_fvector3	apex_to_p;
