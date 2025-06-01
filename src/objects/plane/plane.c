@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:10:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/29 14:28:31 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/01 18:28:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ void	*parse_plane(char **values)
 		return (error_and_null(PL_POS_E));
 	if (!parse_normal(values[1], &normal))
 		return (error_and_null(PL_NORM_E));
-	if (!parse_color(values[2], &pattern.main_color))
-		return (error_and_null(PL_RGB_E));
 	init_pattern(&pattern);
+	if (!parse_texture(values[2], &pattern))
+		return (error_and_null(PL_TEXTURE_E));
 	if (values[3] && !parse_pattern(values + 3, &pattern))
 		return (error_and_null(PL_ARGS_E));
 	return (plane(position, normal, pattern));

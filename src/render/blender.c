@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/30 14:27:06 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/01 20:32:35 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,16 @@ static inline unsigned int	rgb_to_uint(t_rgb color);
 
 void	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos)
 {
-	int		count;
-	t_mlx	*mlx;
-	t_rgb	prev_color;
+	int			count;
+	t_mlx		*mlx;
+	t_rgb		prev_color;
+	t_mlx_image	image;
 
 	mlx = mrt->mlx;
 	count = mlx->count;
 	prev_color = pixel_to_rgb(mlx, pos.x, pos.y);
-	*((unsigned int *)(mlx->data + (pos.y * mlx->ll + pos.x * mlx->cl)))
+	image = mlx->image;
+	*((unsigned int *)(image.data + (pos.y * image.ll + pos.x * image.cl)))
 		= rgb_to_uint((t_rgb){
 			(unsigned char)((prev_color.r * count + ray->color.r)
 				/ (count + 1)),
@@ -39,8 +41,10 @@ void	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos)
 static inline t_rgb	pixel_to_rgb(t_mlx *mlx, int x, int y)
 {
 	unsigned int	pixel;
+	t_mlx_image		image;
 
-	pixel = *((unsigned int *)(mlx->data + (y * mlx->ll + x * mlx->cl)));
+	image = mlx->image;
+	pixel = *((unsigned int *)(image.data + (y * image.ll + x * image.cl)));
 	return ((t_rgb){(pixel >> 16) & 0xFF, (pixel >> 8) & 0xFF, pixel & 0xFF});
 }
 

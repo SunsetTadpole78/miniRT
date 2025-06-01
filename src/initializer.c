@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 18:16:26 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/01 20:29:13 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,41 @@ static inline void	register_types(void)
 
 int	check_env(t_minirt *mrt)
 {
+	t_pattern	pattern;
+
 	mrt->cores = sysconf(_SC_NPROCESSORS_ONLN);
 	if (mrt->cores == -1)
 		return (ft_error(CORES_E, ERR_PREFIX, 0));
 	if (!mrt->camera)
 		return (ft_error(NEED_CAMERA_E, ERR_PREFIX, 0));
 	if (!mrt->ambiant)
-		mrt->ambiant = ambiant(0, (t_rgb){0, 0, 0});
+	{
+		init_pattern(&pattern);
+		mrt->ambiant = ambiant(0, pattern);
+	}
 	return (1);
+}
+
+void	init_render(t_minirt *mrt)
+{
+	t_object	*cur;
+	void		*ptr;
+	t_pattern	*pattern;
+
+	cur = mrt->objects;
+	ptr = mrt->mlx->mlx_ptr;
+	while (cur)
+	{
+		pattern = &cur->pattern;
+		if (pattern->path)
+		{
+			pattern->texture.ptr = mlx_xpm_file_to_image(ptr, pattern->path,
+					&pattern->texture.width, &pattern->texture.height);
+			pattern->texture.data = mlx_get_data_addr(pattern->texture.ptr,
+					&pattern->texture.bpp, &pattern->texture.ll,
+					&pattern->texture.endian);
+			pattern->texture.cl = pattern->texture.bpp / 8;
+		}
+		cur = cur->next;
+	}
 }

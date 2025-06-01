@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:44:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 15:53:08 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/01 18:59:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,18 @@ static inline float	get_distance(t_object *cur, t_fvector3 position, t_ray *ray,
 
 t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside)
 {
+	t_rgb	ambiant_color;
 	t_frgb	color;
 	t_light	*light;
 	int		(*is_inside)(t_object *, t_fvector3);
 
+	ambiant_color = mrt->ambiant->pattern.main_color;
 	color = (t_frgb){
-		(float)powf(mrt->ambiant->color.r / 255.0f, GAMMA)
+		(float)powf(ambiant_color.r / 255.0f, GAMMA)
 		* mrt->ambiant->level,
-		(float)powf(mrt->ambiant->color.g / 255.0f, GAMMA)
+		(float)powf(ambiant_color.g / 255.0f, GAMMA)
 		* mrt->ambiant->level,
-		(float)powf(mrt->ambiant->color.b / 255.0f, GAMMA)
+		(float)powf(ambiant_color.b / 255.0f, GAMMA)
 		* mrt->ambiant->level};
 	light = mrt->lights;
 	is_inside = hit.object->methods->is_inside;
@@ -79,11 +81,13 @@ static inline void	apply_diffuse_lights(t_minirt *mrt, t_light *light,
 		t_hit_data hit, t_frgb *color)
 {
 	float	level;
+	t_rgb	light_color;
 
 	level = calculate_light_level(mrt, light, hit) * light->level;
-	color->r += powf(light->color.r / 255.0f, GAMMA) * level;
-	color->g += powf(light->color.g / 255.0f, GAMMA) * level;
-	color->b += powf(light->color.b / 255.0f, GAMMA) * level;
+	light_color = light->pattern.main_color;
+	color->r += powf(light_color.r / 255.0f, GAMMA) * level;
+	color->g += powf(light_color.g / 255.0f, GAMMA) * level;
+	color->b += powf(light_color.b / 255.0f, GAMMA) * level;
 }
 
 static inline int	is_light_blocked(t_minirt *mrt, t_ray *ray, t_light *light,

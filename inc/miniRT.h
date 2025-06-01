@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 21:47:31 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/01 20:33:45 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,30 @@ typedef struct s_minirt		t_minirt;
 typedef struct s_ray		t_ray;
 typedef struct s_object		t_object;
 typedef struct s_camera		t_camera;
-typedef struct s_pattern	t_pattern;
 typedef struct s_type		t_type;
 typedef struct s_methods	t_methods;
 
+typedef struct s_mlx_image
+{
+	void	*ptr;
+	char	*data;
+	int		bpp;
+	int		ll;
+	int		cl;
+	int		endian;
+	int		height;
+	int		width;
+}	t_mlx_image;
+
 typedef struct s_pattern
 {
-	char	id;
-	t_rgb	main_color;
-	t_rgb	secondary_color;
-	float	smoothness;
-	float	mattifying;
+	char		id;
+	t_rgb		main_color;
+	t_rgb		secondary_color;
+	float		smoothness;
+	float		mattifying;
+	char		*path;
+	t_mlx_image	texture;
 }	t_pattern;
 
 typedef struct s_object
@@ -73,6 +86,7 @@ typedef struct s_object
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
+	t_pattern	pattern;
 }	t_object;
 
 typedef struct s_normal_object
@@ -92,7 +106,7 @@ typedef struct s_ambiant
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
-	t_rgb		color;
+	t_pattern	pattern;
 	float		level;
 }	t_ambiant;
 
@@ -125,7 +139,7 @@ typedef struct s_light
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
-	t_rgb		color;
+	t_pattern	pattern;
 	t_fvector3	position;
 	float		level;
 	float		scale;
@@ -196,16 +210,11 @@ typedef struct s_cylinder
 
 typedef struct s_mlx
 {
-	void	*mlx_ptr;
-	void	*win_ptr;
-	void	*img_ptr;
-	char	*data;
-	int		bpp;
-	int		ll;
-	int		cl;
-	int		endian;
-	int		update;
-	int		count;
+	void		*mlx_ptr;
+	void		*win_ptr;
+	t_mlx_image	image;
+	int			update;
+	int			count;
 }	t_mlx;
 
 typedef struct s_type
@@ -256,6 +265,7 @@ typedef struct s_thread_data
 
 t_minirt	*minirt(void);
 int			check_env(t_minirt *mrt);
+void		init_render(t_minirt *mrt);
 void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 
 // mlx
@@ -282,7 +292,7 @@ void		specular_reflection(t_ray *ray, t_hit_data *hit, float smoothness);
 t_fvector3	rotate_object(t_fvector3 v, t_fvector3 axis, float theta);
 
 //objects
-t_ambiant	*ambiant(float level, t_rgb color);
+t_ambiant	*ambiant(float level, t_pattern pattern);
 void		*parse_ambiant(char **values);
 
 t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
@@ -314,7 +324,8 @@ int			is_inside_cylinder(t_object *object, t_fvector3 point);
 void		on_press_key_cylinder(t_object *object, int keycode,
 				t_camera *camera);
 
-t_light		*light(t_fvector3 position, float level, t_rgb color, float scale);
+t_light		*light(t_fvector3 position, float level, t_pattern pattern,
+				float scale);
 void		*parse_light(char **values);
 void		show_light(t_ray *ray, t_light *light);
 float		intersect_light(t_ray *ray, t_object *object, float amplifier);
@@ -359,6 +370,7 @@ int			parse_map(char *path);
 int			parse_fvector3(char *value, t_fvector3 *v3);
 int			parse_normal(char *value, t_fvector3 *normal);
 int			parse_color(char *value, t_rgb *rgb);
+int			parse_texture(char *value, t_pattern *pattern);
 int			parse_pattern(char **values, t_pattern *pattern);
 void		*error_and_null(char *error);
 void		init_pattern(t_pattern *pattern);

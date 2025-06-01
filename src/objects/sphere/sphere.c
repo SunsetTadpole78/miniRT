@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:07:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/29 14:28:15 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/01 18:29:39 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ void	*parse_sphere(char **values)
 	diameter = ft_atof(values[1]);
 	if (diameter < 0.0f)
 		return (error_and_null(SP_DIAM_E));
-	if (!parse_color(values[2], &pattern.main_color))
-		return (error_and_null(SP_RGB_E));
 	init_pattern(&pattern);
+	if (!parse_texture(values[2], &pattern))
+		return (error_and_null(SP_TEXTURE_E));
 	if (values[3] && !parse_pattern(values + 3, &pattern))
 		return (error_and_null(SP_ARGS_E));
 	return (sphere(position, diameter, pattern));
