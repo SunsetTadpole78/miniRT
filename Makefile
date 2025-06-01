@@ -35,6 +35,7 @@ FILES =		destructor.c				\
 		objects/cone/utils.c			\
 		objects/cylinder/cylinder.c		\
 		objects/cylinder/render.c		\
+		objects/cylinder/intersect.c		\
 		objects/cylinder/keys.c			\
 		objects/cylinder/side.c			\
 		objects/cylinder/utils.c		\

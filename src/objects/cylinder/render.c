@@ -16,6 +16,8 @@
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline void		init_hit(t_ray *ray, t_hit_data *hit,
 							t_cylinder *cylinder, float dist);
+static inline int			is_inside(t_object *object, t_fvector3 *origin,
+							t_fvector3 *normal);
 static inline t_rgb		get_base_color(t_cylinder *cy, t_fvector3 impact_point,
 							t_pattern pattern);
 static inline t_fvector3	get_cylinder_normal(int type,
@@ -35,47 +37,19 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 		return ;
 	cylinder = (t_cylinder *)object;
 	init_hit(ray, &hit, cylinder, dist);
-	inside = is_inside_cylinder(object, ray->origin);
-	if (inside)
-		hit.normal = ft_fvector3_scale(hit.normal, -1);
+	inside = is_inside(object, &ray->origin, &hit.normal);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(cylinder, hit.impact_point, cylinder->pattern));
-	reflect_ray = *ray;
-	specular_reflection(&reflect_ray, &hit, cylinder->pattern.smoothness);
-	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
-				depth + 1), cylinder->pattern.mattifying);
+	if (!inside)
+	{
+		reflect_ray = *ray;
+		specular_reflection(&reflect_ray, &hit, cylinder->pattern.smoothness);
+		ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
+					depth + 1), cylinder->pattern.mattifying);
+	}
 	if (cylinder->selected)
 		apply_selection_effect(&ray->color);
 	ray->dist = dist;
-}
-
-float	intersect_cylinder(t_ray *ray, t_object *object, float amplifier)
-{
-	t_cylinder	*cylinder;
-	t_fvector3	o;
-	t_fvector3	d;
-	t_fvector3	t;
-	t_fvector2	amplified;
-
-	cylinder = (t_cylinder *)object;
-	normalize_complex_object(&o, &d, *ray, (t_normal_object *)object);
-	t.z = apply_side_equation(o, d, cylinder, amplifier);
-	if (fabsf(d.y) < 1e-6f)
-		return (t.z);
-	ray->extra = 0;
-	if (cylinder->infinite)
-		return (t.z);
-	amplified = (t_fvector2){cylinder->radius * amplifier,
-		cylinder->half_height * amplifier};
-	t.x = intersect_cap(o, d, amplified.x, -amplified.y);
-	t.y = intersect_cap(o, d, amplified.x, amplified.y);
-	ray->extra = t.x > EPSILON && (t.z < 0 || t.x < t.z);
-	if (ray->extra == 1)
-		t.z = t.x;
-	if (t.y < EPSILON || (t.z >= 0 && t.y >= t.z))
-		return (t.z);
-	ray->extra = 2;
-	return (t.y);
 }
 
 static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder,
@@ -86,6 +60,17 @@ static inline void	init_hit(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder,
 			ft_fvector3_scale(ray->direction, dist));
 	hit->normal = get_cylinder_normal(ray->extra, hit->impact_point, cylinder);
 	hit->position = cylinder->position;
+}
+
+static inline int	is_inside(t_object *object, t_fvector3 *origin,
+	t_fvector3 *normal)
+{
+	int	inside;
+
+	inside = is_inside_cylinder(object, *origin);
+	if (inside)
+		*normal = ft_fvector3_scale(*normal, -1);
+	return (inside);
 }
 
 static inline t_rgb	get_base_color(t_cylinder *cy, t_fvector3 impact_point,
