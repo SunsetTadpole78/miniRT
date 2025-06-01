@@ -190,6 +190,7 @@ typedef struct s_cone
 	t_fvector3	right;
 	t_fvector3	up;
 	float		base_diameter;
+	float		radius;
 	float		height;
 	int			infinite;
 	float		k;

@@ -32,6 +32,7 @@ t_cone	*cone(t_fvector3 position, t_fvector3 normal, t_fvector2 size,
 	co->up = ft_fcross_product(co->normal, co->right);
 	co->pattern = pattern;
 	co->base_diameter = size.x;
+	co->radius = size.x / 2.0f;
 	co->infinite = size.y < 0.0f;
 	if (co->infinite)
 		size.y = size.x * 0.6f;
@@ -40,7 +41,7 @@ t_cone	*cone(t_fvector3 position, t_fvector3 normal, t_fvector2 size,
 	co->k2 = co->k * co->k;
 	co->methods = get_methods_by_id(CONE_ID);
 	co->selected = 0;
-	co->texture = (t_texture){NULL, NULL, 0, 0, 0, 0, 0, 0};
+	co->texture = init_texture("images/shawn_mendes.xpm");
 	return (co);
 }
 
