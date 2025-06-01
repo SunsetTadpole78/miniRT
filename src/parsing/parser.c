@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:52:59 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 01:17:23 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 01:24:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ static inline int	check_comments(char **splited, int *comment)
 	if (ft_strncmp(splited[0], "//", 2) == 0
 		|| ft_strncmp(splited[0], "#", 1) == 0)
 		return (1);
-	else if (ft_strncmp(splited[0], "/*", 3) == 0)
+	else if (ft_strncmp(splited[0], "/*", 2) == 0)
 	{
 		*comment = 1;
 		return (1);
