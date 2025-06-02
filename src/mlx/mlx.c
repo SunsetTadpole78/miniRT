@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 11:14:26 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:35:53 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ t_mlx	*init_mlx(t_mlx *mlx)
 	mlx->mlx_ptr = mlx_init();
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr,
 			WIN_WIDTH, WIN_HEIGHT, WINDOW_NAME);
-	mlx->img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
-	mlx->data = mlx_get_data_addr(mlx->img_ptr, &mlx->bpp,
-			&mlx->ll, &mlx->endian);
-	mlx->cl = mlx->bpp / 8;
+	mlx->image.ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+	mlx->image.data = mlx_get_data_addr(mlx->image.ptr, &mlx->image.bpp,
+			&mlx->image.ll, &mlx->image.endian);
+	mlx->image.cl = mlx->image.bpp / 8;
 	mlx->update = 0;
 	mlx->count = 0;
 	return (mlx);

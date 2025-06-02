@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 12:39:52 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:43:54 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ static inline void	register_types(void)
 
 int	check_env(t_minirt *mrt)
 {
+	t_pattern		pattern;
 	t_thread_data	*datas;
 	int				cores;
 	int				i;
@@ -74,20 +75,44 @@ int	check_env(t_minirt *mrt)
 	if (!mrt->camera)
 		return (ft_error(NEED_CAMERA_E, ERR_PREFIX, 0));
 	if (!mrt->ambiant)
-		mrt->ambiant = ambiant(0, (t_rgb){0, 0, 0});
+	{
+		init_pattern(&pattern);
+		mrt->ambiant = ambiant(0, pattern);
+	}
 	datas = malloc(sizeof(t_thread_data) * mrt->cores);
 	if (!datas)
 		return (0);
 	cores = mrt->cores;
 	mrt->pixels_per_thread = (WIN_WIDTH * WIN_HEIGHT) / cores;
-	i = 0;
-	while (i < cores)
-	{
+	i = -1;
+	while (++i < cores)
 		init_thread_data(&datas[i], cores, i, mrt);
-		i++;
-	}
 	mrt->threads_datas = datas;
 	return (1);
+}
+
+void	init_render(t_minirt *mrt)
+{
+	t_object	*cur;
+	void		*ptr;
+	t_pattern	*pattern;
+
+	cur = mrt->objects;
+	ptr = mrt->mlx->mlx_ptr;
+	while (cur)
+	{
+		pattern = &cur->pattern;
+		if (pattern->path)
+		{
+			pattern->texture.ptr = mlx_xpm_file_to_image(ptr, pattern->path,
+					&pattern->texture.width, &pattern->texture.height);
+			pattern->texture.data = mlx_get_data_addr(pattern->texture.ptr,
+					&pattern->texture.bpp, &pattern->texture.ll,
+					&pattern->texture.endian);
+			pattern->texture.cl = pattern->texture.bpp / 8;
+		}
+		cur = cur->next;
+	}
 }
 
 inline void	init_thread_data(t_thread_data *data, int cores, int i,
