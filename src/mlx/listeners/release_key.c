@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   release_key.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 01:34:33 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 02:58:00 by lroussel         ###   ########.fr       */
+/*   Created: 2025/06/02 11:11:37 by lroussel          #+#    #+#             */
+/*   Updated: 2025/06/02 12:38:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include "errors.h"
+#include "keys.h"
 
-void	*error_and_null(char *error)
+int	on_release_key(int keycode, t_minirt *mrt)
 {
-	ft_error(error, ERR_PREFIX, 0);
-	return (NULL);
-}
-
-void	init_pattern(t_pattern *pattern)
-{
-	pattern->id = '\0';
-	pattern->secondary_color = (t_rgb){0, 0, 0};
-	pattern->smoothness = 1.0f;
-	pattern->smoothness_factor = 0.0f;
-	pattern->mattifying = 0.0f;
+	if (keycode == OGLK_LEFT_COMMAND || keycode == OGLK_RIGHT_COMMAND
+		|| keycode == XK_LEFT_CONTROL || keycode == XK_RIGHT_CONTROL)
+	{
+		mrt->ctrl_pressed--;
+		if (mrt->ctrl_pressed < 0)
+			mrt->ctrl_pressed = 0;
+	}
+	return (1);
 }

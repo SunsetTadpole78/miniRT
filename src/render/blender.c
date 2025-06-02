@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/30 14:27:06 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 03:31:41 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,30 @@ static inline unsigned int	rgb_to_uint(t_rgb color)
 
 t_rgb	apply_lights_modifier(t_frgb modifier, t_rgb base)
 {
-	base.r = (unsigned char) fmin(powf(powf((float)base.r / 255.0f, GAMMA)
-				* fmin(modifier.r, 1.0f), 1.0f / GAMMA) * 255.0f, 255.0f);
-	base.g = (unsigned char) fmin(powf(powf((float)base.g / 255.0f, GAMMA)
-				* fmin(modifier.g, 1.0f), 1.0f / GAMMA) * 255.0f, 255.0f);
-	base.b = (unsigned char) fmin(powf(powf((float)base.b / 255.0f, GAMMA)
-				* fmin(modifier.b, 1.0f), 1.0f / GAMMA) * 255.0f, 255.0f);
+	float	gamma_inv;
+	t_frgb	temp;
+
+	gamma_inv = 1.0f / GAMMA;
+	temp = (t_frgb){(float)base.r / 255.0f, (float)base.g / 255.0f,
+		(float)base.b / 255.0f};
+	if (modifier.r <= 1.0f)
+		temp.r *= powf(modifier.r, gamma_inv);
+	if (modifier.g <= 1.0f)
+		temp.g *= powf(modifier.g, gamma_inv);
+	if (modifier.b <= 1.0f)
+		temp.b *= powf(modifier.b, gamma_inv);
+	if (temp.r > 1.0f)
+		base.r = 255;
+	else
+		base.r = (unsigned char)(temp.r * 255.0f);
+	if (temp.g > 1.0f)
+		base.g = 255;
+	else
+		base.g = (unsigned char)(temp.g * 255.0f);
+	if (temp.b > 1.0f)
+		base.b = 255;
+	else
+		base.b = (unsigned char)(temp.b * 255.0f);
 	return (base);
 }
 
