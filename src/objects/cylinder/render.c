@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/31 21:10:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 03:44:55 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,11 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	inside = init_cylinder(ray, &hit, cylinder, dist);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(cylinder, hit.impact_point, cylinder->pattern));
-	if (!inside)
+	if (!inside && cylinder->pattern.mattifying != 0.0f)
 	{
 		reflect_ray = *ray;
-		specular_reflection(&reflect_ray, &hit, cylinder->pattern.smoothness);
+		specular_reflection(&reflect_ray, &hit,
+			cylinder->pattern.smoothness_factor);
 		ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
 					depth + 1), cylinder->pattern.mattifying);
 	}
