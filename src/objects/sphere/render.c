@@ -14,7 +14,8 @@
 #include "errors.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline t_rgb	get_base_color(t_pattern pattern, t_fvector3 normal);
+static inline t_rgb	get_base_color(t_pattern pattern, t_fvector3 normal,
+						int inside);
 static inline t_rgb	display_texture(t_mlx_image texture, float u, float v);
 /* -------------------------------------------------------------------------- */
 
@@ -32,7 +33,7 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	sphere = (t_sphere *)object;
 	inside = init_sphere(ray, &hit, sphere, dist);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
-			get_base_color(sphere->pattern, hit.normal));
+			get_base_color(sphere->pattern, hit.normal, inside));
 	if (!inside && sphere->pattern.mattifying != 0.0f)
 	{
 		reflect_ray = *ray;
@@ -46,13 +47,16 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	ray->dist = dist;
 }
 
-static inline t_rgb	get_base_color(t_pattern pattern, t_fvector3 normal)
+static inline t_rgb	get_base_color(t_pattern pattern, t_fvector3 normal,
+	int inside)
 {
 	float	u;
 	float	v;
 
 	if (pattern.id != 'c' && pattern.path == NULL)
 		return (pattern.main_color);
+	if (inside)
+		normal = ft_fvector3_scale(normal, -1);
 	u = 0.5f + atan2f(normal.z, normal.x) / (2.0f * M_PI);
 	v = 0.5f - asinf(normal.y) / M_PI;
 	if (pattern.id == 'c'
