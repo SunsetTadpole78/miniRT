@@ -1,0 +1,60 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tracer.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/02 01:38:41 by lroussel          #+#    #+#             */
+/*   Updated: 2025/06/02 01:38:53 by lroussel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "miniRT.h"
+
+t_fvector3	primary_ray(t_camera *cam, t_vector2 pos, float ratio)
+{
+	t_fvector3	ndc_vec;
+
+	ndc_vec = (t_fvector3){
+		-(2.0f * (((float)pos.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
+		-(2.0f * (((float)pos.y + 0.5f) / WIN_HEIGHT) - 1.0f)
+		* cam->iplane_scale, 1.0f};
+	return (ft_fnormalize(
+			ft_fvector3_sum(
+				ft_fvector3_sum(
+					(t_fvector3){cam->right.x * ndc_vec.x,
+					cam->right.y * ndc_vec.x, cam->right.z * ndc_vec.x},
+				(t_fvector3){cam->up.x * ndc_vec.y,
+				cam->up.y * ndc_vec.y, cam->up.z * ndc_vec.y}),
+		cam->normal)));
+}
+
+t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
+{
+	t_object	*cur;
+	void		(*render)(t_minirt *, t_ray *, t_object *, int);
+	t_light		*light;
+
+	if (depth > MAX_DEPTH)
+		return (ray->color);
+	ray->dist = 3.4E+38;
+	cur = mrt->objects;
+	while (cur)
+	{
+		render = cur->methods->render;
+		if (render)
+			render(mrt, ray, cur, depth);
+		cur = cur->next;
+	}
+	if (ray->dist >= 3.4E+37)
+		ray->color = (t_rgb){0, 0, 0};
+	light = mrt->lights;
+	while (light)
+	{
+		if (light->visible)
+			show_light(ray, light);
+		light = (t_light *)light->next;
+	}
+	return (ray->color);
+}

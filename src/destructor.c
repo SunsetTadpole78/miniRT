@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 18:40:55 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 01:54:04 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 	if (destroy_mlx)
 		destruct_mlx(mlx);
 	free(mlx);
+	free(mrt->threads_datas);
 	free(mrt);
 }
 
