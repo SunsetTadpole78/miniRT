@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 13:45:50 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 15:39:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -387,6 +387,8 @@ t_methods	*get_methods_by_id(char *id);
 
 void		normalize_complex_object(t_fvector3 *o, t_fvector3 *d, t_ray ray,
 				t_normal_object *object);
+
+void		delete_object(t_minirt *mrt, t_object *object);
 
 //parsing
 int			parse_map(char *path);
