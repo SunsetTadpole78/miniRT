@@ -98,7 +98,7 @@ static inline t_rgb	display_texture(t_mlx_image texture, t_cylinder *cy,
 		if (angle < 0.0f)
 			angle += 2.0f * M_PI;
 		u = angle / (2.0f * M_PI);
-		v = ((h + cy->half_height) / cy->height);
+		v = (h + cy->half_height) / cy->height;
 	}
 	u -= floorf(u);
 	v -= floorf(v);
