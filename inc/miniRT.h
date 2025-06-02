@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 03:35:45 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 12:35:13 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,11 +220,12 @@ typedef struct s_type
 
 typedef struct s_methods
 {
-	void	*(*parser)(char **);
-	void	(*render)(t_minirt *, t_ray *, t_object *, int);
-	float	(*intersect)(t_ray *, t_object *, float);
-	void	(*on_press_key)(t_object *, int, t_camera *);
-	int		(*is_inside)(t_object *, t_fvector3);
+	void		*(*parser)(char **);
+	void		(*render)(t_minirt *, t_ray *, t_object *, int);
+	float		(*intersect)(t_ray *, t_object *, float);
+	void		(*on_press_key)(t_object *, int, t_camera *);
+	int			(*is_inside)(t_object *, t_fvector3);
+	t_object	*(*duplicate)(t_object *);
 }	t_methods;
 
 typedef struct s_thread_data
@@ -249,6 +250,8 @@ typedef struct s_minirt
 	int				pixels_per_thread;
 	t_thread_data	*threads_datas;
 	t_object		*selected;
+	int				ctrl_pressed;
+	t_object		*clipboard;
 }	t_minirt;
 
 typedef struct s_hit_data
@@ -267,6 +270,7 @@ void		destruct_minirt(t_minirt *mrt, int destroy_mlx);
 t_mlx		*init_mlx(t_mlx *mlx);
 void		destruct_mlx(t_mlx *mlx);
 int			on_press_key(int keycode, t_minirt *mrt);
+int			on_release_key(int keycode, t_minirt *mrt);
 int			on_click(int id, int x, int y, t_minirt *mrt);
 int			loop_hook(t_minirt *mrt);
 int			close_window(t_minirt *mrt);
@@ -305,6 +309,7 @@ int			init_cone(t_ray *ray, t_hit_data *hit, t_cone *cone,
 				float dist);
 int			is_inside_cone(t_object *object, t_fvector3 point);
 void		on_press_key_cone(t_object *object, int keycode, t_camera *camera);
+t_object	*duplicate_cone(t_object *object);
 
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_pattern pattern);
@@ -321,12 +326,14 @@ float		intersect_cylinder(t_ray *ray, t_object *object, float amplifier);
 int			is_inside_cylinder(t_object *object, t_fvector3 point);
 void		on_press_key_cylinder(t_object *object, int keycode,
 				t_camera *camera);
+t_object	*duplicate_cylinder(t_object *object);
 
 t_light		*light(t_fvector3 position, float level, t_rgb color, float scale);
 void		*parse_light(char **values);
 void		show_light(t_ray *ray, t_light *light);
 float		intersect_light(t_ray *ray, t_object *object, float amplifier);
 void		on_press_key_light(t_object *object, int keycode, t_camera *camera);
+t_object	*duplicate_light(t_object *object);
 
 t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_pattern pattern);
 void		*parse_plane(char **values);
@@ -334,6 +341,7 @@ void		render_plane(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
 float		intersect_plane(t_ray *ray, t_object *object, float amplifier);
 void		on_press_key_plane(t_object *object, int keycode, t_camera *camera);
+t_object	*duplicate_plane(t_object *object);
 
 t_sphere	*sphere(t_fvector3 position, float diameter, t_pattern pattern);
 void		*parse_sphere(char **values);
@@ -345,6 +353,7 @@ int			init_sphere(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
 int			is_inside_sphere(t_object *object, t_fvector3 point);
 void		on_press_key_sphere(t_object *object, int keycode,
 				t_camera *camera);
+t_object	*duplicate_sphere(t_object *object);
 
 int			register_object(t_object *object);
 int			register_light(t_light *light);
@@ -352,12 +361,13 @@ int			set_ambiant(t_ambiant *ambiant);
 int			set_camera(t_camera *camera);
 
 int			register_type(char *id, void *(*parser)(char **),
+				void (*render)(t_minirt *, t_ray *, t_object *, int),
 				t_methods *methods);
 int			exist_type(char *id);
-t_methods	*init_methods(void (*render)(t_minirt *, t_ray *, t_object *, int),
-				float (*intersect)(t_ray *, t_object *, float),
+t_methods	*init_methods(float (*intersect)(t_ray *, t_object *, float),
 				int (*is_inside)(t_object *, t_fvector3),
-				void (*on_press_key)(t_object *, int, t_camera *));
+				void (*on_press_key)(t_object *, int, t_camera *),
+				t_object *(*duplicate)(t_object *));
 t_methods	*empty_methods(void);
 t_methods	*get_methods_by_id(char *id);
 
