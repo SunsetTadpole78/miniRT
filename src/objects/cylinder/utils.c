@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 18:34:10 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 20:44:42 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 12:04:37 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,29 @@ int	is_inside_cylinder(t_object *object, t_fvector3 point)
 	if (ft_fdot_product(radial, radial) < cylinder->radius * cylinder->radius)
 		return (1);
 	return (0);
+}
+
+t_object	*duplicate_cylinder(t_object *object)
+{
+	t_cylinder	*cylinder;
+	t_cylinder	*new;
+
+	cylinder = (t_cylinder *)object;
+	new = malloc(sizeof(t_cylinder));
+	if (!new)
+		return (NULL);
+	new->id = CYLINDER_ID;
+	new->position = cylinder->position;
+	new->normal = cylinder->normal;
+	new->right = cylinder->right;
+	new->up = cylinder->up;
+	new->pattern = cylinder->pattern;
+	new->diameter = cylinder->diameter;
+	new->radius = cylinder->radius;
+	new->height = cylinder->height;
+	new->half_height = cylinder->half_height;
+	new->infinite = cylinder->infinite;
+	new->methods = cylinder->methods;
+	new->selected = 0;
+	return ((t_object *)new);
 }

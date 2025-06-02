@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/30 16:05:45 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 12:38:08 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline int		refresh_key(t_mlx *mlx);
+static inline void	c_key(t_minirt *mrt);
+static inline void	paste_object(t_minirt *mrt);
 /* -------------------------------------------------------------------------- */
 
 int	on_press_key(int keycode, t_minirt *mrt)
@@ -26,10 +28,12 @@ int	on_press_key(int keycode, t_minirt *mrt)
 	else if (keycode == OGLK_R || keycode == XK_R)
 		return (refresh_key(mrt->mlx));
 	else if ((keycode == OGLK_C || keycode == XK_C) && mrt->selected)
-	{
-		mrt->selected->selected = 0;
-		mrt->selected = NULL;
-	}
+		c_key(mrt);
+	else if (keycode == OGLK_LEFT_COMMAND || keycode == OGLK_RIGHT_COMMAND
+		|| keycode == XK_LEFT_CONTROL || keycode == XK_RIGHT_CONTROL)
+		mrt->ctrl_pressed++;
+	else if ((keycode == OGLK_V || keycode == XK_V) && mrt->ctrl_pressed != 0)
+		paste_object(mrt);
 	else if (!mrt->selected)
 		on_press_key_camera(mrt->camera, keycode);
 	else
@@ -50,4 +54,35 @@ static inline int	refresh_key(t_mlx *mlx)
 	else
 		mlx->update = 2;
 	return (0);
+}
+
+static inline void	c_key(t_minirt *mrt)
+{
+	if (mrt->ctrl_pressed != 0)
+		mrt->clipboard = mrt->selected;
+	else
+	{
+		mrt->selected->selected = 0;
+		mrt->selected = NULL;
+	}
+}
+
+static inline void	paste_object(t_minirt *mrt)
+{
+	t_normal_object	*object;
+
+	if (!mrt->clipboard)
+		return ;
+	object = (t_normal_object *)(mrt->clipboard->methods->duplicate(
+				mrt->clipboard
+				));
+	object->position.x += 1;
+	object->position.y += 1;
+	object->position.z += 1;
+	object->next = mrt->objects;
+	object->selected = 1;
+	mrt->objects = (t_object *)object;
+	if (mrt->selected)
+		mrt->selected->selected = 0;
+	mrt->selected = mrt->objects;
 }
