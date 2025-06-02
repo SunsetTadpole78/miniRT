@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/30 14:28:53 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 03:19:11 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0),
 			get_base_color(plane, hit, plane->pattern));
 	reflect_ray = *ray;
-	specular_reflection(&reflect_ray, &hit, plane->pattern.smoothness);
+	specular_reflection(&reflect_ray, &hit,
+		plane->pattern.smoothness_factor);
 	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
 				depth + 1), plane->pattern.mattifying);
 	if (plane->selected)

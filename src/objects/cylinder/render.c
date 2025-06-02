@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/31 21:10:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 03:19:09 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	if (!inside)
 	{
 		reflect_ray = *ray;
-		specular_reflection(&reflect_ray, &hit, cylinder->pattern.smoothness);
+		specular_reflection(&reflect_ray, &hit,
+			cylinder->pattern.smoothness_factor);
 		ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
 					depth + 1), cylinder->pattern.mattifying);
 	}

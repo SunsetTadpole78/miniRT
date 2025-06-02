@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 00:20:45 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 21:10:16 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 03:19:07 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	if (!inside)
 	{
 		reflect_ray = *ray;
-		specular_reflection(&reflect_ray, &hit, cone->pattern.smoothness);
+		specular_reflection(&reflect_ray, &hit,
+			cone->pattern.smoothness_factor);
 		ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
 					depth + 1), cone->pattern.mattifying);
 	}
