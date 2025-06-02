@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/01 18:56:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:40:30 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ t_light	*light(t_fvector3 position, float level, t_pattern pattern, float scale)
 	l->position = position;
 	l->level = level;
 	l->pattern = pattern;
+	l->gamma_color.r = powf(pattern.main_color.r / 255.0f, GAMMA);
+	l->gamma_color.g = powf(pattern.main_color.g / 255.0f, GAMMA);
+	l->gamma_color.b = powf(pattern.main_color.b / 255.0f, GAMMA);
 	l->scale = scale;
 	l->methods = get_methods_by_id(LIGHT_ID);
 	l->selected = 0;

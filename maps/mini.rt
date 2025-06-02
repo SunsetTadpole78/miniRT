@@ -1,7 +1,7 @@
 # Comment
 A 0.4 255,255,255
 C -50,10,20 0,0,1 70
-pl 0,0,0 0,1,0 resources/ship.xpm 0.9 0 checker 0,0,0
+pl 0,0,0 0,1,0 resources/ship.xpm 0.9 0 checker 255,255,255
 /*
   *
   * !! A snake (or a noodle)
