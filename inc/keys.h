@@ -26,6 +26,7 @@
 # define OGLK_EQUAL 24
 # define OGLK_MINUS 27
 # define OGLK_SPACE 49
+# define OGLK_DELETE 51
 # define OGLK_ESC 53
 # define OGLK_ARROW_LEFT 123
 # define OGLK_ARROW_RIGHT 124
@@ -34,7 +35,6 @@
 # define OGLK_SHIFT 257
 # define OGLK_LEFT_COMMAND 259
 # define OGLK_RIGHT_COMMAND 260
-# define OGLK_DELETE -1
 
 /*
  *	X11 KEYS
