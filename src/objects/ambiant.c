@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:58:48 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/29 14:27:22 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 02:07:14 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ t_ambiant	*ambiant(float level, t_rgb color)
 	a->color.r = color.r * level;
 	a->color.g = color.g * level;
 	a->color.b = color.b * level;
+	a->gamma_color.r = (float)powf(a->color.r / 255.0f, GAMMA) * level;
+	a->gamma_color.g = (float)powf(a->color.g / 255.0f, GAMMA) * level;
+	a->gamma_color.b = (float)powf(a->color.b / 255.0f, GAMMA) * level;
 	a->methods = get_methods_by_id(AMBIANT_ID);
 	a->selected = 0;
 	return (a);

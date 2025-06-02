@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 03:08:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/27 21:06:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 03:30:20 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ int	parse_reflection(char **values, t_pattern *pattern)
 	if (!ft_isnumeric(values[0]))
 		return (0);
 	pattern->smoothness = ft_atof(values[0]);
+	pattern->smoothness_factor = (1.0f - cosf(RAD_ANGLE
+				* (1.0f - pattern->smoothness)));
 	if (!values[1])
 		return (1);
 	if (ft_isnumeric(values[1]))

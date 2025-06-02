@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 21:47:31 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 03:35:45 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_pattern
 	t_rgb	secondary_color;
 	float	smoothness;
 	float	mattifying;
+	float	smoothness_factor;
 }	t_pattern;
 
 typedef struct s_object
@@ -93,6 +94,7 @@ typedef struct s_ambiant
 	t_methods	*methods;
 	int			selected;
 	t_rgb		color;
+	t_frgb		gamma_color;
 	float		level;
 }	t_ambiant;
 
@@ -126,6 +128,7 @@ typedef struct s_light
 	t_methods	*methods;
 	int			selected;
 	t_rgb		color;
+	t_frgb		gamma_color;
 	t_fvector3	position;
 	float		level;
 	float		scale;
@@ -224,26 +227,6 @@ typedef struct s_methods
 	int		(*is_inside)(t_object *, t_fvector3);
 }	t_methods;
 
-typedef struct s_minirt
-{
-	t_type		*types;
-	t_object	*objects;
-	t_light		*lights;
-	t_ambiant	*ambiant;
-	t_camera	*camera;
-	t_mlx		*mlx;
-	int			cores;
-	t_object	*selected;
-}	t_minirt;
-
-typedef struct s_hit_data
-{
-	t_object	*object;
-	t_fvector3	impact_point;
-	t_fvector3	normal;
-	t_fvector3	position;
-}	t_hit_data;
-
 typedef struct s_thread_data
 {
 	t_minirt	*mrt;
@@ -253,6 +236,28 @@ typedef struct s_thread_data
 	pthread_t	thread;
 	float		ratio;
 }	t_thread_data;
+
+typedef struct s_minirt
+{
+	t_type			*types;
+	t_object		*objects;
+	t_light			*lights;
+	t_ambiant		*ambiant;
+	t_camera		*camera;
+	t_mlx			*mlx;
+	int				cores;
+	int				pixels_per_thread;
+	t_thread_data	*threads_datas;
+	t_object		*selected;
+}	t_minirt;
+
+typedef struct s_hit_data
+{
+	t_object	*object;
+	t_fvector3	impact_point;
+	t_fvector3	normal;
+	t_fvector3	position;
+}	t_hit_data;
 
 t_minirt	*minirt(void);
 int			check_env(t_minirt *mrt);
@@ -277,7 +282,8 @@ t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside);
 void		blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos);
 t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 void		apply_selection_effect(t_rgb *color);
-void		specular_reflection(t_ray *ray, t_hit_data *hit, float smoothness);
+void		specular_reflection(t_ray *ray, t_hit_data *hit,
+				float smoothness_factor);
 
 t_fvector3	rotate_object(t_fvector3 v, t_fvector3 axis, float theta);
 

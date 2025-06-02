@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 00:20:45 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 21:10:16 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 03:44:42 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,11 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	inside = init_cone(ray, &hit, cone, dist);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(cone, hit.impact_point, cone->pattern));
-	if (!inside)
+	if (!inside && cone->pattern.mattifying != 0.0f)
 	{
 		reflect_ray = *ray;
-		specular_reflection(&reflect_ray, &hit, cone->pattern.smoothness);
+		specular_reflection(&reflect_ray, &hit,
+			cone->pattern.smoothness_factor);
 		ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
 					depth + 1), cone->pattern.mattifying);
 	}
