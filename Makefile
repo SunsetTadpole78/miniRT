@@ -60,7 +60,8 @@ FILES =		destructor.c				\
 		objects/factory.c			\
 		objects/types_factory.c			\
 		objects/delete.c			\
-		parsing/elements.c			\
+		parsing/elements/default.c		\
+		parsing/elements/extra.c		\
 		parsing/parser.c			\
 		parsing/utils.c				\
 		render/blender.c			\
