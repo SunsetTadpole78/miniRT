@@ -24,13 +24,13 @@ int	main(int argc, char **argv)
 	mrt = minirt();
 	if (!mrt)
 		return (ft_error(MALLOC_E, ERR_PREFIX, 2));
-	mlx = init_mlx(mrt->mlx);
 	code = parse_map(argv[1]);
 	if (code != 0 || !check_env(mrt))
 	{
-		destruct_minirt(mrt, 1);
+		destruct_minirt(mrt, 0);
 		return (4 + code);
 	}
+	mlx = init_mlx(mrt->mlx);
 	init_render(mrt);
 	render_scene(mrt);
 	handle_events(mrt);

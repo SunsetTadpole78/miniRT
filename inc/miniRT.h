@@ -81,18 +81,6 @@ typedef struct s_pattern
 	t_mlx_image	texture;
 }	t_pattern;
 
-typedef struct s_texture
-{
-	void	*image;
-	char	*data;
-	int		width;
-	int		height;
-	int		bpp;
-	int		ll;
-	int		cl;
-	int		endian;
-}	t_texture;
-
 typedef struct s_object
 {
 	char		*id;

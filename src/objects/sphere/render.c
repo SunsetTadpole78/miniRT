@@ -14,8 +14,7 @@
 #include "errors.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline t_rgb	get_base_color(t_fvector3 normal, t_pattern pattern,
-						t_sphere *sphere);
+static inline t_rgb	get_base_color(t_pattern pattern, t_fvector3 normal);
 static inline t_rgb	display_texture(t_mlx_image texture, float u, float v);
 /* -------------------------------------------------------------------------- */
 
@@ -33,7 +32,7 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	sphere = (t_sphere *)object;
 	inside = init_sphere(ray, &hit, sphere, dist);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
-			get_base_color(hit.normal, sphere->pattern, sphere));
+			get_base_color(sphere->pattern, hit.normal));
 	if (!inside && sphere->pattern.mattifying != 0.0f)
 	{
 		reflect_ray = *ray;
@@ -47,21 +46,20 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	ray->dist = dist;
 }
 
-static inline t_rgb	get_base_color(t_fvector3 normal, t_pattern pattern,
-	t_sphere *sphere)
+static inline t_rgb	get_base_color(t_pattern pattern, t_fvector3 normal)
 {
 	float	u;
 	float	v;
 
-	if (pattern.id != 'c' && sphere->pattern.path == NULL)
+	if (pattern.id != 'c' && pattern.path == NULL)
 		return (pattern.main_color);
 	u = 0.5f + atan2f(normal.z, normal.x) / (2.0f * M_PI);
 	v = 0.5f - asinf(normal.y) / M_PI;
 	if (pattern.id == 'c'
 		&& (int)((floorf(u * 10.0f)) + (floorf(v * 10.0f))) % 2 == 0)
 		return (pattern.secondary_color);
-	if (sphere->pattern.path != NULL)
-		return (display_texture(sphere->pattern.texture, u, v));
+	if (pattern.path != NULL)
+		return (display_texture(pattern.texture, u, v));
 	return (pattern.main_color);
 }
 

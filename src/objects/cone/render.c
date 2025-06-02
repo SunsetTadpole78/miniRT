@@ -13,8 +13,8 @@
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline t_rgb	get_base_color(t_cone *co, t_fvector3 impact_point,
-						t_pattern pattern);
+static inline t_rgb	get_base_color(t_cone *cone, t_pattern pattern,
+						t_fvector3 impact_point);
 static inline t_rgb	display_texture(t_mlx_image texture, t_cone *cone,
 						t_fvector3 diff,
 						float h);
@@ -34,7 +34,7 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	cone = (t_cone *)object;
 	inside = init_cone(ray, &hit, cone, dist);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
-			get_base_color(cone, hit.impact_point, cone->pattern));
+			get_base_color(cone, cone->pattern, hit.impact_point));
 	if (!inside && cone->pattern.mattifying != 0.0f)
 	{
 		reflect_ray = *ray;
@@ -48,33 +48,33 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	ray->dist = dist;
 }
 
-static inline t_rgb	get_base_color(t_cone *cone, t_fvector3 impact_point,
-		t_pattern pattern)
+static inline t_rgb	get_base_color(t_cone *cone, t_pattern pattern,
+	t_fvector3 impact_point)
 {
 	t_fvector3	diff;
 	t_fvector3	local;
 	float		angle;
 	float		h;
 
-	if (pattern.id != 'c' && cone->pattern.path == NULL)
+	if (pattern.id != 'c' && pattern.path == NULL)
 		return (pattern.main_color);
 	diff = ft_fvector3_diff(impact_point, cone->position);
 	if (pattern.id == 'c')
 	{
 		local = (t_fvector3){ft_fdot_product(diff, cone->right),
-			ft_fdot_product(diff, ft_fnormalize(cone->normal)),
+			ft_fdot_product(diff, cone->normal),
 			ft_fdot_product(diff, cone->up)
 		};
 		angle = atan2f(local.z, local.x);
 		if (angle < 0.0f)
 			angle += 2.0f * M_PI;
-		if ((int)((floor(angle * 3.0f + EPSILON))
-			+ (floor(local.y * 0.3f + EPSILON))) % 2 == 0)
+		if ((int)((floorf(angle * 3.0f + EPSILON))
+			+ (floorf(local.y * 0.3f + EPSILON))) % 2 == 0)
 			return (pattern.secondary_color);
 	}
 	h = 0.0f;
-	if (cone->pattern.path != NULL)
-		return (display_texture(cone->pattern.texture, cone, diff, h));
+	if (pattern.path != NULL)
+		return (display_texture(pattern.texture, cone, diff, h));
 	return (pattern.main_color);
 }
 
@@ -86,7 +86,7 @@ static inline t_rgb	display_texture(t_mlx_image texture, t_cone *cone,
 	t_fvector3	proj;
 	float		angle;
 
-	if (fabsf(h - cone->height) < EPSILON)
+	if (fabsf(fabsf(h) - cone->height) < EPSILON)
 	{
 		u = ft_fdot_product(diff, cone->right) / (2.0f * cone->radius) + 0.5f;
 		v = ft_fdot_product(diff, cone->up) / (2.0f * cone->radius) + 0.5f;
