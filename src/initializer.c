@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 18:16:26 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 01:56:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline void	register_types(void);
+static inline void	init_thread_data(t_thread_data *data, int cores, int i,
+						t_minirt *mrt);
 /* -------------------------------------------------------------------------- */
 
 t_minirt	*minirt(void)
@@ -58,6 +60,10 @@ static inline void	register_types(void)
 
 int	check_env(t_minirt *mrt)
 {
+	t_thread_data	*datas;
+	int				cores;
+	int				i;
+
 	mrt->cores = sysconf(_SC_NPROCESSORS_ONLN);
 	if (mrt->cores == -1)
 		return (ft_error(CORES_E, ERR_PREFIX, 0));
@@ -65,5 +71,34 @@ int	check_env(t_minirt *mrt)
 		return (ft_error(NEED_CAMERA_E, ERR_PREFIX, 0));
 	if (!mrt->ambiant)
 		mrt->ambiant = ambiant(0, (t_rgb){0, 0, 0});
+	datas = malloc(sizeof(t_thread_data) * mrt->cores);
+	if (!datas)
+		return (0);
+	cores = mrt->cores;
+	mrt->pixels_per_thread = (WIN_WIDTH * WIN_HEIGHT) / cores;
+	i = 0;
+	while (i < cores)
+	{
+		init_thread_data(&datas[i], cores, i, mrt);
+		i++;
+	}
+	mrt->threads_datas = datas;
 	return (1);
+}
+
+inline void	init_thread_data(t_thread_data *data, int cores, int i,
+		t_minirt *mrt)
+{
+	int	pixels_per_thread;
+
+	pixels_per_thread = mrt->pixels_per_thread;
+	data->mrt = mrt;
+	data->start = i * pixels_per_thread;
+	if (i == cores - 1)
+		data->end = WIN_WIDTH * WIN_HEIGHT;
+	else
+		data->end = (i + 1) * pixels_per_thread;
+	data->camera = data->mrt->camera;
+	data->ratio = ((float)WIN_WIDTH / (float)WIN_HEIGHT)
+		* data->camera->iplane_scale;
 }
