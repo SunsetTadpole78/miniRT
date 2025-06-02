@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 01:54:04 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:24:48 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 	free_objects((t_object *)mrt->lights);
 	free(mrt->ambiant);
 	free(mrt->camera);
+	free(mrt->clipboard);
 	if (destroy_mlx)
 		destruct_mlx(mlx);
 	free(mlx);
