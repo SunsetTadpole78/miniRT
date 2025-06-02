@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/30 16:05:45 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:14:41 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	on_press_key(int keycode, t_minirt *mrt)
 		mrt->selected->selected = 0;
 		mrt->selected = NULL;
 	}
+	else if ((keycode == OGLK_DELETE || keycode == XK_DELETE) && mrt->selected)
+		delete_object(mrt, mrt->selected);
 	else if (!mrt->selected)
 		on_press_key_camera(mrt->camera, keycode);
 	else
