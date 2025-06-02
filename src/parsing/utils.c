@@ -21,8 +21,6 @@ void	*error_and_null(char *error)
 
 void	init_pattern(t_pattern *pattern)
 {
-	t_mlx_image	texture;
-
 	pattern->id = '\0';
 	pattern->main_color = (t_rgb){0, 0, 0};
 	pattern->secondary_color = (t_rgb){0, 0, 0};
@@ -30,13 +28,12 @@ void	init_pattern(t_pattern *pattern)
 	pattern->smoothness_factor = 0.0f;
 	pattern->mattifying = 0.0f;
 	pattern->path = NULL;
-	texture = pattern->texture;
-	texture.ptr = NULL;
-	texture.data = NULL;
-	texture.bpp = 0;
-	texture.ll = 0;
-	texture.cl = 0;
-	texture.endian = 0;
-	texture.height = 0;
-	texture.width = 0;
+	pattern->texture.ptr = NULL;
+	pattern->texture.data = NULL;
+	pattern->texture.bpp = 0;
+	pattern->texture.ll = 0;
+	pattern->texture.cl = 0;
+	pattern->texture.endian = 0;
+	pattern->texture.height = 0;
+	pattern->texture.width = 0;
 }
