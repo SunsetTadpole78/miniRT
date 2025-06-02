@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 13:33:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:45:50 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ typedef struct s_pattern
 	t_rgb		secondary_color;
 	float		smoothness;
 	float		mattifying;
+	float		smoothness_factor;
 	char		*path;
 	t_mlx_image	texture;
-	float		smoothness_factor;
 }	t_pattern;
 
 typedef struct s_object
