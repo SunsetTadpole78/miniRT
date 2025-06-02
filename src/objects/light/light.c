@@ -6,14 +6,14 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/30 16:03:00 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:40:30 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "errors.h"
 
-t_light	*light(t_fvector3 position, float level, t_rgb color, float scale)
+t_light	*light(t_fvector3 position, float level, t_pattern pattern, float scale)
 {
 	t_light	*l;
 
@@ -23,13 +23,15 @@ t_light	*light(t_fvector3 position, float level, t_rgb color, float scale)
 	l->id = LIGHT_ID;
 	l->position = position;
 	l->level = level;
-	l->color = color;
+	l->pattern = pattern;
+	l->gamma_color.r = powf(pattern.main_color.r / 255.0f, GAMMA);
+	l->gamma_color.g = powf(pattern.main_color.g / 255.0f, GAMMA);
+	l->gamma_color.b = powf(pattern.main_color.b / 255.0f, GAMMA);
 	l->scale = scale;
 	l->methods = get_methods_by_id(LIGHT_ID);
 	l->selected = 0;
 	l->radius = level * scale;
 	l->visible = scale != 0.0f && level != 0.0f;
-	l->texture = (t_texture){NULL, NULL, 0, 0, 0, 0, 0, 0};
 	return (l);
 }
 
@@ -37,7 +39,7 @@ void	*parse_light(char **values)
 {
 	t_fvector3	position;
 	float		level;
-	t_rgb		color;
+	t_pattern	pattern;
 	float		scale;
 
 	if (!values[0] || !values[1] || !values[2] || (values[3] && values[4]))
@@ -49,7 +51,8 @@ void	*parse_light(char **values)
 	level = ft_atof(values[1]);
 	if (level < 0.0f || level > 1.0f)
 		return (error_and_null(L_LVL_E));
-	if (!parse_color(values[2], &color))
+	init_pattern(&pattern);
+	if (!parse_color(values[2], &pattern.main_color))
 		return (error_and_null(L_RGB_E));
 	scale = 0.0f;
 	if (values[3])
@@ -58,7 +61,7 @@ void	*parse_light(char **values)
 		if (!ft_isnumeric(values[3]) || scale < 0.0f)
 			return (error_and_null(L_SCALE_E));
 	}
-	return (light(position, level, color, scale));
+	return (light(position, level, pattern, scale));
 }
 
 void	show_light(t_ray *ray, t_light *light)
@@ -68,7 +71,7 @@ void	show_light(t_ray *ray, t_light *light)
 	dist = intersect_light(ray, (t_object *)light, 1.0f);
 	if (dist <= 0.0f || dist > ray->dist)
 		return ;
-	ray->color = light->color;
+	ray->color = light->pattern.main_color;
 	ray->dist = dist;
 	if (light->selected)
 		apply_selection_effect(&ray->color);

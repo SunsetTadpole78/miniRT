@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   x11.c                                              :+:      :+:    :+:   */
+/*   release_key.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 13:51:40 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/01 20:26:45 by lroussel         ###   ########.fr       */
+/*   Created: 2025/06/02 11:11:37 by lroussel          #+#    #+#             */
+/*   Updated: 2025/06/02 12:38:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
+#include "keys.h"
 
-void	destruct_mlx(t_mlx *mlx)
+int	on_release_key(int keycode, t_minirt *mrt)
 {
-	mlx_destroy_image(mlx->mlx_ptr, mlx->image.ptr);
-	mlx_destroy_window(mlx->mlx_ptr, mlx->win_ptr);
-	mlx_destroy_display(mlx->mlx_ptr);
-	free(mlx->mlx_ptr);
+	if (keycode == OGLK_LEFT_COMMAND || keycode == OGLK_RIGHT_COMMAND
+		|| keycode == XK_LEFT_CONTROL || keycode == XK_RIGHT_CONTROL)
+	{
+		mrt->ctrl_pressed--;
+		if (mrt->ctrl_pressed < 0)
+			mrt->ctrl_pressed = 0;
+	}
+	return (1);
 }

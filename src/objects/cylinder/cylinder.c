@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:11:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 22:11:31 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/01 18:28:26 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	cy->infinite = size.y < 0.0f;
 	cy->methods = get_methods_by_id(CYLINDER_ID);
 	cy->selected = 0;
-	cy->texture = init_texture("images/shawn_mendes.xpm");
 	return (cy);
 }
 
@@ -60,9 +59,9 @@ void	*parse_cylinder(char **values)
 	if (!ft_isnumeric(values[3]) || ft_isoutint(values[3])
 		|| (size.y < 0.0f && size.y != -1.0f))
 		return (error_and_null(CY_HEI_E));
-	if (!parse_color(values[4], &pattern.main_color))
-		return (error_and_null(CY_RGB_E));
 	init_pattern(&pattern);
+	if (!parse_texture(values[4], &pattern))
+		return (error_and_null(CY_TEXTURE_E));
 	if (values[5] && !parse_pattern(values + 5, &pattern))
 		return (error_and_null(CY_ARGS_E));
 	return (cylinder(position, normal, size, pattern));

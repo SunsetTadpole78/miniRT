@@ -31,6 +31,7 @@ int	main(int argc, char **argv)
 		destruct_minirt(mrt, 1);
 		return (4 + code);
 	}
+	init_render(mrt);
 	render_scene(mrt);
 	handle_events(mrt);
 	mlx_loop_hook(mlx->mlx_ptr, loop_hook, mrt);

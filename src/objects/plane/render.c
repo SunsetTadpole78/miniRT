@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/30 14:28:53 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 11:08:27 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static inline void	init_plane(t_ray *ray, t_hit_data *hit, t_plane *plane,
 						float dist);
 static inline t_rgb	get_base_color(t_plane *plane, t_hit_data hit,
 						t_pattern pattern);
-static inline t_rgb	display_texture(t_plane *plane, t_texture texture,
+static inline t_rgb	display_texture(t_plane *plane, t_mlx_image texture,
 						t_fvector3 diff);
 /* -------------------------------------------------------------------------- */
 
@@ -38,10 +38,14 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0),
 			get_base_color(plane, hit, plane->pattern));
-	reflect_ray = *ray;
-	specular_reflection(&reflect_ray, &hit, plane->pattern.smoothness);
-	ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
-				depth + 1), plane->pattern.mattifying);
+	if (plane->pattern.mattifying != 0.0f)
+	{
+		reflect_ray = *ray;
+		specular_reflection(&reflect_ray, &hit,
+			plane->pattern.smoothness_factor);
+		ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
+					depth + 1), plane->pattern.mattifying);
+	}
 	if (plane->selected)
 		apply_selection_effect(&ray->color);
 	ray->dist = dist;
@@ -62,18 +66,19 @@ static inline t_rgb	get_base_color(t_plane *plane, t_hit_data hit,
 {
 	t_fvector3	diff;
 
-	if (pattern.id != 'c' && plane->texture.image == NULL)
+	if (pattern.id != 'c' && plane->pattern.path == NULL)
 		return (pattern.main_color);
 	diff = ft_fvector3_diff(hit.impact_point, hit.position);
-	if (plane->texture.image != NULL)
-		return (display_texture(plane, plane->texture, diff));
-	if ((int)((floorf(ft_fdot_product(diff, plane->right) * 0.05f))
+	if (pattern.id == 'c'
+		&& (int)((floorf(ft_fdot_product(diff, plane->right) * 0.05f))
 		+ (floorf(ft_fdot_product(diff, plane->up) * 0.05f))) % 2 == 0)
 		return (pattern.secondary_color);
+	if (plane->pattern.path != NULL)
+		return (display_texture(plane, plane->pattern.texture, diff));
 	return (pattern.main_color);
 }
 
-static inline t_rgb	display_texture(t_plane *plane, t_texture texture,
+static inline t_rgb	display_texture(t_plane *plane, t_mlx_image texture,
 	t_fvector3 diff)
 {
 	float	size;
@@ -86,7 +91,7 @@ static inline t_rgb	display_texture(t_plane *plane, t_texture texture,
 		* ((float)texture.width / (float)texture.height);
 	u -= floorf(u);
 	v -= floorf(v);
-	return (texture_pixel_to_rgb(&texture,
+	return (mlx_pixel_to_rgb(texture,
 			(int)(u * texture.width) % texture.width,
 		(int)((1.0f - v) * texture.height) % texture.height));
 }

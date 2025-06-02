@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   texture.c                                          :+:      :+:    :+:   */
+/*   mlx_pixel_to_rgb.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,17 +11,11 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include "errors.h"
 
-t_texture	init_texture(char *pathname)
+t_rgb	mlx_pixel_to_rgb(t_mlx_image image, int x, int y)
 {
-	t_texture	tex;
+	unsigned int	pixel;
 
-	tex.image = mlx_xpm_file_to_image(minirt()->mlx->mlx_ptr, pathname,
-			&tex.width, &tex.height);
-	if (!tex.image)
-		return ((t_texture){NULL, NULL, 0, 0, 0, 0, 0, 0});
-	tex.data = mlx_get_data_addr(tex.image, &tex.bpp, &tex.ll, &tex.endian);
-	tex.cl = tex.bpp / 8;
-	return (tex);
+	pixel = *((unsigned int *)(image.data + (y * image.ll + x * image.cl)));
+	return ((t_rgb){(pixel >> 16) & 0xFF, (pixel >> 8) & 0xFF, pixel & 0xFF});
 }

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 12:46:20 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 21:54:17 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 12:03:22 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,29 @@ int	is_inside_cone(t_object *object, t_fvector3 point)
 	if (ft_fhorizontal_magnitude(local_point) <= radius_at_y * radius_at_y)
 		return (1);
 	return (0);
+}
+
+t_object	*duplicate_cone(t_object *object)
+{
+	t_cone	*cone;
+	t_cone	*new;
+
+	cone = (t_cone *)object;
+	new = malloc(sizeof(t_cone));
+	if (!new)
+		return (NULL);
+	new->id = CONE_ID;
+	new->position = cone->position;
+	new->normal = cone->normal;
+	new->right = cone->right;
+	new->up = cone->up;
+	new->pattern = cone->pattern;
+	new->base_diameter = cone->base_diameter;
+	new->infinite = cone->infinite;
+	new->height = cone->height;
+	new->k = cone->k;
+	new->k2 = cone->k2;
+	new->methods = cone->methods;
+	new->selected = 0;
+	return ((t_object *)new);
 }

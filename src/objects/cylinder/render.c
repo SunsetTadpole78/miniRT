@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/31 21:10:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 03:44:55 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 #include "errors.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline t_rgb		get_base_color(t_cylinder *cy, t_fvector3 impact_point,
-							t_pattern pattern);
-static inline t_rgb		display_texture(t_texture texture, t_cylinder *cy,
-							t_fvector3 diff,
-							float h);
+static inline t_rgb	get_base_color(t_cylinder *cy, t_fvector3 impact_point,
+						t_pattern pattern);
+static inline t_rgb	display_texture(t_mlx_image texture, t_cylinder *cy,
+						t_fvector3 diff,
+						float h);
 /* -------------------------------------------------------------------------- */
 
 void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
@@ -36,10 +36,11 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	inside = init_cylinder(ray, &hit, cylinder, dist);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(cylinder, hit.impact_point, cylinder->pattern));
-	if (!inside)
+	if (!inside && cylinder->pattern.mattifying != 0.0f)
 	{
 		reflect_ray = *ray;
-		specular_reflection(&reflect_ray, &hit, cylinder->pattern.smoothness);
+		specular_reflection(&reflect_ray, &hit,
+			cylinder->pattern.smoothness_factor);
 		ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
 					depth + 1), cylinder->pattern.mattifying);
 	}
@@ -56,24 +57,27 @@ static inline t_rgb	get_base_color(t_cylinder *cy, t_fvector3 impact_point,
 	float		h;
 	float		angle;
 
-	if (pattern.id != 'c' && cy->texture.image == NULL)
+	if (pattern.id != 'c' && cy->pattern.path == NULL)
 		return (pattern.main_color);
 	diff = ft_fvector3_diff(impact_point, cy->position);
 	h = ft_fdot_product(diff, cy->normal);
-	if (cy->texture.image != NULL)
-		return (display_texture(cy->texture, cy, diff, h));
-	proj = ft_fvector3_diff(diff, ft_fvector3_scale(cy->normal, h));
-	angle = atan2f(ft_fdot_product(proj, cy->up),
-			ft_fdot_product(proj, cy->right));
-	if (angle < 0.0f)
-		angle += 2.0f * M_PI;
-	if ((int)(floor(angle * 3.0f + EPSILON)
-		+ floor((h + cy->half_height) * 0.3f + EPSILON)) % 2 == 0)
-		return (pattern.secondary_color);
+	if (pattern.id == 'c')
+	{
+		proj = ft_fvector3_diff(diff, ft_fvector3_scale(cy->normal, h));
+		angle = atan2f(ft_fdot_product(proj, cy->up),
+				ft_fdot_product(proj, cy->right));
+		if (angle < 0.0f)
+			angle += 2.0f * M_PI;
+		if ((int)(floor(angle * 3.0f + EPSILON)
+			+ floor((h + cy->half_height) * 0.3f + EPSILON)) % 2 == 0)
+			return (pattern.secondary_color);
+	}
+	if (cy->pattern.path != NULL)
+		return (display_texture(cy->pattern.texture, cy, diff, h));
 	return (pattern.main_color);
 }
 
-static inline t_rgb	display_texture(t_texture texture, t_cylinder *cy,
+static inline t_rgb	display_texture(t_mlx_image texture, t_cylinder *cy,
 	t_fvector3 diff, float h)
 {
 	float		u;
@@ -98,7 +102,7 @@ static inline t_rgb	display_texture(t_texture texture, t_cylinder *cy,
 	}
 	u -= floorf(u);
 	v -= floorf(v);
-	return (texture_pixel_to_rgb(&texture,
+	return (mlx_pixel_to_rgb(texture,
 			(int)(u * texture.width) % texture.width,
 		(int)(v * texture.height) % texture.height));
 }

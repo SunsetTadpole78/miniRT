@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 00:20:45 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/31 21:10:16 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 03:44:42 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline t_rgb	get_base_color(t_cone *co, t_fvector3 impact_point,
 						t_pattern pattern);
-static inline t_rgb	display_texture(t_texture texture, t_cone *cone,
-						t_fvector3 diff, float h);
+static inline t_rgb	display_texture(t_mlx_image texture, t_cone *cone,
+						t_fvector3 diff,
+						float h);
 /* -------------------------------------------------------------------------- */
 
 void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
@@ -34,10 +35,11 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	inside = init_cone(ray, &hit, cone, dist);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(cone, hit.impact_point, cone->pattern));
-	if (!inside)
+	if (!inside && cone->pattern.mattifying != 0.0f)
 	{
 		reflect_ray = *ray;
-		specular_reflection(&reflect_ray, &hit, cone->pattern.smoothness);
+		specular_reflection(&reflect_ray, &hit,
+			cone->pattern.smoothness_factor);
 		ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
 					depth + 1), cone->pattern.mattifying);
 	}
@@ -54,29 +56,29 @@ static inline t_rgb	get_base_color(t_cone *cone, t_fvector3 impact_point,
 	float		angle;
 	float		h;
 
-	if (pattern.id != 'c' && cone->texture.image == NULL)
+	if (pattern.id != 'c' && cone->pattern.path == NULL)
 		return (pattern.main_color);
 	diff = ft_fvector3_diff(impact_point, cone->position);
-	if (cone->texture.image != NULL)
+	if (pattern.id == 'c')
 	{
-		h = ft_fdot_product(diff, cone->normal);
-		return (display_texture(cone->texture, cone, diff, h));
+		local = (t_fvector3){ft_fdot_product(diff, cone->right),
+			ft_fdot_product(diff, ft_fnormalize(cone->normal)),
+			ft_fdot_product(diff, cone->up)
+		};
+		angle = atan2f(local.z, local.x);
+		if (angle < 0.0f)
+			angle += 2.0f * M_PI;
+		if ((int)((floor(angle * 3.0f + EPSILON))
+			+ (floor(local.y * 0.3f + EPSILON))) % 2 == 0)
+			return (pattern.secondary_color);
 	}
-	local = (t_fvector3){
-		ft_fdot_product(diff, cone->right),
-		ft_fdot_product(diff, ft_fnormalize(cone->normal)),
-		ft_fdot_product(diff, cone->up)
-	};
-	angle = atan2f(local.z, local.x);
-	if (angle < 0.0f)
-		angle += 2.0f * M_PI;
-	if (((int)(floor(angle * 3.0f + EPSILON))
-		+ (int)(floor(local.y * 0.3f + EPSILON))) % 2 == 0)
-		return (pattern.secondary_color);
+	h = 0.0f;
+	if (cone->pattern.path != NULL)
+		return (display_texture(cone->pattern.texture, cone, diff, h));
 	return (pattern.main_color);
 }
 
-static inline t_rgb	display_texture(t_texture texture, t_cone *cone,
+static inline t_rgb	display_texture(t_mlx_image texture, t_cone *cone,
 	t_fvector3 diff, float h)
 {
 	float		u;
@@ -91,6 +93,7 @@ static inline t_rgb	display_texture(t_texture texture, t_cone *cone,
 	}
 	else
 	{
+		h = ft_fdot_product(diff, cone->normal);
 		proj = ft_fvector3_diff(diff, ft_fvector3_scale(cone->normal, h));
 		angle = atan2f(ft_fdot_product(proj, cone->up),
 				ft_fdot_product(proj, cone->right));
@@ -101,7 +104,6 @@ static inline t_rgb	display_texture(t_texture texture, t_cone *cone,
 	}
 	u -= floorf(u);
 	v -= floorf(v);
-	return (texture_pixel_to_rgb(&texture,
-			(int)(u * texture.width) % texture.width,
+	return (mlx_pixel_to_rgb(texture, (int)(u * texture.width) % texture.width,
 		(int)(v * texture.height) % texture.height));
 }

@@ -25,7 +25,9 @@ FILES =		destructor.c				\
 		mlx/listeners/click.c			\
 		mlx/listeners/expose.c			\
 		mlx/listeners/press_key.c		\
+		mlx/listeners/release_key.c		\
 		mlx/mlx.c				\
+		mlx/mlx_pixel_to_rgb.c			\
 		objects/ambiant.c			\
 		objects/camera/camera.c			\
 		objects/camera/keys.c			\
@@ -42,28 +44,31 @@ FILES =		destructor.c				\
 		objects/cylinder/utils.c		\
 		objects/light/light.c			\
 		objects/light/keys.c			\
+		objects/light/utils.c			\
 		objects/plane/keys.c			\
 		objects/plane/plane.c			\
 		objects/plane/render.c			\
 		objects/plane/intersect.c		\
+		objects/plane/utils.c			\
 		objects/rotations.c			\
 		objects/sphere/sphere.c			\
 		objects/sphere/render.c			\
 		objects/sphere/intersect.c		\
 		objects/sphere/keys.c			\
+		objects/sphere/utils.c			\
 		objects/cap.c				\
 		objects/complex.c			\
 		objects/factory.c			\
-		objects/texture.c			\
-		objects/texture_pixel_to_rgb.c		\
 		objects/types_factory.c			\
-		parsing/elements.c			\
+		parsing/elements/default.c		\
+		parsing/elements/extra.c		\
 		parsing/parser.c			\
 		parsing/utils.c				\
 		render/blender.c			\
 		render/lights.c				\
 		render/render.c				\
 		render/specular_reflection.c		\
+		render/tracer.c				\
 
 ifeq ($(shell uname), Darwin)
 FILES += mlx/opengl.c

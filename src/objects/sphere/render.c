@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/05/30 14:28:18 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 03:45:30 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline t_rgb	get_base_color(t_fvector3 normal, t_pattern pattern,
 						t_sphere *sphere);
-static inline t_rgb	display_texture(t_texture texture, t_fvector3 normal);
+static inline t_rgb	display_texture(t_mlx_image texture, float u, float v);
 /* -------------------------------------------------------------------------- */
 
 void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
@@ -34,10 +34,11 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	inside = init_sphere(ray, &hit, sphere, dist);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(hit.normal, sphere->pattern, sphere));
-	if (!inside)
+	if (!inside && sphere->pattern.mattifying != 0.0f)
 	{
 		reflect_ray = *ray;
-		specular_reflection(&reflect_ray, &hit, sphere->pattern.smoothness);
+		specular_reflection(&reflect_ray, &hit,
+			sphere->pattern.smoothness_factor);
 		ray->color = ft_rgb_lerp(ray->color, ray_tracer(mrt, &reflect_ray,
 					depth + 1), sphere->pattern.mattifying);
 	}
@@ -49,25 +50,24 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 static inline t_rgb	get_base_color(t_fvector3 normal, t_pattern pattern,
 	t_sphere *sphere)
 {
-	if (pattern.id != 'c' && sphere->texture.image == NULL)
-		return (pattern.main_color);
-	if (sphere->texture.image != NULL)
-		return (display_texture(sphere->texture, normal));
-	if ((int)((floorf((0.5f + atan2f(normal.z, normal.x)
-					/ (2.0f * M_PI)) * 10.0f))
-		+ (floorf((0.5f - asinf(normal.y) / M_PI) * 10.0f))) % 2 == 0)
-		return (pattern.secondary_color);
-	return (pattern.main_color);
-}
-
-static inline t_rgb	display_texture(t_texture texture, t_fvector3 normal)
-{
 	float	u;
 	float	v;
 
+	if (pattern.id != 'c' && sphere->pattern.path == NULL)
+		return (pattern.main_color);
 	u = 0.5f + atan2f(normal.z, normal.x) / (2.0f * M_PI);
 	v = 0.5f - asinf(normal.y) / M_PI;
-	return (texture_pixel_to_rgb(&texture,
+	if (pattern.id == 'c'
+		&& (int)((floorf(u * 10.0f)) + (floorf(v * 10.0f))) % 2 == 0)
+		return (pattern.secondary_color);
+	if (sphere->pattern.path != NULL)
+		return (display_texture(sphere->pattern.texture, u, v));
+	return (pattern.main_color);
+}
+
+static inline t_rgb	display_texture(t_mlx_image texture, float u, float v)
+{
+	return (mlx_pixel_to_rgb(texture,
 			(int)(u * texture.width) % texture.width,
 		(int)(v * texture.height) % texture.height));
 }

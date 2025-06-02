@@ -6,14 +6,14 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 18:40:55 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 01:54:04 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 /* -------------------------------- PROTOTYPE ------------------------------- */
-static void	free_objects(t_object *objects, void *mlx_ptr);
+static void	free_objects(t_object *objects);
 static void	free_types(t_type *types);
 /* -------------------------------------------------------------------------- */
 
@@ -23,25 +23,24 @@ void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 
 	mlx = mrt->mlx;
 	free_types(mrt->types);
-	free_objects(mrt->objects, mlx->mlx_ptr);
-	free_objects((t_object *)mrt->lights, mlx->mlx_ptr);
+	free_objects(mrt->objects);
+	free_objects((t_object *)mrt->lights);
 	free(mrt->ambiant);
 	free(mrt->camera);
 	if (destroy_mlx)
 		destruct_mlx(mlx);
 	free(mlx);
+	free(mrt->threads_datas);
 	free(mrt);
 }
 
-static void	free_objects(t_object *objects, void *mlx_ptr)
+static void	free_objects(t_object *objects)
 {
 	t_object	*tmp;
 
 	while (objects)
 	{
 		tmp = objects->next;
-		if (objects->texture.image != NULL)
-			mlx_destroy_image(mlx_ptr, objects->texture.image);
 		free(objects);
 		objects = tmp;
 	}
