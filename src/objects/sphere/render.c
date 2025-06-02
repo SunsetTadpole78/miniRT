@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 03:19:13 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 03:45:30 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	inside = init_sphere(ray, &hit, sphere, dist);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(hit.normal, sphere->pattern));
-	if (!inside)
+	if (!inside && sphere->pattern.mattifying != 0.0f)
 	{
 		reflect_ray = *ray;
 		specular_reflection(&reflect_ray, &hit,
