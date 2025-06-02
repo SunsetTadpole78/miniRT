@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 01:38:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 01:38:53 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 18:52:32 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ t_fvector3	primary_ray(t_camera *cam, t_vector2 pos, float ratio)
 t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 {
 	t_object	*cur;
-	void		(*render)(t_minirt *, t_ray *, t_object *, int);
+	float			(*intersect)(t_ray *, t_object *, float);
 	t_light		*light;
+	float		dist;
 
 	if (depth > MAX_DEPTH)
 		return (ray->color);
@@ -42,13 +43,22 @@ t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 	cur = mrt->objects;
 	while (cur)
 	{
-		render = cur->methods->render;
-		if (render)
-			render(mrt, ray, cur, depth);
+		intersect = cur->methods->intersect;
+		if (intersect)
+		{
+			dist = intersect(ray, cur, 1.0f);
+			if (dist > 0 && dist <= ray->dist)
+			{
+				ray->object = cur;
+				ray->dist = dist;
+			}
+		}
 		cur = cur->next;
 	}
 	if (ray->dist >= 3.4E+37)
 		ray->color = (t_rgb){0, 0, 0};
+	else
+		ray->object->methods->apply_lights(mrt, ray, ray->object, 1.0f);
 	light = mrt->lights;
 	while (light)
 	{

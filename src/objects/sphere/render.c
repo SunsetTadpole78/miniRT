@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 03:45:30 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 18:44:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,15 @@
 static inline t_rgb	get_base_color(t_fvector3 normal, t_pattern pattern);
 /* -------------------------------------------------------------------------- */
 
-void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
+void	apply_lights_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 {
-	t_ray		reflect_ray;
-	float		dist;
 	t_sphere	*sphere;
 	t_hit_data	hit;
 	int			inside;
+	t_ray		reflect_ray;
 
-	dist = intersect_sphere(ray, object, 1.0f);
-	if (dist <= 0 || dist > ray->dist)
-		return ;
 	sphere = (t_sphere *)object;
-	inside = init_sphere(ray, &hit, sphere, dist);
+	inside = init_sphere(ray, &hit, sphere);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(hit.normal, sphere->pattern));
 	if (!inside && sphere->pattern.mattifying != 0.0f)
@@ -42,7 +38,6 @@ void	render_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	}
 	if (sphere->selected)
 		apply_selection_effect(&ray->color);
-	ray->dist = dist;
 }
 
 static inline t_rgb	get_base_color(t_fvector3 normal, t_pattern pattern)
