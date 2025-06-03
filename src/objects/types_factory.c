@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:11:12 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 16:31:57 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 03:23:57 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ int	exist_type(char *id)
 	return (0);
 }
 
-t_methods	*init_methods(
-		void (*apply_lights)(t_minirt *, t_ray *, t_object *, int),
+t_methods	*init_methods(void (*apply_lights)(t_minirt *, t_ray *,
+			t_object *, int),
 		int (*is_inside)(t_object *, t_fvector3),
 		void (*on_press_key)(t_object *, int, t_camera *),
 		t_object *(*duplicate)(t_object *))

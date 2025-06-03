@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 13:29:31 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 03:33:54 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	on_press_key(int keycode, t_minirt *mrt)
 	else if ((keycode == OGLK_DELETE || keycode == XK_DELETE) && mrt->selected)
 		delete_object(mrt, mrt->selected);
 	else if (!mrt->selected)
-		on_press_key_camera(mrt->camera, keycode);
+		on_press_key_camera(mrt, mrt->camera, keycode);
 	else
 		objects_key(mrt, keycode);
 	mrt->mlx->count = 0;

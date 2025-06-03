@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 03:11:23 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 03:29:50 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,7 +308,7 @@ void		*parse_ambiant(char **values);
 
 t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
 void		*parse_camera(char **values);
-void		on_press_key_camera(t_camera *camera, int keycode);
+void		on_press_key_camera(t_minirt *mrt, t_camera *camera, int keycode);
 
 t_cone		*cone(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_pattern pattern);
