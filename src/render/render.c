@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/03 07:22:29 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 07:44:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline void	*render_part(void *value);
 static inline void	init_threads(t_minirt *mrt);
-static inline void	fill_image(t_thread_data *data, t_ray ray,
+static inline void	fill_image(t_thread_data *data, t_ray *ray,
 						t_minirt *mrt);
 /* -------------------------------------------------------------------------- */
 
@@ -28,7 +28,7 @@ void	render_scene(t_minirt *mrt)
 	mrt->workers = mrt->cores;
 	init_threads(mrt);
 	data = &mrt->threads_datas[mrt->cores - 1];
-	fill_image(data, ray, mrt);
+	fill_image(data, &ray, mrt);
 	while (is_working(mrt))
 	{
 		usleep(1);
@@ -54,7 +54,7 @@ static inline void	*render_part(void *value)
 			usleep(1);
 			continue ;
 		}
-		fill_image(data, ray, mrt);
+		fill_image(data, &ray, mrt);
 	}
 	return (0);
 }
@@ -82,20 +82,20 @@ static inline void	init_threads(t_minirt *mrt)
 	}
 }
 
-static inline void	fill_image(t_thread_data *data, t_ray ray, t_minirt *mrt)
+static inline void	fill_image(t_thread_data *data, t_ray *ray, t_minirt *mrt)
 {
 	t_vector2		pos;
 
-	ray.origin = data->camera->position;
+	ray->origin = data->camera->position;
 	pos.y = data->start;
 	while (pos.y < data->end)
 	{
 		pos.x = 0;
 		while (pos.x < WIN_WIDTH)
 		{
-			ray.direction = primary_ray(data->camera, pos, data->ratio);
-			ray_tracer(mrt, &ray, 0);
-			blend_colors(mrt, &ray, pos);
+			ray->direction = primary_ray(data->camera, pos, data->ratio);
+			ray_tracer(mrt, ray, 0);
+			blend_colors(mrt, ray, pos);
 			pos.x++;
 		}
 		pos.y++;

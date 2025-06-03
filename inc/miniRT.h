@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 07:23:57 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 07:43:52 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,8 +306,8 @@ void		specular_reflection(t_ray *ray, t_hit_data *hit,
 				float smoothness_factor);
 
 void		on_finish(t_minirt *mrt);
-int		is_update(t_minirt *mrt, t_thread_data *data);
-int		is_working(t_minirt *mrt);
+int			is_update(t_minirt *mrt, t_thread_data *data);
+int			is_working(t_minirt *mrt);
 
 t_fvector3	rotate_object(t_fvector3 v, t_fvector3 axis, float theta);
 
