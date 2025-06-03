@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 08:27:48 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 08:35:19 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static void	free_types(t_type *type);
 void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 {
 	t_mlx		*mlx;
-	int			i;
 
 	mlx = mrt->mlx;
 	free_types(mrt->types);
@@ -30,17 +29,13 @@ void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 	free(mrt->camera);
 	free(mrt->clipboard);
 	if (destroy_mlx)
-		destruct_mlx(mlx);
-	stop_threads(mrt);
-	i = 0;
-	while (i < (mrt->cores - 1))
 	{
-		pthread_join(mrt->threads_datas[i].thread, NULL);
-		i++;
+		destruct_mlx(mlx);
+		stop_threads(mrt);
+		free(mrt->threads_datas);
+		pthread_mutex_destroy(&mrt->workers_mutex);
+		pthread_mutex_destroy(&mrt->update_mutex);
 	}
-	free(mrt->threads_datas);
-	pthread_mutex_destroy(&mrt->workers_mutex);
-	pthread_mutex_destroy(&mrt->update_mutex);
 	free(mlx);
 	free(mrt);
 }

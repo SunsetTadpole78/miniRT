@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 07:20:49 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 08:28:21 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 08:35:56 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,15 @@ int	is_stop(t_minirt *mrt)
 
 void	stop_threads(t_minirt *mrt)
 {
+	int	i;
+
 	pthread_mutex_lock(&mrt->workers_mutex);
 	mrt->stop = 1;
 	pthread_mutex_unlock(&mrt->workers_mutex);
+	i = 0;
+	while (i < (mrt->cores - 1))
+	{
+		pthread_join(mrt->threads_datas[i].thread, NULL);
+		i++;
+	}
 }
