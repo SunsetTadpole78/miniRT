@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 13:24:48 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 08:35:19 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,14 @@ void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 	free(mrt->camera);
 	free(mrt->clipboard);
 	if (destroy_mlx)
+	{
 		destruct_mlx(mlx);
+		stop_threads(mrt);
+		free(mrt->threads_datas);
+		pthread_mutex_destroy(&mrt->workers_mutex);
+		pthread_mutex_destroy(&mrt->update_mutex);
+	}
 	free(mlx);
-	free(mrt->threads_datas);
 	free(mrt);
 }
 

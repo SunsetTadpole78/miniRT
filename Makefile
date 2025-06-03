@@ -68,6 +68,7 @@ FILES =		destructor.c				\
 		render/lights.c				\
 		render/render.c				\
 		render/specular_reflection.c		\
+		render/state.c				\
 		render/tracer.c				\
 
 ifeq ($(shell uname), Darwin)
