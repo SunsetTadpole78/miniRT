@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 15:39:44 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 07:23:57 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,11 +240,14 @@ typedef struct s_methods
 typedef struct s_thread_data
 {
 	t_minirt	*mrt;
+	int			id;
 	int			start;
 	int			end;
 	t_camera	*camera;
 	pthread_t	thread;
 	float		ratio;
+	int			update;
+	int			init;
 }	t_thread_data;
 
 typedef struct s_minirt
@@ -258,6 +261,9 @@ typedef struct s_minirt
 	int				cores;
 	int				pixels_per_thread;
 	t_thread_data	*threads_datas;
+	int				workers;
+	pthread_mutex_t	workers_mutex;
+	pthread_mutex_t	update_mutex;
 	t_object		*selected;
 	int				ctrl_pressed;
 	t_object		*clipboard;
@@ -298,6 +304,10 @@ t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 void		apply_selection_effect(t_rgb *color);
 void		specular_reflection(t_ray *ray, t_hit_data *hit,
 				float smoothness_factor);
+
+void		on_finish(t_minirt *mrt);
+int		is_update(t_minirt *mrt, t_thread_data *data);
+int		is_working(t_minirt *mrt);
 
 t_fvector3	rotate_object(t_fvector3 v, t_fvector3 axis, float theta);
 

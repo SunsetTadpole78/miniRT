@@ -1,0 +1,116 @@
+mlx/listeners/release_key.c:		mrt->ctrl_pressed--;
+mlx/listeners/release_key.c:		if (mrt->ctrl_pressed < 0)
+mlx/listeners/release_key.c:			mrt->ctrl_pressed = 0;
+mlx/listeners/press_key.c:		return (refresh_key(mrt->mlx));
+mlx/listeners/press_key.c:	else if ((keycode == OGLK_C || keycode == XK_C) && mrt->selected)
+mlx/listeners/press_key.c:		mrt->ctrl_pressed++;
+mlx/listeners/press_key.c:	else if ((keycode == OGLK_V || keycode == XK_V) && mrt->ctrl_pressed != 0)
+mlx/listeners/press_key.c:	else if ((keycode == OGLK_DELETE || keycode == XK_DELETE) && mrt->selected)
+mlx/listeners/press_key.c:		delete_object(mrt, mrt->selected);
+mlx/listeners/press_key.c:	else if (!mrt->selected)
+mlx/listeners/press_key.c:		on_press_key_camera(mrt->camera, keycode);
+mlx/listeners/press_key.c:	mrt->mlx->count = 0;
+mlx/listeners/press_key.c:	mrt->mlx->update = 1;
+mlx/listeners/press_key.c:	if (mrt->ctrl_pressed != 0)
+mlx/listeners/press_key.c:		free(mrt->clipboard);
+mlx/listeners/press_key.c:		mrt->clipboard = mrt->selected->methods->duplicate(
+mlx/listeners/press_key.c:				mrt->selected
+mlx/listeners/press_key.c:		mrt->selected->selected = 0;
+mlx/listeners/press_key.c:		mrt->selected = NULL;
+mlx/listeners/press_key.c:	if (!mrt->clipboard)
+mlx/listeners/press_key.c:	object = (t_normal_object *)(mrt->clipboard->methods->duplicate(
+mlx/listeners/press_key.c:				mrt->clipboard
+mlx/listeners/press_key.c:	object->next = mrt->objects;
+mlx/listeners/press_key.c:	mrt->objects = (t_object *)object;
+mlx/listeners/press_key.c:	if (mrt->selected)
+mlx/listeners/press_key.c:		mrt->selected->selected = 0;
+mlx/listeners/press_key.c:	mrt->selected = mrt->objects;
+mlx/listeners/press_key.c:	on_press_key = mrt->selected->methods->on_press_key;
+mlx/listeners/press_key.c:		on_press_key(mrt->selected, keycode, mrt->camera);
+mlx/listeners/click.c:	cur = mrt->objects;
+mlx/listeners/click.c:	cur = (t_object *)mrt->lights;
+mlx/listeners/click.c:	camera = mrt->camera;
+mlx/listeners/click.c:	if (mrt->selected)
+mlx/listeners/click.c:		mrt->selected->selected = 0;
+mlx/listeners/click.c:	mrt->selected = NULL;
+mlx/listeners/click.c:	mrt->mlx->update = 1;
+mlx/listeners/click.c:	mrt->mlx->count = 0;
+mlx/listeners/click.c:	if (mrt->selected)
+mlx/listeners/click.c:		mrt->selected->selected = 0;
+mlx/listeners/click.c:	mrt->selected = object;
+mlx/listeners/click.c:	mrt->selected->selected = 1;
+mlx/mlx.c:	mlx = mrt->mlx;
+mlx/mlx.c:	if (mrt->mlx->update != 0)
+mlx/mlx.c:		if (mrt->mlx->update != 2)
+mlx/mlx.c:			mrt->mlx->update = 0;
+render/lights.c:	color = mrt->ambiant->gamma_color;
+render/lights.c:	light = mrt->lights;
+render/lights.c:	cur = mrt->objects;
+render/lights.c:	position = mrt->camera->position;
+render/tracer.c:	cur = mrt->objects;
+render/tracer.c:	light = mrt->lights;
+render/blender.c:	mlx = mrt->mlx;
+render/render.c:	pthread_mutex_lock(&mrt->display_mutex);
+render/render.c:	pthread_mutex_unlock(&mrt->display_mutex);
+render/render.c:	pthread_mutex_lock(&mrt->workers_mutex);
+render/render.c:	mrt->workers--;
+render/render.c:	pthread_mutex_unlock(&mrt->workers_mutex);
+render/render.c:	cores = mrt->cores;
+render/render.c:	datas = mrt->threads_datas;
+render/render.c:	cores = mrt->cores;
+render/render.c:	datas = mrt->threads_datas;
+render/render.c:	mlx = mrt->mlx;
+render/render.c:	mrt->workers = mrt->cores;
+render/render.c:	data = &mrt->threads_datas[mrt->cores - 1];
+render/render.c:	while (mrt->workers)
+render/render.c:	mlx = mrt->mlx;
+destructor.c:	mlx = mrt->mlx;
+destructor.c:	free_types(mrt->types);
+destructor.c:	free_objects(mrt->objects);
+destructor.c:	free_objects((t_object *)mrt->lights);
+destructor.c:	free(mrt->ambiant);
+destructor.c:	free(mrt->camera);
+destructor.c:	free(mrt->clipboard);
+destructor.c:	free(mrt->threads_datas);
+main.c:	mlx = init_mlx(mrt->mlx);
+initializer.c:		mrt->types = NULL;
+initializer.c:		mrt->objects = NULL;
+initializer.c:		mrt->lights = NULL;
+initializer.c:		mrt->ambiant = NULL;
+initializer.c:		mrt->camera = NULL;
+initializer.c:		mrt->mlx = malloc(sizeof(t_mlx));
+initializer.c:		if (!mrt->mlx)
+initializer.c:		mrt->selected = NULL;
+initializer.c:		mrt->ctrl_pressed = 0;
+initializer.c:		mrt->clipboard = NULL;
+initializer.c:		mrt->workers = 0;
+initializer.c:		pthread_mutex_init(&mrt->display_mutex, NULL);
+initializer.c:		pthread_mutex_init(&mrt->workers_mutex, NULL);
+initializer.c:	mrt->cores = sysconf(_SC_NPROCESSORS_ONLN);
+initializer.c:	if (mrt->cores == -1)
+initializer.c:	if (!mrt->camera)
+initializer.c:	if (!mrt->ambiant)
+initializer.c:		mrt->ambiant = ambiant(0, pattern);
+initializer.c:	datas = malloc(sizeof(t_thread_data) * mrt->cores);
+initializer.c:	cores = mrt->cores;
+initializer.c:	mrt->pixels_per_thread = (WIN_WIDTH * WIN_HEIGHT) / cores;
+initializer.c:	mrt->threads_datas = datas;
+initializer.c:	cur = mrt->objects;
+initializer.c:	ptr = mrt->mlx->mlx_ptr;
+initializer.c:	pixels_per_thread = mrt->pixels_per_thread;
+initializer.c:	data->camera = data->mrt->camera;
+objects/factory.c:	object->next = mrt->objects;
+objects/factory.c:	mrt->objects = object;
+objects/factory.c:	light->next = (t_object *)mrt->lights;
+objects/factory.c:	mrt->lights = light;
+objects/factory.c:	free(mrt->ambiant);
+objects/factory.c:	mrt->ambiant = ambiant;
+objects/factory.c:	free(mrt->camera);
+objects/factory.c:	mrt->camera = camera;
+objects/delete.c:	cur = mrt->objects;
+objects/delete.c:				mrt->objects = cur->next;
+objects/delete.c:	mrt->selected = NULL;
+objects/delete.c:	cur = (t_object *)mrt->lights;
+objects/delete.c:				mrt->lights = (t_light *)cur->next;
+objects/types_factory.c:	type->next = mrt->types;
+objects/types_factory.c:	mrt->types = type;
