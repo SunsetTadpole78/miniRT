@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 07:48:01 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 08:28:55 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,6 +266,7 @@ typedef struct s_minirt
 	t_object		*selected;
 	int				ctrl_pressed;
 	t_object		*clipboard;
+	int				stop;
 }	t_minirt;
 
 typedef struct s_hit_data
@@ -307,6 +308,8 @@ void		specular_reflection(t_ray *ray, t_hit_data *hit,
 void		on_finish(t_minirt *mrt);
 int			is_update(t_minirt *mrt, t_thread_data *data);
 int			is_working(t_minirt *mrt);
+int			is_stop(t_minirt *mrt);
+void		stop_threads(t_minirt *mrt);
 
 t_fvector3	rotate_object(t_fvector3 v, t_fvector3 axis, float theta);
 

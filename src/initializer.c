@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 07:47:01 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 08:19:41 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ t_minirt	*minirt(void)
 		mrt->workers = 0;
 		pthread_mutex_init(&mrt->workers_mutex, NULL);
 		pthread_mutex_init(&mrt->update_mutex, NULL);
+		mrt->stop = 0;
 		register_types();
 	}
 	return (mrt);

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 07:20:49 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 07:21:35 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 08:28:21 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,21 @@ int	is_working(t_minirt *mrt)
 	v = mrt->workers;
 	pthread_mutex_unlock(&mrt->workers_mutex);
 	return (v);
+}
+
+int	is_stop(t_minirt *mrt)
+{
+	int	v;
+
+	pthread_mutex_lock(&mrt->workers_mutex);
+	v = mrt->stop;
+	pthread_mutex_unlock(&mrt->workers_mutex);
+	return (v);
+}
+
+void	stop_threads(t_minirt *mrt)
+{
+	pthread_mutex_lock(&mrt->workers_mutex);
+	mrt->stop = 1;
+	pthread_mutex_unlock(&mrt->workers_mutex);
 }

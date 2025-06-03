@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/03 07:44:12 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 08:23:09 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ void	render_scene(t_minirt *mrt)
 	fill_image(data, &ray, mrt);
 	while (is_working(mrt))
 	{
-		usleep(1);
+		if (is_stop(mrt))
+			return ;
+		usleep(1000);
 		continue ;
 	}
 	mlx = mrt->mlx;
@@ -51,12 +53,14 @@ static inline void	*render_part(void *value)
 	{
 		while (!is_update(mrt, data))
 		{
-			usleep(1);
+			if (is_stop(mrt))
+				return (NULL);
+			usleep(1000);
 			continue ;
 		}
 		fill_image(data, &ray, mrt);
 	}
-	return (0);
+	return (NULL);
 }
 
 static inline void	init_threads(t_minirt *mrt)
