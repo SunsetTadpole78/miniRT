@@ -101,8 +101,8 @@ static inline t_rgb	display_texture(t_mlx_image texture, t_cone *cone,
 		u = angle / (2.0f * M_PI);
 		v = h / cone->height;
 	}
-	u -= floorf(u);
-	v -= floorf(v);
+	u -= (int)u;
+	v -= (int)v;
 	return (mlx_pixel_to_rgb(texture,
 			(int)(u * texture.width) % texture.width,
 		(int)(v * texture.height) % texture.height));

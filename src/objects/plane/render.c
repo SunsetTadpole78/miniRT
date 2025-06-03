@@ -89,8 +89,8 @@ static inline t_rgb	display_texture(t_plane *plane, t_mlx_image texture,
 	u = ft_fdot_product(diff, plane->right) * size;
 	v = ft_fdot_product(diff, plane->up) * size
 		* texture.ratio;
-	u -= floorf(u);
-	v -= floorf(v);
+	u -= (int)u;
+	v -= (int)v;
 	return (mlx_pixel_to_rgb(texture,
 			(int)(u * texture.width) % texture.width,
 		(int)(v * texture.height) % texture.height));
