@@ -24,7 +24,7 @@ t_sphere	*sphere(t_fvector3 position, float diameter, t_pattern pattern)
 	sp->position = position;
 	sp->pattern = pattern;
 	sp->diameter = diameter;
-	sp->radius = diameter / 2.0f;
+	sp->radius = diameter * 0.5f;
 	sp->methods = get_methods_by_id(SPHERE_ID);
 	sp->selected = 0;
 	return (sp);

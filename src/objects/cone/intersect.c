@@ -36,7 +36,7 @@ float	intersect_cone(t_ray *ray, t_object *object, float amplifier)
 	ray->extra = 0;
 	if (cone->infinite || fabsf(d.y) < 1e-6f)
 		return (t.y);
-	t.x = intersect_cap(o, d, amplified.x / 2.0f, amplified.y);
+	t.x = intersect_cap(o, d, amplified.x * 0.5f, amplified.y);
 	ray->extra = t.x > EPSILON && (t.y < 0 || t.x < t.y);
 	if (ray->extra == 1)
 		return (t.x);

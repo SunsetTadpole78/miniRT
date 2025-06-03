@@ -66,14 +66,14 @@ static inline t_rgb	get_base_color(t_plane *plane, t_pattern pattern,
 {
 	t_fvector3	diff;
 
-	if (pattern.id != 'c' && pattern.path == NULL)
+	if (pattern.id != 'c' && !pattern.path)
 		return (pattern.main_color);
 	diff = ft_fvector3_diff(impact_point, plane->position);
 	if (pattern.id == 'c'
 		&& (int)((floorf(ft_fdot_product(diff, plane->right) * 0.05f))
-		+ (floorf(ft_fdot_product(diff, plane->up) * 0.05f))) % 2 == 0)
+		+ (floorf(ft_fdot_product(diff, plane->up) * 0.05f))) & 1)
 		return (pattern.secondary_color);
-	if (pattern.path != NULL)
+	if (pattern.path)
 		return (display_texture(plane, pattern.texture, diff));
 	return (pattern.main_color);
 }
@@ -88,7 +88,7 @@ static inline t_rgb	display_texture(t_plane *plane, t_mlx_image texture,
 	size = 0.05f;
 	u = ft_fdot_product(diff, plane->right) * size;
 	v = ft_fdot_product(diff, plane->up) * size
-		* ((float)texture.width / (float)texture.height);
+		* texture.ratio;
 	u -= floorf(u);
 	v -= floorf(v);
 	return (mlx_pixel_to_rgb(texture,

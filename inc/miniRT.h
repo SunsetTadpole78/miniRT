@@ -67,6 +67,7 @@ typedef struct s_mlx_image
 	int		endian;
 	int		height;
 	int		width;
+	float	ratio;
 }	t_mlx_image;
 
 typedef struct s_pattern

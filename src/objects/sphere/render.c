@@ -53,16 +53,16 @@ static inline t_rgb	get_base_color(t_pattern pattern, t_fvector3 normal,
 	float	u;
 	float	v;
 
-	if (pattern.id != 'c' && pattern.path == NULL)
+	if (pattern.id != 'c' && !pattern.path)
 		return (pattern.main_color);
 	if (inside)
 		normal = ft_fvector3_scale(normal, -1);
 	u = 0.5f + atan2f(normal.z, normal.x) / (2.0f * M_PI);
 	v = 0.5f - asinf(normal.y) / M_PI;
 	if (pattern.id == 'c'
-		&& (int)((floorf(u * 10.0f)) + (floorf(v * 10.0f))) % 2 == 0)
+		&& (int)((floorf(u * 10.0f)) + (floorf(v * 10.0f))) & 1)
 		return (pattern.secondary_color);
-	if (pattern.path != NULL)
+	if (pattern.path)
 		return (display_texture(pattern.texture, u, v));
 	return (pattern.main_color);
 }

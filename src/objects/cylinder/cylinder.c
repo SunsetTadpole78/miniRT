@@ -29,9 +29,9 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	cy->up = ft_fnormalize(ft_fcross_product(cy->right, cy->normal));
 	cy->pattern = pattern;
 	cy->diameter = size.x;
-	cy->radius = size.x / 2.0f;
+	cy->radius = size.x * 0.5f;
 	cy->height = size.y;
-	cy->half_height = size.y / 2.0f;
+	cy->half_height = size.y * 0.5f;
 	cy->infinite = size.y < 0.0f;
 	cy->methods = get_methods_by_id(CYLINDER_ID);
 	cy->selected = 0;

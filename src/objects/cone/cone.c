@@ -32,7 +32,7 @@ t_cone	*cone(t_fvector3 position, t_fvector3 normal, t_fvector2 size,
 	co->up = ft_fcross_product(co->normal, co->right);
 	co->pattern = pattern;
 	co->base_diameter = size.x;
-	co->radius = size.x / 2.0f;
+	co->radius = size.x * 0.5f;
 	co->infinite = size.y < 0.0f;
 	if (co->infinite)
 		size.y = size.x * 0.6f;
