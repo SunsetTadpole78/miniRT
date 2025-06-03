@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 07:43:52 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 07:48:01 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,6 @@ typedef struct s_minirt
 	t_camera		*camera;
 	t_mlx			*mlx;
 	int				cores;
-	int				pixels_per_thread;
 	t_thread_data	*threads_datas;
 	int				workers;
 	pthread_mutex_t	workers_mutex;

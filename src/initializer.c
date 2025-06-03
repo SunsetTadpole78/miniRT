@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 06:49:04 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 07:47:01 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int	check_env(t_minirt *mrt)
 	if (!datas)
 		return (0);
 	cores = mrt->cores;
-	mrt->pixels_per_thread = WIN_HEIGHT / cores;
 	i = -1;
 	while (++i < cores)
 		init_thread_data(&datas[i], cores, i, mrt);
