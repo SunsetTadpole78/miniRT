@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 18:46:11 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 00:28:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static inline t_rgb		get_base_color(t_cylinder *cy, t_fvector3 impact_point,
 							t_pattern pattern);
 /* -------------------------------------------------------------------------- */
 
-void	apply_lights_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
+void	apply_lights_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
+		int depth)
 {
 	t_cylinder	*cylinder;
 	t_hit_data	hit;

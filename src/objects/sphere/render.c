@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 18:44:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 02:47:42 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 static inline t_rgb	get_base_color(t_fvector3 normal, t_pattern pattern);
 /* -------------------------------------------------------------------------- */
 
-void	apply_lights_sphere(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
+void	apply_lights_sphere(t_minirt *mrt, t_ray *ray, t_object *object,
+		int depth)
 {
 	t_sphere	*sphere;
 	t_hit_data	hit;

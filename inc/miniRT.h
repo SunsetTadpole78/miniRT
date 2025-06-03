@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 00:26:37 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 03:11:23 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define QUADRATIC_ATTENUATION_COEF 0.004f
 # define RAD_ANGLE 0.785398f
 
-# define MAX_DEPTH 10
+# define MAX_DEPTH 100
 
 // Structures
 
@@ -374,7 +374,8 @@ int			register_type(char *id, void *(*parser)(char **),
 				float (*intersect)(t_ray *, t_object *, float),
 				t_methods *methods);
 int			exist_type(char *id);
-t_methods	*init_methods(void (*apply_lights)(t_minirt *, t_ray *, t_object *, int),
+t_methods	*init_methods(void (*apply_lights)(t_minirt *, t_ray *, t_object *,
+					int),
 				int (*is_inside)(t_object *, t_fvector3),
 				void (*on_press_key)(t_object *, int, t_camera *),
 				t_object *(*duplicate)(t_object *));
