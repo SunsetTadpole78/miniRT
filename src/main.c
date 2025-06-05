@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
+/*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:31:29 by lroussel          #+#    #+#             */
 /*   Updated: 2025/05/27 21:24:17 by lroussel         ###   ########.fr       */
@@ -31,6 +31,7 @@ int	main(int argc, char **argv)
 		return (4 + code);
 	}
 	mlx = init_mlx(mrt->mlx);
+	init_render(mrt);
 	render_scene(mrt);
 	handle_events(mrt);
 	mlx_loop_hook(mlx->mlx_ptr, loop_hook, mrt);
