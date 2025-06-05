@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 00:20:45 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 03:44:42 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:11:27 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ static inline t_rgb	display_texture(t_mlx_image texture, t_cone *cone,
 		u = angle / (2.0f * M_PI);
 		v = h / cone->height;
 	}
-	u -= (int)u;
-	v -= (int)v;
+	u -= floorf(u);
+	v -= floorf(v);
 	return (mlx_pixel_to_rgb(texture,
 			(int)(u * texture.width) % texture.width,
 		(int)(v * texture.height) % texture.height));

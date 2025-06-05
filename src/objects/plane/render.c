@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 11:08:27 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:04:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ static inline t_rgb	display_texture(t_plane *plane, t_mlx_image texture,
 	u = ft_fdot_product(diff, plane->right) * size;
 	v = ft_fdot_product(diff, plane->up) * size
 		* texture.ratio;
-	u -= (int)u;
-	v -= (int)v;
+	u -= floorf(u);
+	v -= floorf(v);
 	return (mlx_pixel_to_rgb(texture,
 			(int)(u * texture.width) % texture.width,
 		(int)(v * texture.height) % texture.height));

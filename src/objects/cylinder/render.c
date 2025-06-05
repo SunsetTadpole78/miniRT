@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 03:44:55 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:07:37 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,8 @@ static inline t_rgb	display_texture(t_mlx_image texture, t_cylinder *cy,
 		u = angle / (2.0f * M_PI);
 		v = (h + cy->half_height) / cy->height;
 	}
-	u -= (int)u;
-	v -= (int)v;
+	u -= floorf(u);
+	v -= floorf(v);
 	return (mlx_pixel_to_rgb(texture,
 			(int)(u * texture.width) % texture.width,
 		(int)(v * texture.height) % texture.height));
