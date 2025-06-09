@@ -6,11 +6,13 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 01:38:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 01:38:53 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 02:56:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
+
+static inline void	check_intersection(t_object *object, t_ray *ray);
 
 t_fvector3	primary_ray(t_camera *cam, t_vector2 pos, float ratio)
 {
@@ -33,7 +35,6 @@ t_fvector3	primary_ray(t_camera *cam, t_vector2 pos, float ratio)
 t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 {
 	t_object	*cur;
-	void		(*render)(t_minirt *, t_ray *, t_object *, int);
 	t_light		*light;
 
 	if (depth > MAX_DEPTH)
@@ -42,13 +43,13 @@ t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 	cur = mrt->objects;
 	while (cur)
 	{
-		render = cur->methods->render;
-		if (render)
-			render(mrt, ray, cur, depth);
+		check_intersection(cur, ray);
 		cur = cur->next;
 	}
 	if (ray->dist >= 3.4E+37)
 		ray->color = (t_rgb){0, 0, 0};
+	else
+		ray->object->methods->apply_lights(mrt, ray, ray->object, depth);
 	light = mrt->lights;
 	while (light)
 	{
@@ -57,4 +58,21 @@ t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 		light = (t_light *)light->next;
 	}
 	return (ray->color);
+}
+
+static inline void	check_intersection(t_object *object, t_ray *ray)
+{
+	float	(*intersect)(t_ray *, t_object *, float);
+	float	dist;
+
+	intersect = object->methods->intersect;
+	if (intersect)
+	{
+		dist = intersect(ray, object, 1.0f);
+		if (dist > 0 && dist <= ray->dist)
+		{
+			ray->object = object;
+			ray->dist = dist;
+		}
+	}
 }

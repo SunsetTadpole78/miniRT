@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 18:34:10 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 12:04:37 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:21:15 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ static inline t_fvector3	get_normal(int type, t_fvector3 impact_point,
 								t_cylinder *cylinder);
 /* -------------------------------------------------------------------------- */
 
-int	init_cylinder(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder, float dist)
+int	init_cylinder(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder)
 {
 	int	inside;
 
 	hit->object = (t_object *)cylinder;
 	hit->impact_point = ft_fvector3_sum(ray->origin,
-			ft_fvector3_scale(ray->direction, dist));
+			ft_fvector3_scale(ray->direction, ray->dist));
 	hit->normal = get_normal(ray->extra, hit->impact_point, cylinder);
 	hit->position = cylinder->position;
 	inside = is_inside_cylinder((t_object *)cylinder, ray->origin);

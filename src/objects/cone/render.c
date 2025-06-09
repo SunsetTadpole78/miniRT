@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 00:20:45 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 03:44:42 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 00:28:32 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,16 @@ static inline t_rgb	get_base_color(t_cone *co, t_fvector3 impact_point,
 						t_pattern pattern);
 /* -------------------------------------------------------------------------- */
 
-void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
+void	apply_lights_cone(t_minirt *mrt, t_ray *ray, t_object *object,
+		int depth)
 {
-	float		dist;
 	t_cone		*cone;
-	t_hit_data	hit;
 	int			inside;
+	t_hit_data	hit;
 	t_ray		reflect_ray;
 
-	dist = intersect_cone(ray, object, 1.0f);
-	if (dist < 0.0f || dist > ray->dist)
-		return ;
 	cone = (t_cone *)object;
-	inside = init_cone(ray, &hit, cone, dist);
+	inside = init_cone(ray, &hit, cone);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(cone, hit.impact_point, cone->pattern));
 	if (!inside && cone->pattern.mattifying != 0.0f)
@@ -42,7 +39,6 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	}
 	if (cone->selected)
 		apply_selection_effect(&ray->color);
-	ray->dist = dist;
 }
 
 static inline t_rgb	get_base_color(t_cone *cone, t_fvector3 impact_point,
