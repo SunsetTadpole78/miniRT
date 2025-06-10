@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 15:39:44 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 03:11:23 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define QUADRATIC_ATTENUATION_COEF 0.004f
 # define RAD_ANGLE 0.785398f
 
-# define MAX_DEPTH 10
+# define MAX_DEPTH 100
 
 // Structures
 
@@ -120,6 +120,7 @@ typedef struct s_ray
 	float		dist;
 	t_rgb		color;
 	int			extra;
+	t_object	*object;
 }	t_ray;
 
 typedef struct s_camera
@@ -232,8 +233,8 @@ typedef struct s_type
 typedef struct s_methods
 {
 	void		*(*parser)(char **);
-	void		(*render)(t_minirt *, t_ray *, t_object *, int);
 	float		(*intersect)(t_ray *, t_object *, float);
+	void		(*apply_lights)(t_minirt *, t_ray *, t_object *, int);
 	void		(*on_press_key)(t_object *, int, t_camera *);
 	int			(*is_inside)(t_object *, t_fvector3);
 	t_object	*(*duplicate)(t_object *);
@@ -316,11 +317,10 @@ void		on_press_key_camera(t_camera *camera, int keycode);
 t_cone		*cone(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_pattern pattern);
 void		*parse_cone(char **values);
-void		render_cone(t_minirt *mrt, t_ray *ray, t_object *object,
+void		apply_lights_cone(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
 float		intersect_cone(t_ray *ray, t_object *object, float amplifier);
-int			init_cone(t_ray *ray, t_hit_data *hit, t_cone *cone,
-				float dist);
+int			init_cone(t_ray *ray, t_hit_data *hit, t_cone *cone);
 int			is_inside_cone(t_object *object, t_fvector3 point);
 void		on_press_key_cone(t_object *object, int keycode, t_camera *camera);
 t_object	*duplicate_cone(t_object *object);
@@ -328,11 +328,11 @@ t_object	*duplicate_cone(t_object *object);
 t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_pattern pattern);
 void		*parse_cylinder(char **values);
-void		render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
+void		apply_lights_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
 float		intersect_cylinder(t_ray *ray, t_object *object, float amplifier);
 int			init_cylinder(t_ray *ray, t_hit_data *hit,
-				t_cylinder *cylinder, float dist);
+				t_cylinder *cylinder);
 float		intersect_cap(t_fvector3 o, t_fvector3 d, float radius,
 				float half_height);
 float		apply_side_equation(t_fvector3 o, t_fvector3 d,
@@ -352,7 +352,7 @@ t_object	*duplicate_light(t_object *object);
 
 t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_pattern pattern);
 void		*parse_plane(char **values);
-void		render_plane(t_minirt *mrt, t_ray *ray, t_object *object,
+void		apply_lights_plane(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
 float		intersect_plane(t_ray *ray, t_object *object, float amplifier);
 void		on_press_key_plane(t_object *object, int keycode, t_camera *camera);
@@ -360,11 +360,10 @@ t_object	*duplicate_plane(t_object *object);
 
 t_sphere	*sphere(t_fvector3 position, float diameter, t_pattern pattern);
 void		*parse_sphere(char **values);
-void		render_sphere(t_minirt *mrt, t_ray *ray, t_object *object,
+void		apply_lights_sphere(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
 float		intersect_sphere(t_ray *ray, t_object *object, float amplifier);
-int			init_sphere(t_ray *ray, t_hit_data *hit, t_sphere *sphere,
-				float dist);
+int			init_sphere(t_ray *ray, t_hit_data *hit, t_sphere *sphere);
 int			is_inside_sphere(t_object *object, t_fvector3 point);
 void		on_press_key_sphere(t_object *object, int keycode,
 				t_camera *camera);
@@ -376,10 +375,11 @@ int			set_ambiant(t_ambiant *ambiant);
 int			set_camera(t_camera *camera);
 
 int			register_type(char *id, void *(*parser)(char **),
-				void (*render)(t_minirt *, t_ray *, t_object *, int),
+				float (*intersect)(t_ray *, t_object *, float),
 				t_methods *methods);
 int			exist_type(char *id);
-t_methods	*init_methods(float (*intersect)(t_ray *, t_object *, float),
+t_methods	*init_methods(void (*apply_lights)(t_minirt *, t_ray *, t_object *,
+					int),
 				int (*is_inside)(t_object *, t_fvector3),
 				void (*on_press_key)(t_object *, int, t_camera *),
 				t_object *(*duplicate)(t_object *));

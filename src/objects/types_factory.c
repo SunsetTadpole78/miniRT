@@ -6,14 +6,14 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:11:12 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 12:35:53 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:31:57 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 int	register_type(char *id, void *(*parser)(char **),
-		void (*render)(t_minirt *, t_ray *, t_object *, int),
+		float (*intersect)(t_ray *, t_object *, float),
 		t_methods *methods)
 {
 	t_type		*type;
@@ -26,7 +26,7 @@ int	register_type(char *id, void *(*parser)(char **),
 		return (0);
 	type->id = id;
 	methods->parser = parser;
-	methods->render = render;
+	methods->intersect = intersect;
 	type->methods = methods;
 	mrt = minirt();
 	type->next = mrt->types;
@@ -50,7 +50,8 @@ int	exist_type(char *id)
 	return (0);
 }
 
-t_methods	*init_methods(float (*intersect)(t_ray *, t_object *, float),
+t_methods	*init_methods(
+		void (*apply_lights)(t_minirt *, t_ray *, t_object *, int),
 		int (*is_inside)(t_object *, t_fvector3),
 		void (*on_press_key)(t_object *, int, t_camera *),
 		t_object *(*duplicate)(t_object *))
@@ -61,8 +62,8 @@ t_methods	*init_methods(float (*intersect)(t_ray *, t_object *, float),
 	if (!methods)
 		return (NULL);
 	methods->parser = NULL;
-	methods->render = NULL;
-	methods->intersect = intersect;
+	methods->intersect = NULL;
+	methods->apply_lights = apply_lights;
 	methods->is_inside = is_inside;
 	methods->on_press_key = on_press_key;
 	methods->duplicate = duplicate;
@@ -77,8 +78,8 @@ t_methods	*empty_methods(void)
 	if (!methods)
 		return (NULL);
 	methods->parser = NULL;
-	methods->render = NULL;
 	methods->intersect = NULL;
+	methods->apply_lights = NULL;
 	methods->is_inside = NULL;
 	methods->on_press_key = NULL;
 	methods->duplicate = NULL;

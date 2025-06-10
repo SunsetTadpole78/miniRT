@@ -22,18 +22,15 @@ static inline t_rgb	display_texture(t_plane *plane, t_mlx_image texture,
 						t_fvector3 diff);
 /* -------------------------------------------------------------------------- */
 
-void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
+void	apply_lights_plane(t_minirt *mrt, t_ray *ray, t_object *object,
+		int depth)
 {
-	t_ray		reflect_ray;
-	float		dist;
 	t_plane		*plane;
 	t_hit_data	hit;
+	t_ray		reflect_ray;
 
-	dist = intersect_plane(ray, object, 1.0f);
-	if (dist <= 0 || dist > ray->dist)
-		return ;
 	plane = (t_plane *)object;
-	init_plane(ray, &hit, plane, dist);
+	init_plane(ray, &hit, plane);
 	if (ft_fdot_product(ray->direction, hit.normal) > 0)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0),
@@ -48,15 +45,13 @@ void	render_plane(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	}
 	if (plane->selected)
 		apply_selection_effect(&ray->color);
-	ray->dist = dist;
 }
 
-static inline void	init_plane(t_ray *ray, t_hit_data *hit, t_plane *plane,
-	float dist)
+static inline void	init_plane(t_ray *ray, t_hit_data *hit, t_plane *plane)
 {
 	hit->object = (t_object *)plane;
 	hit->impact_point = ft_fvector3_sum(ray->origin,
-			ft_fvector3_scale(ray->direction, dist));
+			ft_fvector3_scale(ray->direction, ray->dist));
 	hit->normal = plane->normal;
 	hit->position = plane->position;
 }

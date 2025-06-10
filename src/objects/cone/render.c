@@ -20,19 +20,16 @@ static inline t_rgb	display_texture(t_mlx_image texture, t_cone *cone,
 						float h);
 /* -------------------------------------------------------------------------- */
 
-void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
+void	apply_lights_cone(t_minirt *mrt, t_ray *ray, t_object *object,
+		int depth)
 {
-	float		dist;
 	t_cone		*cone;
-	t_hit_data	hit;
 	int			inside;
+	t_hit_data	hit;
 	t_ray		reflect_ray;
 
-	dist = intersect_cone(ray, object, 1.0f);
-	if (dist < 0.0f || dist > ray->dist)
-		return ;
 	cone = (t_cone *)object;
-	inside = init_cone(ray, &hit, cone, dist);
+	inside = init_cone(ray, &hit, cone);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(cone, cone->pattern, hit.impact_point));
 	if (!inside && cone->pattern.mattifying != 0.0f)
@@ -45,7 +42,6 @@ void	render_cone(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	}
 	if (cone->selected)
 		apply_selection_effect(&ray->color);
-	ray->dist = dist;
 }
 
 static inline t_rgb	get_base_color(t_cone *cone, t_pattern pattern,
