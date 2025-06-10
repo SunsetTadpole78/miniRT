@@ -15,8 +15,10 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline void	init_plane(t_ray *ray, t_hit_data *hit, t_plane *plane);
-static inline t_rgb	get_base_color(t_plane *plane, t_hit_data hit,
-						t_pattern pattern);
+static inline t_rgb	get_base_color(t_plane *plane, t_pattern pattern,
+						t_fvector3 impact_point);
+static inline t_rgb	display_texture(t_plane *plane, t_mlx_image texture,
+						t_fvector3 diff);
 /* -------------------------------------------------------------------------- */
 
 void	apply_lights_plane(t_minirt *mrt, t_ray *ray, t_object *object,
@@ -31,7 +33,7 @@ void	apply_lights_plane(t_minirt *mrt, t_ray *ray, t_object *object,
 	if (ft_fdot_product(ray->direction, hit.normal) > 0)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0),
-			get_base_color(plane, hit, plane->pattern));
+			get_base_color(plane, plane->pattern, hit.impact_point));
 	if (plane->pattern.mattifying != 0.0f)
 	{
 		reflect_ray = *ray;
@@ -53,16 +55,32 @@ static inline void	init_plane(t_ray *ray, t_hit_data *hit, t_plane *plane)
 	hit->position = plane->position;
 }
 
-static inline t_rgb	get_base_color(t_plane *plane, t_hit_data hit,
-	t_pattern pattern)
+static inline t_rgb	get_base_color(t_plane *plane, t_pattern pattern,
+	t_fvector3 impact_point)
 {
 	t_fvector3	diff;
 
-	if (pattern.id != 'c')
+	if (pattern.id != 'c' && !pattern.path)
 		return (pattern.main_color);
-	diff = ft_fvector3_diff(hit.impact_point, hit.position);
-	if ((int)((floor(ft_fdot_product(diff, plane->right) * 0.05f))
-		+ (floor(ft_fdot_product(diff, plane->up) * 0.05f))) % 2 == 0)
+	diff = ft_fvector3_diff(impact_point, plane->position);
+	if (pattern.id == 'c'
+		&& (int)((floorf(ft_fdot_product(diff, plane->right) * 0.05f))
+		+ (floorf(ft_fdot_product(diff, plane->up) * 0.05f))) & 1)
 		return (pattern.secondary_color);
+	if (pattern.path)
+		return (display_texture(plane, pattern.texture, diff));
 	return (pattern.main_color);
+}
+
+static inline t_rgb	display_texture(t_plane *plane, t_mlx_image texture,
+	t_fvector3 diff)
+{
+	float	u;
+	float	v;
+
+	u = ft_fdot_product(diff, plane->right) * 0.05f;
+	v = ft_fdot_product(diff, plane->up) * 0.05f * texture.ratio;
+	return (mlx_pixel_to_rgb(texture,
+			(int)((u - floorf(u)) * texture.width) % texture.width,
+		(int)((v - floorf(v)) * texture.height) % texture.height));
 }

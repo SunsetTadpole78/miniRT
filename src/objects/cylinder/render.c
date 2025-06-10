@@ -14,8 +14,11 @@
 #include "errors.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline t_rgb		get_base_color(t_cylinder *cy, t_fvector3 impact_point,
-							t_pattern pattern);
+static inline t_rgb	get_base_color(t_cylinder *cy, t_pattern pattern,
+						t_fvector3 impact_point);
+static inline t_rgb	display_texture(t_mlx_image texture, t_cylinder *cy,
+						t_fvector3 diff,
+						float h);
 /* -------------------------------------------------------------------------- */
 
 void	apply_lights_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
@@ -29,7 +32,7 @@ void	apply_lights_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
 	cylinder = (t_cylinder *)object;
 	inside = init_cylinder(ray, &hit, cylinder);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
-			get_base_color(cylinder, hit.impact_point, cylinder->pattern));
+			get_base_color(cylinder, cylinder->pattern, hit.impact_point));
 	if (!inside && cylinder->pattern.mattifying != 0.0f)
 	{
 		reflect_ray = *ray;
@@ -42,25 +45,58 @@ void	apply_lights_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
 		apply_selection_effect(&ray->color);
 }
 
-static inline t_rgb	get_base_color(t_cylinder *cy, t_fvector3 impact_point,
-	t_pattern pattern)
+static inline t_rgb	get_base_color(t_cylinder *cy, t_pattern pattern,
+	t_fvector3 impact_point)
 {
 	t_fvector3	diff;
 	t_fvector3	proj;
 	float		h;
 	float		angle;
 
-	if (pattern.id != 'c')
+	if (pattern.id != 'c' && !pattern.path)
 		return (pattern.main_color);
 	diff = ft_fvector3_diff(impact_point, cy->position);
 	h = ft_fdot_product(diff, cy->normal);
-	proj = ft_fvector3_diff(diff, ft_fvector3_scale(cy->normal, h));
-	angle = atan2f(ft_fdot_product(proj, cy->up),
-			ft_fdot_product(proj, cy->right));
-	if (angle < 0)
-		angle += 2.0f * M_PI;
-	if ((int)(floor(angle * 3.0f + EPSILON)
-		+ floor((h + cy->half_height) * 0.3f + EPSILON)) % 2 == 0)
-		return (pattern.secondary_color);
+	if (pattern.id == 'c')
+	{
+		proj = ft_fvector3_diff(diff, ft_fvector3_scale(cy->normal, h));
+		angle = atan2f(ft_fdot_product(proj, cy->up),
+				ft_fdot_product(proj, cy->right));
+		if (angle < 0.0f)
+			angle += 2.0f * M_PI;
+		if ((int)(floorf(angle * 3.0f + EPSILON)
+			+ floorf((h + cy->half_height) * 0.3f + EPSILON)) & 1)
+			return (pattern.secondary_color);
+	}
+	if (pattern.path)
+		return (display_texture(pattern.texture, cy, diff, h));
 	return (pattern.main_color);
+}
+
+static inline t_rgb	display_texture(t_mlx_image texture, t_cylinder *cy,
+	t_fvector3 diff, float h)
+{
+	float		u;
+	float		v;
+	t_fvector3	proj;
+	float		angle;
+
+	if (fabsf(fabsf(h) - cy->half_height) < EPSILON)
+	{
+		u = ft_fdot_product(diff, cy->right) / cy->diameter + 0.5f;
+		v = ft_fdot_product(diff, cy->up) / cy->diameter + 0.5f;
+	}
+	else
+	{
+		proj = ft_fvector3_diff(diff, ft_fvector3_scale(cy->normal, h));
+		angle = atan2f(ft_fdot_product(proj, cy->up),
+				ft_fdot_product(proj, cy->right));
+		if (angle < 0.0f)
+			angle += 2.0f * M_PI;
+		u = angle / (2.0f * M_PI);
+		v = (h + cy->half_height) / cy->height;
+	}
+	return (mlx_pixel_to_rgb(texture,
+			(int)((u - floorf(u)) * texture.width) % texture.width,
+		(int)((v - floorf(v)) * texture.height) % texture.height));
 }
