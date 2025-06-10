@@ -32,10 +32,10 @@ float	intersect_cylinder(t_ray *ray, t_object *object, float amplifier)
 		cylinder->half_height * amplifier};
 	t.x = intersect_cap(o, d, amplified.x, -amplified.y);
 	t.y = intersect_cap(o, d, amplified.x, amplified.y);
-	ray->extra = t.x > EPSILON && (t.z < 0 || t.x < t.z);
+	ray->extra = t.x > EPSILON && (t.z < 0.0f || t.x < t.z);
 	if (ray->extra == 1)
 		t.z = t.x;
-	if (t.y < EPSILON || (t.z >= 0 && t.y >= t.z))
+	if (t.y < EPSILON || (t.z >= 0.0f && t.y >= t.z))
 		return (t.z);
 	ray->extra = 2;
 	return (t.y);

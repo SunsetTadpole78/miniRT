@@ -17,6 +17,7 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	t_fvector2 size, t_pattern pattern)
 {
 	t_cylinder	*cy;
+	t_fvector3	ref;
 
 	cy = malloc(sizeof(t_cylinder));
 	if (!cy)
@@ -24,14 +25,16 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 	cy->id = CYLINDER_ID;
 	cy->position = position;
 	cy->normal = ft_fnormalize(normal);
-	cy->right = ft_fnormalize(ft_fcross_product(cy->normal,
-				(t_fvector3){0.0f, 1.0f, 0.0f}));
+	ref = (t_fvector3){0.0f, 1.0f, 0.0f};
+	if (fabsf(ft_fdot_product(cy->normal, ref)) > 0.999f)
+		ref = (t_fvector3){1.0f, 0.0f, 0.0f};
+	cy->right = ft_fnormalize(ft_fcross_product(cy->normal, ref));
 	cy->up = ft_fnormalize(ft_fcross_product(cy->right, cy->normal));
 	cy->pattern = pattern;
 	cy->diameter = size.x;
-	cy->radius = size.x / 2.0f;
+	cy->radius = size.x * 0.5f;
 	cy->height = size.y;
-	cy->half_height = size.y / 2.0f;
+	cy->half_height = size.y * 0.5f;
 	cy->infinite = size.y < 0.0f;
 	cy->methods = get_methods_by_id(CYLINDER_ID);
 	cy->selected = 0;

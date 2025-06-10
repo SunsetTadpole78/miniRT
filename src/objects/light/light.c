@@ -94,10 +94,10 @@ float	intersect_light(t_ray *ray, t_object *object, float amplifier)
 			- (light->radius * light->radius * amplifier));
 	if (delta < 0.0f)
 		return (-1.0f);
-	x = (-b - sqrtf(delta)) / 2.0f;
+	x = (-b - sqrtf(delta)) * 0.5f;
 	if (x > EPSILON)
 		return (x);
-	x = (-b + sqrtf(delta)) / 2.0f;
+	x = (-b + sqrtf(delta)) * 0.5f;
 	if (x > EPSILON)
 		return (x);
 	return (-1.0f);

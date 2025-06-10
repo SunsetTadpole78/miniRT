@@ -56,10 +56,10 @@ static inline void	update_yaw(t_camera *camera, float theta)
 	t_fvector3	world;
 
 	world = (t_fvector3){0.0f, 1.0f, 0.0f};
-	if (ft_fdot_product(camera->up, world) < 0.0f)
+	if (ft_fdot_product(camera->up, world) <= EPSILON)
 	{
 		theta = -theta;
-		world.y = -1;
+		world.y = -1.0f;
 	}
 	cos_t = cosf(theta);
 	sin_t = sinf(theta);
