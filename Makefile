@@ -27,6 +27,7 @@ FILES =		destructor.c				\
 		mlx/listeners/press_key.c		\
 		mlx/listeners/release_key.c		\
 		mlx/mlx.c				\
+		mlx/mlx_pixel_to_rgb.c			\
 		objects/ambiant.c			\
 		objects/camera/camera.c			\
 		objects/camera/keys.c			\
