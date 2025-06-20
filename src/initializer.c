@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/20 13:23:43 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:33:29 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,9 @@ static inline void	register_types(void)
 
 int	check_env(t_minirt *mrt)
 {
-	t_pattern		pattern;
-	t_thread_data	*datas;
-	int				cores;
-	int				i;
+	t_pattern	pattern;
+	int			cores;
+	int			i;
 
 	mrt->cores = sysconf(_SC_NPROCESSORS_ONLN);
 	if (mrt->cores == -1)
@@ -83,8 +82,8 @@ int	check_env(t_minirt *mrt)
 		init_pattern(&pattern);
 		mrt->ambiant = ambiant(0, pattern);
 	}
-	datas = malloc(sizeof(t_thread_data) * mrt->cores);
-	if (!datas)
+	mrt->threads_datas = malloc(sizeof(t_thread_data) * mrt->cores);
+	if (!mrt->threads_datas)
 		return (0);
 	cores = mrt->cores;
 	mrt->pixels_per_thread = (WIN_WIDTH * WIN_HEIGHT) / cores;

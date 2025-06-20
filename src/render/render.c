@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/20 13:28:46 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:36:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,18 @@
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline void		*render_part(void *value);
 /* -------------------------------------------------------------------------- */
+
+static inline void	wait_workers(t_minirt *mrt, int cores)
+{
+	int	i;
+
+	i = 0;
+	while (i < (cores - 1))
+	{
+		sem_wait(&mrt->workers_sem);
+		i++;
+	}
+}
 
 void	init_threads(t_minirt *mrt)
 {
@@ -26,10 +38,10 @@ void	init_threads(t_minirt *mrt)
 	cores = mrt->cores;
 	datas = mrt->threads_datas;
 	count = mrt->mlx->count;
+	wait_workers(mrt, cores);
 	i = 0;
 	while (i < (cores - 1))
 	{
-		sem_wait(&mrt->workers_sem);
 		if (!mrt->threads_init)
 		{
 			datas[i].count = count;
@@ -74,12 +86,7 @@ void	render_scene(t_minirt *mrt)
 	fill_image(&datas[cores - 1]);
 	mlx = mrt->mlx;
 	mlx->count++;
-	i = 0;
-	while (i < (cores - 1))
-	{
-		sem_wait(&mrt->workers_sem);
-		i++;
-	}
+	wait_workers(mrt, cores);
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->image.ptr, 0, 0);
 	i = 0;
 	while (i < (cores - 1))
