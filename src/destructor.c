@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/20 14:08:48 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/20 15:35:39 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,14 @@ void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 	if (destroy_mlx)
 		destruct_mlx(mlx);
 	free(mlx);
-	stop_threads(mrt);
 	pthread_mutex_destroy(&mrt->exit_mutex);
+	sem_close(mrt->workers_sem);
 	sem_unlink("/workers_sem");
-	free(mrt->threads_datas);
+	if (mrt->threads_init)
+	{
+		stop_threads(mrt);
+		free(mrt->threads_datas);
+	}
 	free(mrt);
 }
 
