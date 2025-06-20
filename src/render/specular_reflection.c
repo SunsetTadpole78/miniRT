@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/03 03:19:02 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/20 15:47:16 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static inline t_fvector3	random_seed(t_fvector3 center, float phi,
 
 static inline float	fast_rand(void)
 {
-	static unsigned int	seed = 123456789;
+	static _Thread_local unsigned int	seed = 123456789;
 
 	seed = (1103515245 * seed + 12345) & 0x7fffffff;
 	return ((float)seed);

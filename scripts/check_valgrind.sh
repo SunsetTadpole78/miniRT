@@ -30,10 +30,10 @@ allocs=$(echo "$output" | grep -oP '^\d+')
 frees=$(echo "$output" | grep -oP '\d+(?= frees)')
 
 if [[ "$allocs" == "$frees" ]]; then
-    echo -e "${GREEN}Leaks OK${RESET}"
+	echo -e "${GREEN}Leaks OK${RESET}"
 else
-    echo -e "${RED}Leaks KO: $allocs allocs, $frees frees${RESET}"
-    code=1
+	echo -e "${RED}Leaks KO: $allocs allocs, $frees frees${RESET}"
+	code=1
 fi
 
 if [[ "$output2" == "0" ]]; then
