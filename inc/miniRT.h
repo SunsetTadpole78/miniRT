@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/20 13:01:10 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/20 15:10:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,15 +241,16 @@ typedef struct s_methods
 
 typedef struct s_thread_data
 {
-	t_minirt	*mrt;
-	int			id;
-	int			start;
-	int			end;
-	t_camera	*camera;
-	pthread_t	thread;
-	float		ratio;
-	int			count;
-	sem_t		update_sem;
+	t_minirt		*mrt;
+	int				id;
+	int				start;
+	int				end;
+	t_camera		*camera;
+	pthread_t		thread;
+	float			ratio;
+	int				count;
+	pthread_mutex_t	update_mutex;
+	pthread_cond_t	update_cond;
 }	t_thread_data;
 
 typedef struct s_minirt
@@ -267,7 +268,7 @@ typedef struct s_minirt
 	t_object		*clipboard;
 	t_thread_data	*threads_datas;
 	int				threads_init;
-	sem_t			workers_sem;
+	sem_t			*workers_sem;
 	int				exit;
 	pthread_mutex_t	exit_mutex;
 }	t_minirt;

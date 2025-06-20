@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/20 13:40:48 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/20 15:29:58 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,29 +33,37 @@ void	render_scene(t_minirt *mrt)
 	mlx = mrt->mlx;
 	mlx->count++;
 	wait_workers(mrt, cores);
-	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->image.ptr, 0, 0);
 	i = 0;
 	while (i < (cores - 1))
 	{
-		sem_post(&mrt->workers_sem);
+		sem_post(mrt->workers_sem);
 		i++;
 	}
+	usleep(10);
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->image.ptr, 0, 0);
 }
 
 static inline void	*render_part(void *value)
 {
 	t_thread_data	*data;
+	int				init;
 
 	data = (t_thread_data *)value;
+	init = 1;
 	while (!can_exit(data->mrt))
 	{
-		sem_wait(&data->update_sem);
-		sem_post(&data->update_sem);
+		if (!init)
+		{
+			pthread_mutex_lock(&data->update_mutex);
+			pthread_cond_wait(&data->update_cond, &data->update_mutex);
+			pthread_mutex_unlock(&data->update_mutex);
+		}
+		else
+			init = 0;
 		if (can_exit(data->mrt))
 			return (NULL);
 		fill_image(data);
-		sem_post(&data->mrt->workers_sem);
-		sem_wait(&data->update_sem);
+		sem_post(data->mrt->workers_sem);
 	}
 	return (NULL);
 }
@@ -79,8 +87,9 @@ static inline void	init_threads(t_minirt *mrt)
 			datas[i].count = count;
 			pthread_create(&datas[i].thread, NULL, render_part, &datas[i]);
 		}
-		else
-			sem_post(&datas[i].update_sem);
+		pthread_mutex_lock(&datas[i].update_mutex);
+		pthread_cond_signal(&datas[i].update_cond);
+		pthread_mutex_unlock(&datas[i].update_mutex);
 		i++;
 	}
 	mrt->threads_init = 1;
@@ -112,7 +121,7 @@ static inline void	wait_workers(t_minirt *mrt, int cores)
 	i = 0;
 	while (i < (cores - 1))
 	{
-		sem_wait(&mrt->workers_sem);
+		sem_wait(mrt->workers_sem);
 		i++;
 	}
 }

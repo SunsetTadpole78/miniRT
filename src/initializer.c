@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/20 13:33:29 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/20 15:08:36 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ int	check_env(t_minirt *mrt)
 	i = -1;
 	while (++i < cores)
 		init_thread_data(&mrt->threads_datas[i], cores, i, mrt);
-	sem_init(&mrt->workers_sem, 0, cores - 1);
+	sem_unlink("/workers_sem");
+	mrt->workers_sem = sem_open("/workers_sem", O_CREAT, 0644, cores - 1);
 	return (1);
 }
 
@@ -134,5 +135,6 @@ inline void	init_thread_data(t_thread_data *data, int cores, int i,
 	data->camera = data->mrt->camera;
 	data->ratio = ((float)WIN_WIDTH / (float)WIN_HEIGHT)
 		* data->camera->iplane_scale;
-	sem_init(&data->update_sem, 0, 1);
+	pthread_mutex_init(&data->update_mutex, NULL);
+	pthread_cond_init(&data->update_cond, NULL);
 }
