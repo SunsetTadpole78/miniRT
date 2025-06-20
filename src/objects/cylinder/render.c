@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 03:44:55 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 00:28:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,16 @@ static inline t_rgb		get_base_color(t_cylinder *cy, t_fvector3 impact_point,
 							t_pattern pattern);
 /* -------------------------------------------------------------------------- */
 
-void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
+void	apply_lights_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
+		int depth)
 {
-	float		dist;
 	t_cylinder	*cylinder;
 	t_hit_data	hit;
 	int			inside;
 	t_ray		reflect_ray;
 
-	dist = intersect_cylinder(ray, object, 1.0f);
-	if (dist < 0.0f || dist > ray->dist)
-		return ;
 	cylinder = (t_cylinder *)object;
-	inside = init_cylinder(ray, &hit, cylinder, dist);
+	inside = init_cylinder(ray, &hit, cylinder);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
 			get_base_color(cylinder, hit.impact_point, cylinder->pattern));
 	if (!inside && cylinder->pattern.mattifying != 0.0f)
@@ -43,7 +40,6 @@ void	render_cylinder(t_minirt *mrt, t_ray *ray, t_object *object, int depth)
 	}
 	if (cylinder->selected)
 		apply_selection_effect(&ray->color);
-	ray->dist = dist;
 }
 
 static inline t_rgb	get_base_color(t_cylinder *cy, t_fvector3 impact_point,

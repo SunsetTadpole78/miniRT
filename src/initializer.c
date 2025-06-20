@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 08:19:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:23:43 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,9 @@ t_minirt	*minirt(void)
 		mrt->selected = NULL;
 		mrt->ctrl_pressed = 0;
 		mrt->clipboard = NULL;
-		mrt->workers = 0;
-		pthread_mutex_init(&mrt->workers_mutex, NULL);
-		pthread_mutex_init(&mrt->update_mutex, NULL);
-		mrt->stop = 0;
+		mrt->threads_init = 0;
+		pthread_mutex_init(&mrt->exit_mutex, NULL);
+		mrt->exit = 0;
 		register_types();
 	}
 	return (mrt);
@@ -52,17 +51,18 @@ static inline void	register_types(void)
 {
 	register_type(AMBIANT_ID, parse_ambiant, NULL, empty_methods());
 	register_type(CAMERA_ID, parse_camera, NULL, empty_methods());
-	register_type(CONE_ID, parse_cone, render_cone, init_methods(intersect_cone,
-			is_inside_cone, on_press_key_cone, duplicate_cone));
-	register_type(CYLINDER_ID, parse_cylinder, render_cylinder, init_methods(
-			intersect_cylinder, is_inside_cylinder, on_press_key_cylinder,
+	register_type(CONE_ID, parse_cone, intersect_cone, init_methods(
+			apply_lights_cone, is_inside_cone, on_press_key_cone,
+			duplicate_cone));
+	register_type(CYLINDER_ID, parse_cylinder, intersect_cylinder, init_methods(
+			apply_lights_cylinder, is_inside_cylinder, on_press_key_cylinder,
 			duplicate_cylinder));
 	register_type(LIGHT_ID, parse_light, NULL, init_methods(NULL, NULL,
 			on_press_key_light, duplicate_light));
-	register_type(PLANE_ID, parse_plane, render_plane, init_methods(
-			intersect_plane, NULL, on_press_key_plane, duplicate_plane));
-	register_type(SPHERE_ID, parse_sphere, render_sphere, init_methods(
-			intersect_sphere, is_inside_sphere, on_press_key_sphere,
+	register_type(PLANE_ID, parse_plane, intersect_plane, init_methods(
+			apply_lights_plane, NULL, on_press_key_plane, duplicate_plane));
+	register_type(SPHERE_ID, parse_sphere, intersect_sphere, init_methods(
+			apply_lights_sphere, is_inside_sphere, on_press_key_sphere,
 			duplicate_sphere));
 }
 
@@ -87,28 +87,12 @@ int	check_env(t_minirt *mrt)
 	if (!datas)
 		return (0);
 	cores = mrt->cores;
+	mrt->pixels_per_thread = (WIN_WIDTH * WIN_HEIGHT) / cores;
 	i = -1;
 	while (++i < cores)
-		init_thread_data(&datas[i], cores, i, mrt);
-	mrt->threads_datas = datas;
+		init_thread_data(&mrt->threads_datas[i], cores, i, mrt);
+	sem_init(&mrt->workers_sem, 0, cores - 1);
 	return (1);
-}
-
-inline void	init_thread_data(t_thread_data *data, int cores, int i,
-		t_minirt *mrt)
-{
-	data->mrt = mrt;
-	data->id = i + 1;
-	data->start = WIN_HEIGHT / cores * i;
-	if (i == (cores - 1))
-		data->end = WIN_HEIGHT;
-	else
-		data->end = WIN_HEIGHT / cores * (i + 1);
-	data->camera = data->mrt->camera;
-	data->ratio = ((float)WIN_WIDTH / (float)WIN_HEIGHT)
-		* data->camera->iplane_scale;
-	data->update = 1;
-	data->init = 0;
 }
 
 void	init_render(t_minirt *mrt)
@@ -133,4 +117,23 @@ void	init_render(t_minirt *mrt)
 		}
 		cur = cur->next;
 	}
+}
+
+inline void	init_thread_data(t_thread_data *data, int cores, int i,
+		t_minirt *mrt)
+{
+	int	pixels_per_thread;
+
+	pixels_per_thread = mrt->pixels_per_thread;
+	data->mrt = mrt;
+	data->id = i;
+	data->start = i * pixels_per_thread;
+	if (i == cores - 1)
+		data->end = WIN_WIDTH * WIN_HEIGHT;
+	else
+		data->end = (i + 1) * pixels_per_thread;
+	data->camera = data->mrt->camera;
+	data->ratio = ((float)WIN_WIDTH / (float)WIN_HEIGHT)
+		* data->camera->iplane_scale;
+	sem_init(&data->update_sem, 0, 1);
 }

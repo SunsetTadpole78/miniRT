@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 13:37:55 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/20 10:55:28 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,13 @@ static inline t_rgb			pixel_to_rgb(t_mlx *mlx, int x, int y);
 static inline unsigned int	rgb_to_uint(t_rgb color);
 /* -------------------------------------------------------------------------- */
 
-void	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos)
+void	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos, int count)
 {
-	int			count;
 	t_mlx		*mlx;
 	t_rgb		prev_color;
 	t_mlx_image	image;
 
 	mlx = mrt->mlx;
-	count = mlx->count;
 	prev_color = pixel_to_rgb(mlx, pos.x, pos.y);
 	image = mlx->image;
 	*((unsigned int *)(image.data + (pos.y * image.ll + pos.x * image.cl)))

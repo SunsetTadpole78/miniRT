@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 03:30:02 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/20 12:14:07 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static inline t_fvector3		random_seed(t_fvector3 center, float phi,
 									float cos_theta,
 									float sin_theta);
-static inline unsigned int	fast_rand(void);
+static inline float			fast_rand(void);
 /* -------------------------------------------------------------------------- */
 
 void	specular_reflection(t_ray *ray, t_hit_data *hit,
@@ -28,14 +28,13 @@ void	specular_reflection(t_ray *ray, t_hit_data *hit,
 
 	direction = ray->direction;
 	normal = hit->normal;
-	cos_theta = 1.0f - smoothness_factor * ((float)fast_rand()
-			/ (float)RAND_MAX);
+	cos_theta = 1.0f - smoothness_factor * (fast_rand() / 2147483647.0f);
 	ray->origin = ft_fvector3_sum(hit->impact_point,
 			ft_fvector3_scale(hit->normal, EPSILON));
 	ray->direction = random_seed(
 			ft_fvector3_diff(direction, ft_fvector3_scale(normal, 2.0f
 					* ft_fdot_product(direction, normal))),
-			2.0f * M_PI * ((float)fast_rand() / (float)RAND_MAX),
+			2.0f * M_PI * (fast_rand() / 2147483647.0f),
 			cos_theta,
 			sqrtf(1.0f - cos_theta * cos_theta));
 }
@@ -58,10 +57,10 @@ static inline t_fvector3	random_seed(t_fvector3 center, float phi,
 				ft_fvector3_scale(w, cos_theta))));
 }
 
-static inline unsigned int	fast_rand(void)
+static inline float	fast_rand(void)
 {
-	static unsigned int	seed = 123456789;
+	static _Thread_local unsigned int	seed = 123456789;
 
 	seed = (1103515245 * seed + 12345) & 0x7fffffff;
-	return (seed);
+	return ((float)seed);
 }
