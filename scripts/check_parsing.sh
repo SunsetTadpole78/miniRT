@@ -11,6 +11,7 @@ RED="\033[0;91m"
 RESET="\033[0m"
 
 declare -A expected_errors=(
+	["empty.rt"]="Camera element needed"
 	["invalid_object.rt"]="Invalid object id"
 
 	# Ambiant
