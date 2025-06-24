@@ -13,8 +13,11 @@
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline t_rgb	get_base_color(t_cone *co, t_fvector3 impact_point,
-						t_pattern pattern);
+static inline t_rgb	get_base_color(t_cone *cone, t_pattern pattern,
+						t_fvector3 impact_point);
+static inline t_rgb	display_texture(t_mlx_image texture, t_cone *cone,
+						t_fvector3 diff,
+						float h);
 /* -------------------------------------------------------------------------- */
 
 void	apply_lights_cone(t_minirt *mrt, t_ray *ray, t_object *object,
@@ -28,7 +31,7 @@ void	apply_lights_cone(t_minirt *mrt, t_ray *ray, t_object *object,
 	cone = (t_cone *)object;
 	inside = init_cone(ray, &hit, cone);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
-			get_base_color(cone, hit.impact_point, cone->pattern));
+			get_base_color(cone, cone->pattern, hit.impact_point));
 	if (!inside && cone->pattern.mattifying != 0.0f)
 	{
 		reflect_ray = *ray;
@@ -41,26 +44,60 @@ void	apply_lights_cone(t_minirt *mrt, t_ray *ray, t_object *object,
 		apply_selection_effect(&ray->color);
 }
 
-static inline t_rgb	get_base_color(t_cone *cone, t_fvector3 impact_point,
-		t_pattern pattern)
+static inline t_rgb	get_base_color(t_cone *cone, t_pattern pattern,
+	t_fvector3 impact_point)
 {
 	t_fvector3	diff;
 	t_fvector3	local;
 	float		angle;
+	float		h;
 
-	if (pattern.id != 'c')
+	if (pattern.id != 'c' && !pattern.path)
 		return (pattern.main_color);
 	diff = ft_fvector3_diff(impact_point, cone->position);
-	local = (t_fvector3){
-		ft_fdot_product(diff, cone->right),
-		ft_fdot_product(diff, ft_fnormalize(cone->normal)),
-		ft_fdot_product(diff, cone->up)
-	};
-	angle = atan2f(local.z, local.x);
-	if (angle < 0.0f)
-		angle += 2.0f * M_PI;
-	if (((int)(floor(angle * 3.0f + EPSILON))
-		+ (int)(floor(local.y * 0.3f + EPSILON))) % 2 == 0)
-		return (pattern.secondary_color);
+	if (pattern.id == 'c')
+	{
+		local = (t_fvector3){ft_fdot_product(diff, cone->right),
+			ft_fdot_product(diff, cone->normal),
+			ft_fdot_product(diff, cone->up)
+		};
+		angle = atan2f(local.z, local.x);
+		if (angle < 0.0f)
+			angle += 2.0f * M_PI;
+		if ((int)((floorf(angle * 3.0f + EPSILON))
+			+ (floorf(local.y * 0.3f + EPSILON))) & 1)
+			return (pattern.secondary_color);
+	}
+	h = ft_fdot_product(diff, cone->normal);
+	if (pattern.path)
+		return (display_texture(pattern.texture, cone, diff, h));
 	return (pattern.main_color);
+}
+
+static inline t_rgb	display_texture(t_mlx_image texture, t_cone *cone,
+	t_fvector3 diff, float h)
+{
+	float		u;
+	float		v;
+	t_fvector3	proj;
+	float		angle;
+
+	if (fabsf(fabsf(h) - cone->height) < EPSILON)
+	{
+		u = ft_fdot_product(diff, cone->right) / cone->base_diameter + 0.5f;
+		v = ft_fdot_product(diff, cone->up) / cone->base_diameter + 0.5f;
+	}
+	else
+	{
+		proj = ft_fvector3_diff(diff, ft_fvector3_scale(cone->normal, h));
+		angle = atan2f(ft_fdot_product(proj, cone->up),
+				ft_fdot_product(proj, cone->right));
+		if (angle < 0.0f)
+			angle += 2.0f * M_PI;
+		u = angle / (2.0f * M_PI);
+		v = h / cone->height;
+	}
+	return (mlx_pixel_to_rgb(texture,
+			(int)((u - floorf(u)) * texture.width) % texture.width,
+		(int)((v - floorf(v)) * texture.height) % texture.height));
 }

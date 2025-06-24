@@ -111,6 +111,8 @@ void	init_render(t_minirt *mrt)
 					&pattern->texture.bpp, &pattern->texture.ll,
 					&pattern->texture.endian);
 			pattern->texture.cl = pattern->texture.bpp / 8;
+			pattern->texture.ratio = (float)pattern->texture.width
+				/ (float)pattern->texture.height;
 		}
 		cur = cur->next;
 	}

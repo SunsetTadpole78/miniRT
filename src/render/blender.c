@@ -13,7 +13,6 @@
 #include "miniRT.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
-static inline t_rgb			pixel_to_rgb(t_mlx *mlx, int x, int y);
 static inline unsigned int	rgb_to_uint(t_rgb color);
 /* -------------------------------------------------------------------------- */
 
@@ -26,8 +25,8 @@ void	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos)
 
 	mlx = mrt->mlx;
 	count = mlx->count;
-	prev_color = pixel_to_rgb(mlx, pos.x, pos.y);
 	image = mlx->image;
+	prev_color = mlx_pixel_to_rgb(image, pos.x, pos.y);
 	*((unsigned int *)(image.data + (pos.y * image.ll + pos.x * image.cl)))
 		= rgb_to_uint((t_rgb){
 			(unsigned char)((prev_color.r * count + ray->color.r)
@@ -36,16 +35,6 @@ void	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos)
 				/ (count + 1)),
 			(unsigned char)((prev_color.b * count + ray->color.b)
 				/ (count + 1))});
-}
-
-static inline t_rgb	pixel_to_rgb(t_mlx *mlx, int x, int y)
-{
-	unsigned int	pixel;
-	t_mlx_image		image;
-
-	image = mlx->image;
-	pixel = *((unsigned int *)(image.data + (y * image.ll + x * image.cl)));
-	return ((t_rgb){(pixel >> 16) & 0xFF, (pixel >> 8) & 0xFF, pixel & 0xFF});
 }
 
 static inline unsigned int	rgb_to_uint(t_rgb color)

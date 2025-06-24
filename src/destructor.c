@@ -14,7 +14,7 @@
 
 /* -------------------------------- PROTOTYPE ------------------------------- */
 static void	free_objects(t_object *objects);
-static void	free_types(t_type *type);
+static void	free_types(t_type *types);
 /* -------------------------------------------------------------------------- */
 
 void	destruct_minirt(t_minirt *mrt, int destroy_mlx)

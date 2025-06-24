@@ -28,4 +28,12 @@ void	init_pattern(t_pattern *pattern)
 	pattern->smoothness_factor = 0.0f;
 	pattern->mattifying = 0.0f;
 	pattern->path = NULL;
+	pattern->texture.ptr = NULL;
+	pattern->texture.data = NULL;
+	pattern->texture.bpp = 0;
+	pattern->texture.ll = 0;
+	pattern->texture.cl = 0;
+	pattern->texture.endian = 0;
+	pattern->texture.height = 0;
+	pattern->texture.width = 0;
 }
