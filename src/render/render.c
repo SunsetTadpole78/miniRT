@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/20 15:29:58 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:19:14 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,12 @@ static inline void	init_threads(t_minirt *mrt)
 			datas[i].count = count;
 			pthread_create(&datas[i].thread, NULL, render_part, &datas[i]);
 		}
-		pthread_mutex_lock(&datas[i].update_mutex);
-		pthread_cond_signal(&datas[i].update_cond);
-		pthread_mutex_unlock(&datas[i].update_mutex);
+		else
+		{
+			pthread_mutex_lock(&datas[i].update_mutex);
+			pthread_cond_signal(&datas[i].update_cond);
+			pthread_mutex_unlock(&datas[i].update_mutex);
+		}
 		i++;
 	}
 	mrt->threads_init = 1;
