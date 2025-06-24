@@ -22,6 +22,7 @@ t_mlx	*init_mlx(t_mlx *mlx)
 	mlx->image.data = mlx_get_data_addr(mlx->image.ptr, &mlx->image.bpp,
 			&mlx->image.ll, &mlx->image.endian);
 	mlx->image.cl = mlx->image.bpp / 8;
+	mlx->image.ratio = (float)WIN_WIDTH / (float)WIN_HEIGHT;
 	mlx->update = 0;
 	mlx->count = 0;
 	return (mlx);

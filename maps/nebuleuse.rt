@@ -1,4 +1,4 @@
 A 0.7  255,255,255
 C 0,0,0  0,0,1 70
-sp 0,0,0 2000 255,255,255 0 0
-sp 0,10,10 10 0,255,255 0 0
+sp 0,0,0 2000 resources/nebuleuse.xpm 0 0 checker 255,255,255
+sp 0,10,10 10 resources/ship.xpm 0 0

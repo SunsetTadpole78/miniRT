@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 13:24:48 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:17:09 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 /* -------------------------------- PROTOTYPE ------------------------------- */
 static void	free_objects(t_object *objects);
-static void	free_types(t_type *type);
+static void	free_types(t_type *types);
 /* -------------------------------------------------------------------------- */
 
 void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 {
-	t_mlx		*mlx;
+	t_mlx	*mlx;
 
 	mlx = mrt->mlx;
 	free_types(mrt->types);
@@ -31,7 +31,14 @@ void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 	if (destroy_mlx)
 		destruct_mlx(mlx);
 	free(mlx);
-	free(mrt->threads_datas);
+	if (mrt->threads_init)
+	{
+		stop_threads(mrt);
+		free(mrt->threads_datas);
+	}
+	pthread_mutex_destroy(&mrt->exit_mutex);
+	sem_close(mrt->workers_sem);
+	sem_unlink("/workers_sem");
 	free(mrt);
 }
 

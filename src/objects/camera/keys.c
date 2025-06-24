@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 13:35:52 by lroussel          #+#    #+#             */
-/*   Updated: 2025/05/28 17:08:11 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/03 03:35:14 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline void		update_yaw(t_camera *camera, float theta);
 static inline void		update_pitch(t_camera *camera, float theta);
-static inline void		update_fov(t_camera *camera, int incrementation);
+static inline void		update_fov(t_minirt *mrt, t_camera *camera,
+							int incrementation);
 static inline t_fvector3	sum_inversed(t_fvector3 position,
 							t_fvector3 normal);
 /* -------------------------------------------------------------------------- */
 
-void	on_press_key_camera(t_camera *camera, int keycode)
+void	on_press_key_camera(t_minirt *mrt, t_camera *camera, int keycode)
 {
 	if (keycode == OGLK_A || keycode == XK_A)
 		camera->position = ft_fvector3_sum(camera->position, camera->right);
@@ -32,9 +33,9 @@ void	on_press_key_camera(t_camera *camera, int keycode)
 	else if (keycode == OGLK_W || keycode == XK_W)
 		camera->position = ft_fvector3_sum(camera->position, camera->normal);
 	else if (keycode == OGLK_EQUAL || keycode == XK_EQUAL)
-		update_fov(camera, -1);
+		update_fov(mrt, camera, -1);
 	else if (keycode == OGLK_MINUS || keycode == XK_MINUS)
-		update_fov(camera, 1);
+		update_fov(mrt, camera, 1);
 	else if (keycode == OGLK_SPACE || keycode == XK_SPACE)
 		camera->position.y += 1.0f;
 	else if (keycode == OGLK_SHIFT || keycode == XK_SHIFT)
@@ -56,10 +57,10 @@ static inline void	update_yaw(t_camera *camera, float theta)
 	t_fvector3	world;
 
 	world = (t_fvector3){0.0f, 1.0f, 0.0f};
-	if (ft_fdot_product(camera->up, world) < 0.0f)
+	if (ft_fdot_product(camera->up, world) <= EPSILON)
 	{
 		theta = -theta;
-		world.y = -1;
+		world.y = -1.0f;
 	}
 	cos_t = cosf(theta);
 	sin_t = sinf(theta);
@@ -86,9 +87,12 @@ static inline void	update_pitch(t_camera *camera, float theta)
 				camera->normal));
 }
 
-static inline void	update_fov(t_camera *camera, int incrementation)
+static inline void	update_fov(t_minirt *mrt, t_camera *camera,
+		int incrementation)
 {
-	int	fov;
+	int				fov;
+	t_thread_data	*datas;
+	int				i;
 
 	fov = camera->fov;
 	if ((fov == 0 && incrementation == -1)
@@ -96,6 +100,14 @@ static inline void	update_fov(t_camera *camera, int incrementation)
 		return ;
 	camera->fov += incrementation;
 	camera->iplane_scale = tan((camera->fov / 2) * (M_PI / 180.0f));
+	datas = mrt->threads_datas;
+	i = 0;
+	while (i < mrt->cores)
+	{
+		datas[i].ratio = ((float)WIN_WIDTH / (float)WIN_HEIGHT)
+			* camera->iplane_scale;
+		i++;
+	}
 }
 
 static inline t_fvector3	sum_inversed(t_fvector3 position, t_fvector3 normal)

@@ -11,6 +11,7 @@ RED="\033[0;91m"
 RESET="\033[0m"
 
 declare -A expected_errors=(
+	["empty.rt"]="Camera element needed"
 	["invalid_object.rt"]="Invalid object id"
 
 	# Ambiant
@@ -181,8 +182,6 @@ i=0
 
 for file_path in "$MAP_DIR"/*.rt; do
 	file_name=$(basename "$file_path")
-
-	[[ "$file_name" == "empty.rt" ]] && continue
 
 	expected=$(echo -e "${PREFIX}${expected_errors[$file_name]}${SUFFIX}")
 	output=$("$MINIRT" "$file_path" 2>&1 > /dev/null)

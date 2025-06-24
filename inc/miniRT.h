@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 03:11:23 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:46:49 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdio.h>
 # include <math.h>
 # include <pthread.h>
+# include <semaphore.h>
 
 # include "libft.h"
 # include "mlx.h"
@@ -67,6 +68,7 @@ typedef struct s_mlx_image
 	int		endian;
 	int		height;
 	int		width;
+	float	ratio;
 }	t_mlx_image;
 
 typedef struct s_pattern
@@ -188,6 +190,7 @@ typedef struct s_cone
 	t_fvector3	right;
 	t_fvector3	up;
 	float		base_diameter;
+	float		radius;
 	float		height;
 	int			infinite;
 	float		k;
@@ -240,12 +243,16 @@ typedef struct s_methods
 
 typedef struct s_thread_data
 {
-	t_minirt	*mrt;
-	int			start;
-	int			end;
-	t_camera	*camera;
-	pthread_t	thread;
-	float		ratio;
+	t_minirt		*mrt;
+	int				id;
+	int				start;
+	int				end;
+	t_camera		*camera;
+	pthread_t		thread;
+	float			ratio;
+	int				count;
+	pthread_mutex_t	update_mutex;
+	pthread_cond_t	update_cond;
 }	t_thread_data;
 
 typedef struct s_minirt
@@ -258,10 +265,14 @@ typedef struct s_minirt
 	t_mlx			*mlx;
 	int				cores;
 	int				pixels_per_thread;
-	t_thread_data	*threads_datas;
 	t_object		*selected;
 	int				ctrl_pressed;
 	t_object		*clipboard;
+	t_thread_data	*threads_datas;
+	int				threads_init;
+	sem_t			*workers_sem;
+	int				exit;
+	pthread_mutex_t	exit_mutex;
 }	t_minirt;
 
 typedef struct s_hit_data
@@ -288,17 +299,22 @@ int			close_window(t_minirt *mrt);
 void		handle_events(t_minirt *mrt);
 int			on_expose(t_mlx *mlx);
 
+t_rgb		mlx_pixel_to_rgb(t_mlx_image image, int x, int y);
+
 // render
 void		render_scene(t_minirt *mrt);
 
 t_rgb		ray_tracer(t_minirt *mrt, t_ray *ray, int depth);
 t_fvector3	primary_ray(t_camera *cam, t_vector2 pos, float ratio);
 t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside);
-void		blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos);
+void		blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos, int count);
 t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 void		apply_selection_effect(t_rgb *color);
 void		specular_reflection(t_ray *ray, t_hit_data *hit,
 				float smoothness_factor);
+
+int			can_exit(t_minirt *mrt);
+void		stop_threads(t_minirt *mrt);
 
 t_fvector3	rotate_object(t_fvector3 v, t_fvector3 axis, float theta);
 
@@ -308,7 +324,7 @@ void		*parse_ambiant(char **values);
 
 t_camera	*camera(t_fvector3 position, t_fvector3 normal, int fov);
 void		*parse_camera(char **values);
-void		on_press_key_camera(t_camera *camera, int keycode);
+void		on_press_key_camera(t_minirt *mrt, t_camera *camera, int keycode);
 
 t_cone		*cone(t_fvector3 position, t_fvector3 normal,
 				t_fvector2 size, t_pattern pattern);
@@ -326,13 +342,13 @@ t_cylinder	*cylinder(t_fvector3 position, t_fvector3 normal,
 void		*parse_cylinder(char **values);
 void		apply_lights_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
+float		intersect_cylinder(t_ray *ray, t_object *object, float amplifier);
 int			init_cylinder(t_ray *ray, t_hit_data *hit,
 				t_cylinder *cylinder);
 float		intersect_cap(t_fvector3 o, t_fvector3 d, float radius,
 				float half_height);
 float		apply_side_equation(t_fvector3 o, t_fvector3 d,
 				t_cylinder *cylinder, float amplifier);
-float		intersect_cylinder(t_ray *ray, t_object *object, float amplifier);
 int			is_inside_cylinder(t_object *object, t_fvector3 point);
 void		on_press_key_cylinder(t_object *object, int keycode,
 				t_camera *camera);

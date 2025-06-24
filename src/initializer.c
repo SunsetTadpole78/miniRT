@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 02:50:39 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/20 15:47:22 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ t_minirt	*minirt(void)
 		mrt->selected = NULL;
 		mrt->ctrl_pressed = 0;
 		mrt->clipboard = NULL;
+		mrt->threads_init = 0;
+		pthread_mutex_init(&mrt->exit_mutex, NULL);
+		mrt->exit = 0;
 		register_types();
 	}
 	return (mrt);
@@ -65,10 +68,9 @@ static inline void	register_types(void)
 
 int	check_env(t_minirt *mrt)
 {
-	t_pattern		pattern;
-	t_thread_data	*datas;
-	int				cores;
-	int				i;
+	t_pattern	pattern;
+	int			cores;
+	int			i;
 
 	mrt->cores = sysconf(_SC_NPROCESSORS_ONLN);
 	if (mrt->cores == -1)
@@ -80,15 +82,16 @@ int	check_env(t_minirt *mrt)
 		init_pattern(&pattern);
 		mrt->ambiant = ambiant(0, pattern);
 	}
-	datas = malloc(sizeof(t_thread_data) * mrt->cores);
-	if (!datas)
+	mrt->threads_datas = malloc(sizeof(t_thread_data) * mrt->cores);
+	if (!mrt->threads_datas)
 		return (0);
 	cores = mrt->cores;
 	mrt->pixels_per_thread = (WIN_WIDTH * WIN_HEIGHT) / cores;
 	i = -1;
 	while (++i < cores)
-		init_thread_data(&datas[i], cores, i, mrt);
-	mrt->threads_datas = datas;
+		init_thread_data(&mrt->threads_datas[i], cores, i, mrt);
+	sem_unlink("/workers_sem");
+	mrt->workers_sem = sem_open("/workers_sem", O_CREAT, 0644, cores - 1);
 	return (1);
 }
 
@@ -111,6 +114,8 @@ void	init_render(t_minirt *mrt)
 					&pattern->texture.bpp, &pattern->texture.ll,
 					&pattern->texture.endian);
 			pattern->texture.cl = pattern->texture.bpp / 8;
+			pattern->texture.ratio = (float)pattern->texture.width
+				/ (float)pattern->texture.height;
 		}
 		cur = cur->next;
 	}
@@ -123,6 +128,7 @@ inline void	init_thread_data(t_thread_data *data, int cores, int i,
 
 	pixels_per_thread = mrt->pixels_per_thread;
 	data->mrt = mrt;
+	data->id = i;
 	data->start = i * pixels_per_thread;
 	if (i == cores - 1)
 		data->end = WIN_WIDTH * WIN_HEIGHT;
@@ -131,4 +137,6 @@ inline void	init_thread_data(t_thread_data *data, int cores, int i,
 	data->camera = data->mrt->camera;
 	data->ratio = ((float)WIN_WIDTH / (float)WIN_HEIGHT)
 		* data->camera->iplane_scale;
+	pthread_mutex_init(&data->update_mutex, NULL);
+	pthread_cond_init(&data->update_cond, NULL);
 }
