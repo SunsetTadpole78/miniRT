@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/24 19:52:24 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/24 22:43:09 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos, int count)
 	t_mlx_image	image;
 
 	mlx = mrt->mlx;
-	count = mlx->count;
 	image = mlx->image;
 	prev_color = mlx_pixel_to_rgb(image, pos.x, pos.y);
 	*((unsigned int *)(image.data + (pos.y * image.ll + pos.x * image.cl)))
