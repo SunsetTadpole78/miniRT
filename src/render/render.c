@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/24 19:19:14 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:24:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,9 @@ static inline void	init_threads(t_minirt *mrt)
 	i = 0;
 	while (i < (cores - 1))
 	{
+		datas[i].count = count;
 		if (!mrt->threads_init)
-		{
-			datas[i].count = count;
 			pthread_create(&datas[i].thread, NULL, render_part, &datas[i]);
-		}
 		else
 		{
 			pthread_mutex_lock(&datas[i].update_mutex);
