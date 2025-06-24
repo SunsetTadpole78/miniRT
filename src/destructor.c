@@ -13,7 +13,7 @@
 #include "miniRT.h"
 
 /* -------------------------------- PROTOTYPE ------------------------------- */
-static void	free_objects(t_object *objects);
+static void	free_objects(t_object *objects, void *mlx_ptr);
 static void	free_types(t_type *types);
 /* -------------------------------------------------------------------------- */
 
@@ -23,8 +23,8 @@ void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 
 	mlx = mrt->mlx;
 	free_types(mrt->types);
-	free_objects(mrt->objects);
-	free_objects((t_object *)mrt->lights);
+	free_objects(mrt->objects, mlx->mlx_ptr);
+	free_objects((t_object *)mrt->lights, mlx->mlx_ptr);
 	free(mrt->ambiant);
 	free(mrt->camera);
 	free(mrt->clipboard);
@@ -42,13 +42,16 @@ void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 	free(mrt);
 }
 
-static void	free_objects(t_object *objects)
+static void	free_objects(t_object *objects, void *mlx_ptr)
 {
 	t_object	*tmp;
 
 	while (objects)
 	{
 		tmp = objects->next;
+		free(objects->pattern.path);
+		if (objects->pattern.texture.ptr != NULL)
+			mlx_destroy_image(mlx_ptr, objects->pattern.texture.ptr);
 		free(objects);
 		objects = tmp;
 	}
