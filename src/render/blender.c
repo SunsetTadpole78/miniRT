@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 13:37:55 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:52:24 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@
 static inline unsigned int	rgb_to_uint(t_rgb color);
 /* -------------------------------------------------------------------------- */
 
-void	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos)
+void	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos, int count)
 {
-	int			count;
 	t_mlx		*mlx;
 	t_rgb		prev_color;
 	t_mlx_image	image;
