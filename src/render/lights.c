@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:44:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 01:49:25 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/25 13:04:36 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ static inline float	calculate_light_level(t_minirt *mrt, t_light *light,
 	direction = ft_fvector3_diff(light->position, hit.impact_point);
 	distance = ft_fvector3_length(direction);
 	direction = ft_fnormalize(direction);
-	dot = ft_fdot_product(hit.normal, direction);
+	dot = hit.normal.x * direction.x + hit.normal.y * direction.y
+		+ hit.normal.z * direction.z;
 	if (dot <= 0.0f)
 		return (0.0f);
 	shadow_ray.origin = ft_fvector3_sum(hit.impact_point,
