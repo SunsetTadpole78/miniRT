@@ -50,7 +50,7 @@ static void	free_objects(t_object *objects, void *mlx_ptr)
 	{
 		tmp = objects->next;
 		free(objects->pattern.path);
-		if (objects->pattern.texture.ptr != NULL)
+		if (objects->pattern.texture.ptr)
 			mlx_destroy_image(mlx_ptr, objects->pattern.texture.ptr);
 		free(objects);
 		objects = tmp;
