@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 01:34:33 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 13:37:44 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:21:50 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,23 @@ void	init_pattern(t_pattern *pattern)
 	pattern->texture.endian = 0;
 	pattern->texture.height = 0;
 	pattern->texture.width = 0;
+	pattern->bump_path = NULL;
+	pattern->bump.ptr = NULL;
+	pattern->bump.data = NULL;
+	pattern->bump.bpp = 0;
+	pattern->bump.ll = 0;
+	pattern->bump.cl = 0;
+	pattern->bump.endian = 0;
+	pattern->bump.height = 0;
+	pattern->bump.width = 0;
+}
+
+void	init_texture(t_mlx_image *texture, char *path, void *ptr)
+{
+	texture->ptr = mlx_xpm_file_to_image(ptr, path, &texture->width,
+			&texture->height);
+	texture->data = mlx_get_data_addr(texture->ptr, &texture->bpp, &texture->ll,
+			&texture->endian);
+	texture->cl = texture->bpp / 8;
+	texture->ratio = (float)texture->width / (float)texture->height;
 }
