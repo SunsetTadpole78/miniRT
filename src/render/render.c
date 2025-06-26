@@ -29,8 +29,9 @@ void	render_scene(t_minirt *mrt)
 	init_threads(mrt);
 	cores = mrt->cores;
 	datas = mrt->threads_datas;
-	fill_image(&datas[cores - 1]);
 	mlx = mrt->mlx;
+	datas[cores - 1].count = mlx->count;
+	fill_image(&datas[cores - 1]);
 	mlx->count++;
 	wait_workers(mrt, cores);
 	i = 0;
