@@ -81,6 +81,7 @@ typedef struct s_pattern
 	float		smoothness_factor;
 	char		*path;
 	t_mlx_image	texture;
+	t_mlx_image	bump;
 }	t_pattern;
 
 typedef struct s_object
