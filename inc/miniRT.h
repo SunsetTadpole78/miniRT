@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/24 19:46:49 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:21:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,9 @@ typedef struct s_pattern
 	float		mattifying;
 	float		smoothness_factor;
 	char		*path;
+	char		*bump_path;
 	t_mlx_image	texture;
+	t_mlx_image	bump;
 }	t_pattern;
 
 typedef struct s_object
@@ -412,5 +414,6 @@ int			parse_texture(char *value, t_pattern *pattern);
 int			parse_pattern(char **values, t_pattern *pattern);
 void		*error_and_null(char *error);
 void		init_pattern(t_pattern *pattern);
+void		init_texture(t_mlx_image *texture, char *path, void *ptr);
 
 #endif

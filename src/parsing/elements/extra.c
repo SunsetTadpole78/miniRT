@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:29:54 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 02:50:54 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:11:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,29 @@
 
 int	parse_texture(char *value, t_pattern *pattern)
 {
-	int	len;
+	char	**splited;
 
-	if (parse_color(value, &pattern->main_color))
-		return (1);
-	len = ft_strlen(value);
-	if (len < 4 || ft_strncmp(value + (len - 4), ".xpm", 5) != 0)
-		return (0);
-	if (access(value, R_OK) != 0)
-		return (0);
-	pattern->path = ft_strdup(value);
+	if (!ft_isextension(value, ".xpm"))
+		return (parse_color(value, &pattern->main_color));
 	pattern->main_color = (t_rgb){0, 0, 0};
+	if (access(value, R_OK) != 0)
+	{
+		if (!ft_strchr(value, ','))
+			return (0);
+		splited = ft_split(value, ',');
+		if (splited[2] || !ft_isextension(splited[0], ".xpm")
+			|| access(splited[0], R_OK) != 0 || access(splited[1], R_OK) != 0)
+		{
+			ft_free_str_array(splited);
+			return (0);
+		}
+		pattern->path = ft_strdup(splited[0]);
+		pattern->bump_path = ft_strdup(splited[1]);
+		ft_free_str_array(splited);
+		return (1);
+	}
+	pattern->path = ft_strdup(value);
+	pattern->bump_path = NULL;
 	return (1);
 }
 
