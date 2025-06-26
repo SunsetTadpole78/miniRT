@@ -377,7 +377,6 @@ void		*parse_sphere(char **values);
 void		apply_lights_sphere(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
 float		intersect_sphere(t_ray *ray, t_object *object, float amplifier);
-int			init_sphere(t_ray *ray, t_hit_data *hit, t_sphere *sphere);
 int			is_inside_sphere(t_object *object, t_fvector3 point);
 void		on_press_key_sphere(t_object *object, int keycode,
 				t_camera *camera);
