@@ -282,8 +282,10 @@ typedef struct s_hit_data
 	t_fvector3	normal;
 	t_fvector3	position;
 	t_fvector3	diff;
+	t_fvector3	proj;
 	float		u;
 	float		v;
+	float		h;
 }	t_hit_data;
 
 t_minirt	*minirt(void);
