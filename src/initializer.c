@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/20 15:47:22 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:21:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,16 +107,9 @@ void	init_render(t_minirt *mrt)
 	{
 		pattern = &cur->pattern;
 		if (pattern->path)
-		{
-			pattern->texture.ptr = mlx_xpm_file_to_image(ptr, pattern->path,
-					&pattern->texture.width, &pattern->texture.height);
-			pattern->texture.data = mlx_get_data_addr(pattern->texture.ptr,
-					&pattern->texture.bpp, &pattern->texture.ll,
-					&pattern->texture.endian);
-			pattern->texture.cl = pattern->texture.bpp / 8;
-			pattern->texture.ratio = (float)pattern->texture.width
-				/ (float)pattern->texture.height;
-		}
+			init_texture(&pattern->texture, pattern->path, ptr);
+		if (pattern->bump_path)
+			init_texture(&pattern->bump, pattern->bump_path, ptr);
 		cur = cur->next;
 	}
 }

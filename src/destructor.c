@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/24 19:17:09 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:27:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@ static void	free_objects(t_object *objects, void *mlx_ptr)
 		free(objects->pattern.path);
 		if (objects->pattern.texture.ptr)
 			mlx_destroy_image(mlx_ptr, objects->pattern.texture.ptr);
+		free(objects->pattern.bump_path);
+		if (objects->pattern.bump.ptr)
+			mlx_destroy_image(mlx_ptr, objects->pattern.bump.ptr);
 		free(objects);
 		objects = tmp;
 	}
