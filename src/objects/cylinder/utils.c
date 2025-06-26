@@ -27,11 +27,11 @@ int	init_cylinder(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder)
 	hit->normal = get_normal(ray->extra, hit->impact_point, cylinder);
 	hit->position = cylinder->position;
 	hit->diff = ft_fvector3_diff(hit->impact_point, hit->position);
-	hit->proj = ft_fvector3_diff(hit->diff,
-			ft_fvector3_scale(cylinder->normal, hit->h));
 	hit->u = 0.0f;
 	hit->v = 0.0f;
 	hit->h = ft_fdot_product(hit->diff, cylinder->normal);
+	hit->proj = ft_fvector3_diff(hit->diff,
+			ft_fvector3_scale(cylinder->normal, hit->h));
 	inside = is_inside_cylinder((t_object *)cylinder, ray->origin);
 	if (inside)
 		hit->normal = ft_fvector3_scale(hit->normal, -1);

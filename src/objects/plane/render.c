@@ -52,10 +52,10 @@ static inline void	init_plane(t_ray *ray, t_hit_data *hit, t_plane *plane)
 	hit->normal = plane->normal;
 	hit->position = plane->position;
 	hit->diff = ft_fvector3_diff(hit->impact_point, hit->position);
-	hit->proj = (t_fvector3){0.0f, 0.0f, 0.0f};
 	hit->u = ft_fdot_product(hit->diff, plane->right) * 0.05f;
 	hit->v = ft_fdot_product(hit->diff, plane->up) * 0.05f;
 	hit->h = 0.0f;
+	hit->proj = (t_fvector3){0.0f, 0.0f, 0.0f};
 }
 
 static inline t_rgb	get_base_color(t_pattern pattern, t_hit_data hit)
