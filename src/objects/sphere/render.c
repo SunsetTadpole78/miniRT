@@ -50,6 +50,8 @@ static inline t_rgb	get_base_color(t_pattern pattern, t_fvector3 normal,
 		return (pattern.main_color);
 	if (inside)
 		normal = ft_fvector3_scale(normal, -1);
+	hit.u = 0.5f + atan2f(hit.normal.z, hit.normal.x) / (2.0f * M_PI);
+	hit.v = 0.5f - asinf(hit.normal.y) / M_PI;
 	if (pattern.id == 'c'
 		&& (int)((floorf(hit.u * 10.0f)) + (floorf(hit.v * 10.0f))) & 1)
 		return (pattern.secondary_color);

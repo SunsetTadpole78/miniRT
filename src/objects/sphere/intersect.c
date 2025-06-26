@@ -47,10 +47,10 @@ int	init_sphere(t_ray *ray, t_hit_data *hit, t_sphere *sphere)
 				sphere->position));
 	hit->position = sphere->position;
 	hit->diff = (t_fvector3){0.0f, 0.0f, 0.0f};
-	hit->u = 0.5f + atan2f(hit->normal.z, hit->normal.x) / (2.0f * M_PI);
-	hit->v = 0.5f - asinf(hit->normal.y) / M_PI;
-	hit->h = 0.0f;
 	hit->proj = (t_fvector3){0.0f, 0.0f, 0.0f};
+	hit->u = 0.0f;
+	hit->v = 0.0f;
+	hit->h = 0.0f;
 	inside = ft_fvector3_length(ft_fvector3_diff(ray->origin,
 				sphere->position)) < sphere->radius;
 	if (inside)

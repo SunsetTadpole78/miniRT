@@ -53,6 +53,7 @@ static inline t_rgb	get_base_color(t_cone *cone, t_pattern pattern,
 		return (pattern.main_color);
 	if (pattern.id == 'c')
 	{
+		hit.diff = ft_fvector3_diff(hit.impact_point, hit.position);
 		local = (t_fvector3){ft_fdot_product(hit.diff, cone->right),
 			ft_fdot_product(hit.diff, cone->normal),
 			ft_fdot_product(hit.diff, cone->up)
@@ -76,6 +77,8 @@ static inline t_rgb	display_texture(t_mlx_image texture, t_cone *cone,
 	float		v;
 	float		angle;
 
+	hit.diff = ft_fvector3_diff(hit.impact_point, hit.position);
+	hit.h = ft_fdot_product(hit.diff, cone->normal);
 	if (fabsf(fabsf(hit.h) - cone->height) < EPSILON)
 	{
 		u = ft_fdot_product(hit.diff, cone->right) / cone->base_diameter + 0.5f;
@@ -83,6 +86,8 @@ static inline t_rgb	display_texture(t_mlx_image texture, t_cone *cone,
 	}
 	else
 	{
+		hit.proj = ft_fvector3_diff(hit.diff,
+				ft_fvector3_scale(cone->normal, hit.h));
 		angle = atan2f(ft_fdot_product(hit.proj, cone->up),
 				ft_fdot_product(hit.proj, cone->right));
 		if (angle < 0.0f)

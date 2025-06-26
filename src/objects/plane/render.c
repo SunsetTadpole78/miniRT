@@ -15,7 +15,8 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline void	init_plane(t_ray *ray, t_hit_data *hit, t_plane *plane);
-static inline t_rgb	get_base_color(t_pattern pattern, t_hit_data hit);
+static inline t_rgb	get_base_color(t_plane *plane, t_pattern pattern,
+						t_hit_data hit);
 static inline t_rgb	display_texture(t_mlx_image texture, t_hit_data hit);
 /* -------------------------------------------------------------------------- */
 
@@ -31,7 +32,7 @@ void	apply_lights_plane(t_minirt *mrt, t_ray *ray, t_object *object,
 	if (ft_fdot_product(ray->direction, hit.normal) > 0)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0),
-			get_base_color(plane->pattern, hit));
+			get_base_color(plane, plane->pattern, hit));
 	if (plane->pattern.mattifying != 0.0f)
 	{
 		reflect_ray = *ray;
@@ -51,17 +52,21 @@ static inline void	init_plane(t_ray *ray, t_hit_data *hit, t_plane *plane)
 			ft_fvector3_scale(ray->direction, ray->dist));
 	hit->normal = plane->normal;
 	hit->position = plane->position;
-	hit->diff = ft_fvector3_diff(hit->impact_point, hit->position);
-	hit->u = ft_fdot_product(hit->diff, plane->right) * 0.05f;
-	hit->v = ft_fdot_product(hit->diff, plane->up) * 0.05f;
-	hit->h = 0.0f;
+	hit->diff = (t_fvector3){0.0f, 0.0f, 0.0f};
 	hit->proj = (t_fvector3){0.0f, 0.0f, 0.0f};
+	hit->u = 0.0f;
+	hit->v = 0.0f;
+	hit->h = 0.0f;
 }
 
-static inline t_rgb	get_base_color(t_pattern pattern, t_hit_data hit)
+static inline t_rgb	get_base_color(t_plane *plane, t_pattern pattern,
+	t_hit_data hit)
 {
 	if (pattern.id != 'c' && !pattern.path)
 		return (pattern.main_color);
+	hit.diff = ft_fvector3_diff(hit.impact_point, hit.position);
+	hit.u = ft_fdot_product(hit.diff, plane->right) * 0.05f;
+	hit.v = ft_fdot_product(hit.diff, plane->up) * 0.05f;
 	if (pattern.id == 'c' && (int)((floorf(hit.u)) + (floorf(hit.v))) & 1)
 		return (pattern.secondary_color);
 	if (pattern.path)

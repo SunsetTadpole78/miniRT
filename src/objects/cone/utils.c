@@ -26,12 +26,11 @@ int	init_cone(t_ray *ray, t_hit_data *hit, t_cone *cone)
 			ft_fvector3_scale(ray->direction, ray->dist));
 	hit->normal = get_normal(ray->extra, hit->impact_point, cone);
 	hit->position = cone->position;
-	hit->diff = ft_fvector3_diff(hit->impact_point, hit->position);
+	hit->diff = (t_fvector3){0.0f, 0.0f, 0.0f};
+	hit->proj = (t_fvector3){0.0f, 0.0f, 0.0f};
 	hit->u = 0.0f;
 	hit->v = 0.0f;
-	hit->h = ft_fdot_product(hit->diff, cone->normal);
-	hit->proj = ft_fvector3_diff(hit->diff,
-			ft_fvector3_scale(cone->normal, hit->h));
+	hit->h = 0.0f;
 	inside = is_inside_cone((t_object *)cone, ray->origin);
 	if (inside)
 		hit->normal = ft_fvector3_scale(hit->normal, -1);

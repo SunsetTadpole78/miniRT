@@ -53,6 +53,10 @@ static inline t_rgb	get_base_color(t_cylinder *cy, t_pattern pattern,
 		return (pattern.main_color);
 	if (pattern.id == 'c')
 	{
+		hit.diff = ft_fvector3_diff(hit.impact_point, hit.position);
+		hit.h = ft_fdot_product(hit.diff, cy->normal);
+		hit.proj = ft_fvector3_diff(hit.diff,
+				ft_fvector3_scale(cy->normal, hit.h));
 		angle = atan2f(ft_fdot_product(hit.proj, cy->up),
 				ft_fdot_product(hit.proj, cy->right));
 		if (angle < 0.0f)
@@ -73,6 +77,8 @@ static inline t_rgb	display_texture(t_mlx_image texture, t_cylinder *cy,
 	float		v;
 	float		angle;
 
+	hit.diff = ft_fvector3_diff(hit.impact_point, hit.position);
+	hit.h = ft_fdot_product(hit.diff, cy->normal);
 	if (fabsf(fabsf(hit.h) - cy->half_height) < EPSILON)
 	{
 		u = ft_fdot_product(hit.diff, cy->right) / cy->diameter + 0.5f;
@@ -80,6 +86,8 @@ static inline t_rgb	display_texture(t_mlx_image texture, t_cylinder *cy,
 	}
 	else
 	{
+		hit.proj = ft_fvector3_diff(hit.diff,
+				ft_fvector3_scale(cy->normal, hit.h));
 		angle = atan2f(ft_fdot_product(hit.proj, cy->up),
 				ft_fdot_product(hit.proj, cy->right));
 		if (angle < 0.0f)
