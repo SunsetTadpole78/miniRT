@@ -42,11 +42,27 @@ void	handle_events(t_minirt *mrt)
 
 int	loop_hook(t_minirt *mrt)
 {
-	if (mrt->mlx->update != 0)
+	t_mlx		*mlx;
+	static int	count = 0;
+
+	mlx = mrt->mlx;
+	if (mlx->update != 0)
 	{
 		render_scene(mrt);
-		if (mrt->mlx->update != 2)
-			mrt->mlx->update = 0;
+		if (mlx->update == 1)
+		{
+			count = 0;
+			mlx->update = 0;
+		}
+		else
+		{
+			if (count == 15)
+			{
+				count = 0;
+				mlx->update = 0;
+			}
+			count++;
+		}
 	}
 	return (0);
 }
