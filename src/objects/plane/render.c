@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/03 02:52:20 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:53:22 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	apply_lights_plane(t_minirt *mrt, t_ray *ray, t_object *object,
 
 	plane = (t_plane *)object;
 	init_plane(ray, &hit, plane);
-	if (ft_fdot_product(ray->direction, hit.normal) > 0)
+	if ((ray->direction.x * hit.normal.x + ray->direction.y * hit.normal.y
+			+ ray->direction.z * hit.normal.z) > 0)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0),
 			get_base_color(plane, plane->pattern, hit));
@@ -65,8 +66,10 @@ static inline t_rgb	get_base_color(t_plane *plane, t_pattern pattern,
 	if (pattern.id != 'c' && !pattern.path)
 		return (pattern.main_color);
 	hit.diff = ft_fvector3_diff(hit.impact_point, hit.position);
-	hit.u = ft_fdot_product(hit.diff, plane->right) * 0.05f;
-	hit.v = ft_fdot_product(hit.diff, plane->up) * 0.05f;
+	hit.u = (hit.diff.x * plane->right.x + hit.diff.y
+			* plane->right.y + hit.diff.z * plane->right.z) * 0.05f;
+	hit.v = (hit.diff.x * plane->up.x + hit.diff.y
+			* plane->up.y + hit.diff.z * plane->up.z) * 0.05f;
 	if (pattern.id == 'c' && (int)((floorf(hit.u)) + (floorf(hit.v))) & 1)
 		return (pattern.secondary_color);
 	if (pattern.path)

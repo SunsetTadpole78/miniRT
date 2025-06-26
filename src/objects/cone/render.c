@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 00:20:45 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 00:28:32 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/25 13:01:31 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	apply_lights_cone(t_minirt *mrt, t_ray *ray, t_object *object,
 static inline t_rgb	get_base_color(t_cone *cone, t_pattern pattern,
 	t_hit_data hit)
 {
-	t_fvector3	local;
 	float		angle;
 
 	if (pattern.id != 'c' && !pattern.path)
@@ -54,15 +53,15 @@ static inline t_rgb	get_base_color(t_cone *cone, t_pattern pattern,
 	if (pattern.id == 'c')
 	{
 		hit.diff = ft_fvector3_diff(hit.impact_point, hit.position);
-		local = (t_fvector3){ft_fdot_product(hit.diff, cone->right),
-			ft_fdot_product(hit.diff, cone->normal),
-			ft_fdot_product(hit.diff, cone->up)
-		};
-		angle = atan2f(local.z, local.x);
+		hit.h = hit.diff.x * cone->normal.x + hit.diff.y * cone->normal.y
+			+ hit.diff.z * cone->normal.z;
+		angle = atan2f(hit.diff.x * cone->up.x + hit.diff.y * cone->up.y
+				+ hit.diff.z * cone->up.z, hit.diff.x * cone->right.x
+				+ hit.diff.y * cone->right.y + hit.diff.z * cone->right.z);
 		if (angle < 0.0f)
 			angle += 2.0f * M_PI;
 		if ((int)((floorf(angle * 3.0f + EPSILON))
-			+ (floorf(local.y * 0.3f + EPSILON))) & 1)
+			+ (floorf(hit.h * 0.3f + EPSILON))) & 1)
 			return (pattern.secondary_color);
 	}
 	if (pattern.path)
@@ -73,29 +72,29 @@ static inline t_rgb	get_base_color(t_cone *cone, t_pattern pattern,
 static inline t_rgb	display_texture(t_mlx_image texture, t_cone *cone,
 	t_hit_data hit)
 {
-	float		u;
-	float		v;
 	float		angle;
 
 	hit.diff = ft_fvector3_diff(hit.impact_point, hit.position);
-	hit.h = ft_fdot_product(hit.diff, cone->normal);
+	hit.h = hit.diff.x * cone->normal.x + hit.diff.y * cone->normal.y
+		+ hit.diff.z * cone->normal.z;
 	if (fabsf(fabsf(hit.h) - cone->height) < EPSILON)
 	{
-		u = ft_fdot_product(hit.diff, cone->right) / cone->base_diameter + 0.5f;
-		v = ft_fdot_product(hit.diff, cone->up) / cone->base_diameter + 0.5f;
+		hit.u = (hit.diff.x * cone->right.x + hit.diff.y * cone->right.y
+				+ hit.diff.z * cone->right.z) / cone->base_diameter + 0.5f;
+		hit.v = (hit.diff.x * cone->up.x + hit.diff.y * cone->up.y
+				+ hit.diff.z * cone->up.z) / cone->base_diameter + 0.5f;
 	}
 	else
 	{
 		hit.proj = ft_fvector3_diff(hit.diff,
 				ft_fvector3_scale(cone->normal, hit.h));
-		angle = atan2f(ft_fdot_product(hit.proj, cone->up),
-				ft_fdot_product(hit.proj, cone->right));
-		if (angle < 0.0f)
-			angle += 2.0f * M_PI;
-		u = angle / (2.0f * M_PI);
-		v = hit.h / cone->height;
+		angle = atan2f((hit.proj.x * cone->up.x + hit.proj.y * cone->up.y
+					+ hit.proj.z * cone->up.z), (hit.proj.x * cone->right.x
+					+ hit.proj.y * cone->right.y + hit.proj.z * cone->right.z));
+		hit.u = (angle + ((angle < 0.0f) * (2.0f * M_PI))) / (2.0f * M_PI);
+		hit.v = hit.h / cone->height;
 	}
 	return (mlx_pixel_to_rgb(texture,
-			(int)((u - floorf(u)) * texture.width) % texture.width,
-		(int)((v - floorf(v)) * texture.height) % texture.height));
+			(int)((hit.u - floorf(hit.u)) * texture.width) % texture.width,
+		(int)((hit.v - floorf(hit.v)) * texture.height) % texture.height));
 }

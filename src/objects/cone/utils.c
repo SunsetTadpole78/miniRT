@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 12:46:20 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 16:17:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/25 13:02:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,20 @@ static inline t_fvector3	get_normal(int type, t_fvector3 impact_point,
 		t_cone *cone)
 {
 	t_fvector3	apex_to_p;
+	t_fvector3	normal;
+	float		scale;
 
 	if (type == 1)
 		return (cone->normal);
 	apex_to_p = ft_fvector3_diff(impact_point, cone->position);
-	return (ft_fnormalize(ft_fvector3_diff(apex_to_p, ft_fvector3_scale(
-					ft_fvector3_scale(cone->normal, ft_fdot_product(apex_to_p,
-							cone->normal)), 1 + cone->k2))));
+	normal = cone->normal;
+	scale = apex_to_p.x * normal.x + apex_to_p.y * normal.y
+		+ apex_to_p.z * normal.z;
+	return (ft_fnormalize((t_fvector3){
+			apex_to_p.x - ((normal.x * scale) * (1 + cone->k2)),
+			apex_to_p.y - ((normal.y * scale) * (1 + cone->k2)),
+			apex_to_p.z - ((normal.z * scale) * (1 + cone->k2))
+		}));
 }
 
 int	is_inside_cone(t_object *object, t_fvector3 point)
@@ -60,9 +67,9 @@ int	is_inside_cone(t_object *object, t_fvector3 point)
 	cone = (t_cone *)object;
 	oc = ft_fvector3_diff(point, cone->position);
 	local_point = (t_fvector3){
-		ft_fdot_product(oc, cone->right),
-		ft_fdot_product(oc, ft_fnormalize(cone->normal)),
-		ft_fdot_product(oc, cone->up)
+		oc.x * cone->right.x + oc.y * cone->right.y + oc.z * cone->right.z,
+		oc.x * cone->normal.x + oc.y * cone->normal.y + oc.z * cone->normal.z,
+		oc.x * cone->up.x + oc.y * cone->up.y + oc.z * cone->up.z
 	};
 	if (!cone->infinite && (local_point.y < 0.0f
 			|| local_point.y > cone->height))

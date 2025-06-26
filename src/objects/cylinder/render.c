@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/03 00:28:44 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:49:23 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,13 @@ static inline t_rgb	get_base_color(t_cylinder *cy, t_pattern pattern,
 	if (pattern.id == 'c')
 	{
 		hit.diff = ft_fvector3_diff(hit.impact_point, hit.position);
-		hit.h = ft_fdot_product(hit.diff, cy->normal);
+		hit.h = hit.diff.x * cy->normal.x + hit.diff.y
+			* cy->normal.y + hit.diff.z * cy->normal.z;
 		hit.proj = ft_fvector3_diff(hit.diff,
 				ft_fvector3_scale(cy->normal, hit.h));
-		angle = atan2f(ft_fdot_product(hit.proj, cy->up),
-				ft_fdot_product(hit.proj, cy->right));
+		angle = atan2f(hit.proj.x * cy->up.x + hit.proj.y * cy->up.y
+				+ hit.proj.z * cy->up.z, hit.proj.x * cy->right.x
+				+ hit.proj.y * cy->right.y + hit.proj.z * cy->right.z);
 		if (angle < 0.0f)
 			angle += 2.0f * M_PI;
 		if ((int)(floorf(angle * 3.0f + EPSILON)
@@ -73,29 +75,28 @@ static inline t_rgb	get_base_color(t_cylinder *cy, t_pattern pattern,
 static inline t_rgb	display_texture(t_mlx_image texture, t_cylinder *cy,
 	t_hit_data hit)
 {
-	float		u;
-	float		v;
 	float		angle;
 
 	hit.diff = ft_fvector3_diff(hit.impact_point, hit.position);
 	hit.h = ft_fdot_product(hit.diff, cy->normal);
 	if (fabsf(fabsf(hit.h) - cy->half_height) < EPSILON)
 	{
-		u = ft_fdot_product(hit.diff, cy->right) / cy->diameter + 0.5f;
-		v = ft_fdot_product(hit.diff, cy->up) / cy->diameter + 0.5f;
+		hit.u = (hit.diff.x * cy->right.x + hit.diff.y * cy->right.y
+				+ hit.diff.z * cy->right.z) / cy->diameter + 0.5f;
+		hit.v = (hit.diff.x * cy->up.x + hit.diff.y * cy->up.y
+				+ hit.diff.z * cy->up.z) / cy->diameter + 0.5f;
 	}
 	else
 	{
 		hit.proj = ft_fvector3_diff(hit.diff,
 				ft_fvector3_scale(cy->normal, hit.h));
-		angle = atan2f(ft_fdot_product(hit.proj, cy->up),
-				ft_fdot_product(hit.proj, cy->right));
-		if (angle < 0.0f)
-			angle += 2.0f * M_PI;
-		u = angle / (2.0f * M_PI);
-		v = (hit.h + cy->half_height) / cy->height;
+		angle = atan2f(hit.proj.x * cy->up.x + hit.proj.y * cy->up.y
+				+ hit.proj.z * cy->up.z, hit.proj.x * cy->right.x
+				+ hit.proj.y * cy->right.y + hit.proj.z * cy->right.z);
+		hit.u = (angle + ((angle < 0.0f) * 2.0f * M_PI)) / (2.0f * M_PI);
+		hit.v = (hit.h + cy->half_height) / cy->height;
 	}
 	return (mlx_pixel_to_rgb(texture,
-			(int)((u - floorf(u)) * texture.width) % texture.width,
-		(int)((v - floorf(v)) * texture.height) % texture.height));
+			(int)((hit.u - floorf(hit.u)) * texture.width) % texture.width,
+		(int)((hit.v - floorf(hit.v)) * texture.height) % texture.height));
 }

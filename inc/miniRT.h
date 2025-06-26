@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/24 19:46:49 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:21:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,9 @@ typedef struct s_pattern
 	float		mattifying;
 	float		smoothness_factor;
 	char		*path;
+	char		*bump_path;
 	t_mlx_image	texture;
+	t_mlx_image	bump;
 }	t_pattern;
 
 typedef struct s_object
@@ -380,7 +382,6 @@ void		*parse_sphere(char **values);
 void		apply_lights_sphere(t_minirt *mrt, t_ray *ray, t_object *object,
 				int depth);
 float		intersect_sphere(t_ray *ray, t_object *object, float amplifier);
-int			init_sphere(t_ray *ray, t_hit_data *hit, t_sphere *sphere);
 int			is_inside_sphere(t_object *object, t_fvector3 point);
 void		on_press_key_sphere(t_object *object, int keycode,
 				t_camera *camera);
@@ -417,5 +418,6 @@ int			parse_texture(char *value, t_pattern *pattern);
 int			parse_pattern(char **values, t_pattern *pattern);
 void		*error_and_null(char *error);
 void		init_pattern(t_pattern *pattern);
+void		init_texture(t_mlx_image *texture, char *path, void *ptr);
 
 #endif
