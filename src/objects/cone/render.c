@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 00:20:45 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/25 13:01:31 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:47:43 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void	apply_lights_cone(t_minirt *mrt, t_ray *ray, t_object *object,
 
 	cone = (t_cone *)object;
 	inside = init_cone(ray, &hit, cone);
-	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
+	ray->color = apply_lights_modifier(get_lights_modifier(mrt, &hit, inside),
 			get_base_color(cone, cone->pattern, hit.impact_point));
-	if (!inside && cone->pattern.mattifying != 0.0f)
+	if (!inside && cone->pattern.mattifying != 0.0f && hit.level != 0.0f)
 	{
 		reflect_ray = *ray;
 		specular_reflection(&reflect_ray, &hit,

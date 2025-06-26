@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/25 12:53:22 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:50:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void	apply_lights_plane(t_minirt *mrt, t_ray *ray, t_object *object,
 	if ((ray->direction.x * hit.normal.x + ray->direction.y * hit.normal.y
 			+ ray->direction.z * hit.normal.z) > 0)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
-	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0),
+	ray->color = apply_lights_modifier(get_lights_modifier(mrt, &hit, 0),
 			get_base_color(plane, plane->pattern, hit.impact_point));
-	if (plane->pattern.mattifying != 0.0f)
+	if (plane->pattern.mattifying != 0.0f && hit.level != 0.0f)
 	{
 		reflect_ray = *ray;
 		specular_reflection(&reflect_ray, &hit,
@@ -54,6 +54,7 @@ static inline void	init_plane(t_ray *ray, t_hit_data *hit, t_plane *plane)
 			ft_fvector3_scale(ray->direction, ray->dist));
 	hit->normal = plane->normal;
 	hit->position = plane->position;
+	hit->level = plane->default_level;
 }
 
 static inline t_rgb	get_base_color(t_plane *plane, t_pattern pattern,

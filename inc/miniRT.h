@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/26 11:21:05 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 14:02:56 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ typedef struct s_object
 	t_methods	*methods;
 	int			selected;
 	t_pattern	pattern;
+	float		default_level;
 }	t_object;
 
 typedef struct s_normal_object
@@ -101,6 +102,7 @@ typedef struct s_normal_object
 	t_methods	*methods;
 	int			selected;
 	t_pattern	pattern;
+	float		default_level;
 	t_fvector3	position;
 	t_fvector3	normal;
 }	t_normal_object;
@@ -112,6 +114,7 @@ typedef struct s_ambiant
 	t_methods	*methods;
 	int			selected;
 	t_pattern	pattern;
+	float		default_level;
 	t_frgb		gamma_color;
 	float		level;
 }	t_ambiant;
@@ -147,6 +150,7 @@ typedef struct s_light
 	t_methods	*methods;
 	int			selected;
 	t_pattern	pattern;
+	float		default_level;
 	t_fvector3	position;
 	t_frgb		gamma_color;
 	float		level;
@@ -162,6 +166,7 @@ typedef struct s_sphere
 	t_methods	*methods;
 	int			selected;
 	t_pattern	pattern;
+	float		default_level;
 	t_fvector3	position;
 	float		diameter;
 	float		radius;
@@ -174,6 +179,7 @@ typedef struct s_plane
 	t_methods	*methods;
 	int			selected;
 	t_pattern	pattern;
+	float		default_level;
 	t_fvector3	position;
 	t_fvector3	normal;
 	t_fvector3	right;
@@ -187,6 +193,7 @@ typedef struct s_cone
 	t_methods	*methods;
 	int			selected;
 	t_pattern	pattern;
+	float		default_level;
 	t_fvector3	position;
 	t_fvector3	normal;
 	t_fvector3	right;
@@ -206,6 +213,7 @@ typedef struct s_cylinder
 	t_methods	*methods;
 	int			selected;
 	t_pattern	pattern;
+	float		default_level;
 	t_fvector3	position;
 	t_fvector3	normal;
 	t_fvector3	right;
@@ -247,8 +255,8 @@ typedef struct s_thread_data
 {
 	t_minirt		*mrt;
 	int				id;
-	int				start;
-	int				end;
+	int				max;
+	int				cores;
 	t_camera		*camera;
 	pthread_t		thread;
 	float			ratio;
@@ -283,6 +291,7 @@ typedef struct s_hit_data
 	t_fvector3	impact_point;
 	t_fvector3	normal;
 	t_fvector3	position;
+	float		level;
 }	t_hit_data;
 
 t_minirt	*minirt(void);
@@ -308,7 +317,7 @@ void		render_scene(t_minirt *mrt);
 
 t_rgb		ray_tracer(t_minirt *mrt, t_ray *ray, int depth);
 t_fvector3	primary_ray(t_camera *cam, t_vector2 pos, float ratio);
-t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside);
+t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data *hit, int inside);
 void		blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos, int count);
 t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 void		apply_selection_effect(t_rgb *color);
