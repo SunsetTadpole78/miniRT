@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/26 13:50:44 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:46:46 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	apply_lights_plane(t_minirt *mrt, t_ray *ray, t_object *object,
 {
 	t_plane		*plane;
 	t_hit_data	hit;
+	t_rgb		base;
 	t_ray		reflect_ray;
 
 	plane = (t_plane *)object;
@@ -33,8 +34,10 @@ void	apply_lights_plane(t_minirt *mrt, t_ray *ray, t_object *object,
 	if ((ray->direction.x * hit.normal.x + ray->direction.y * hit.normal.y
 			+ ray->direction.z * hit.normal.z) > 0)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
-	ray->color = apply_lights_modifier(get_lights_modifier(mrt, &hit, 0),
-			get_base_color(plane, plane->pattern, hit.impact_point));
+	base = get_base_color(plane, plane->pattern, hit.impact_point);
+	if (base.r != 0 || base.g != 0 || base.b != 0)
+		ray->color = apply_lights_modifier(
+				get_lights_modifier(mrt, &hit, 0), base);
 	if (plane->pattern.mattifying != 0.0f && hit.level != 0.0f)
 	{
 		reflect_ray = *ray;

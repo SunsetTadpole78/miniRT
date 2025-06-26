@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 01:38:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/26 13:31:27 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:31:47 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,8 @@ t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)
 		check_intersection(cur, ray);
 		cur = cur->next;
 	}
-	if (ray->dist >= 3.4E+37)
-		ray->color = (t_rgb){0, 0, 0};
-	else
+	ray->color = (t_rgb){0, 0, 0};
+	if (ray->dist < 3.4E+37)
 		ray->object->methods->apply_lights(mrt, ray, ray->object, depth);
 	light = mrt->lights;
 	while (light)
