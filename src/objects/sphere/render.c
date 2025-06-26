@@ -14,8 +14,10 @@
 #include "errors.h"
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
+static inline int		init_sphere(t_ray *ray, t_hit_data *hit,
+							t_sphere *sphere);
 static inline t_rgb	get_base_color(t_pattern pattern, t_fvector3 normal,
-						int inside);
+							int inside);
 static inline t_rgb	display_texture(t_mlx_image texture, float u, float v);
 /* -------------------------------------------------------------------------- */
 
@@ -41,6 +43,23 @@ void	apply_lights_sphere(t_minirt *mrt, t_ray *ray, t_object *object,
 	}
 	if (sphere->selected)
 		apply_selection_effect(&ray->color);
+}
+
+static inline int	init_sphere(t_ray *ray, t_hit_data *hit, t_sphere *sphere)
+{
+	int	inside;
+
+	hit->object = (t_object *)sphere;
+	hit->impact_point = ft_fvector3_sum(ray->origin,
+			ft_fvector3_scale(ray->direction, ray->dist));
+	hit->normal = ft_fnormalize(ft_fvector3_diff(hit->impact_point,
+				sphere->position));
+	hit->position = sphere->position;
+	inside = ft_fvector3_length(ft_fvector3_diff(ray->origin,
+				sphere->position)) < sphere->radius;
+	if (inside)
+		hit->normal = ft_fvector3_scale(hit->normal, -1);
+	return (inside);
 }
 
 static inline t_rgb	get_base_color(t_pattern pattern, t_fvector3 normal,
