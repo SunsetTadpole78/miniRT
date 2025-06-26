@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/03 00:28:44 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:49:23 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,13 @@ static inline t_rgb	get_base_color(t_cylinder *cy, t_pattern pattern,
 	if (pattern.id != 'c' && !pattern.path)
 		return (pattern.main_color);
 	diff = ft_fvector3_diff(impact_point, cy->position);
-	h = ft_fdot_product(diff, cy->normal);
+	h = diff.x * cy->normal.x + diff.y * cy->normal.y + diff.z * cy->normal.z;
 	if (pattern.id == 'c')
 	{
 		proj = ft_fvector3_diff(diff, ft_fvector3_scale(cy->normal, h));
-		angle = atan2f(ft_fdot_product(proj, cy->up),
-				ft_fdot_product(proj, cy->right));
+		angle = atan2f(proj.x * cy->up.x + proj.y * cy->up.y + proj.z
+				* cy->up.z, proj.x * cy->right.x + proj.y
+				* cy->right.y + proj.z * cy->right.z);
 		if (angle < 0.0f)
 			angle += 2.0f * M_PI;
 		if ((int)(floorf(angle * 3.0f + EPSILON)
@@ -83,17 +84,18 @@ static inline t_rgb	display_texture(t_mlx_image texture, t_cylinder *cy,
 
 	if (fabsf(fabsf(h) - cy->half_height) < EPSILON)
 	{
-		u = ft_fdot_product(diff, cy->right) / cy->diameter + 0.5f;
-		v = ft_fdot_product(diff, cy->up) / cy->diameter + 0.5f;
+		u = (diff.x * cy->right.x + diff.y * cy->right.y + diff.z * cy->right.z)
+			/ cy->diameter + 0.5f;
+		v = (diff.x * cy->up.x + diff.y * cy->up.y + diff.z * cy->up.z)
+			/ cy->diameter + 0.5f;
 	}
 	else
 	{
 		proj = ft_fvector3_diff(diff, ft_fvector3_scale(cy->normal, h));
-		angle = atan2f(ft_fdot_product(proj, cy->up),
-				ft_fdot_product(proj, cy->right));
-		if (angle < 0.0f)
-			angle += 2.0f * M_PI;
-		u = angle / (2.0f * M_PI);
+		angle = atan2f(proj.x * cy->up.x + proj.y * cy->up.y + proj.z
+				* cy->up.z, proj.x * cy->right.x + proj.y
+				* cy->right.y + proj.z * cy->right.z);
+		u = (angle + ((angle < 0.0f) * 2.0f * M_PI)) / (2.0f * M_PI);
 		v = (h + cy->half_height) / cy->height;
 	}
 	return (mlx_pixel_to_rgb(texture,
