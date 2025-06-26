@@ -56,7 +56,7 @@ int	loop_hook(t_minirt *mrt)
 		}
 		else
 		{
-			if (count == 15)
+			if (count == 25)
 			{
 				count = 0;
 				mlx->update = 0;
