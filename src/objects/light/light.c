@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 13:40:30 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:50:51 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,9 @@ float	intersect_light(t_ray *ray, t_object *object, float amplifier)
 	if (light->scale == 0.0f)
 		return (-1.0f);
 	oc = ft_fvector3_diff(ray->origin, light->position);
-	b = 2.0f * ft_fdot_product(oc, ray->direction);
-	delta = b * b - 4.0f * (ft_fdot_product(oc, oc)
+	b = 2.0f * (oc.x * ray->direction.x + oc.y * ray->direction.y
+			+ oc.z * ray->direction.z);
+	delta = b * b - 4.0f * ((oc.x * oc.x + oc.y * oc.y + oc.z * oc.z)
 			- (light->radius * light->radius * amplifier));
 	if (delta < 0.0f)
 		return (-1.0f);

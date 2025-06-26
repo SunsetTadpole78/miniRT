@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 13:35:52 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/03 03:35:14 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/25 13:02:41 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ static inline void	update_yaw(t_camera *camera, float theta)
 	t_fvector3	world;
 
 	world = (t_fvector3){0.0f, 1.0f, 0.0f};
-	if (ft_fdot_product(camera->up, world) <= EPSILON)
+	if ((camera->up.x * world.x + camera->up.y * world.y
+			+ camera->up.z * world.z) <= EPSILON)
 	{
 		theta = -theta;
 		world.y = -1.0f;

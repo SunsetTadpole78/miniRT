@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 16:15:23 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:50:34 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ float	intersect_sphere(t_ray *ray, t_object *object, float amplifier)
 
 	sphere = (t_sphere *)object;
 	oc = ft_fvector3_diff(ray->origin, sphere->position);
-	b = 2.0f * ft_fdot_product(oc, ray->direction);
-	delta = b * b - 4.0f * (ft_fdot_product(oc, oc)
+	b = 2.0f * (oc.x * ray->direction.x + oc.y * ray->direction.y
+			+ oc.z * ray->direction.z);
+	delta = b * b - 4.0f * ((oc.x * oc.x + oc.y * oc.y + oc.z * oc.z)
 			- (sphere->radius * sphere->radius * amplifier));
 	if (delta < 0.0f)
 		return (-1.0f);
