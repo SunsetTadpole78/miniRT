@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:44:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/26 14:26:49 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:58:37 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,14 @@ t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data *hit, int inside)
 {
 	t_frgb		color;
 	t_light		*light;
-	t_object	*object;
-	int			(*is_inside)(t_object *, t_fvector3);
+	int			oid;
 
 	color = mrt->ambiant->gamma_color;
 	light = mrt->lights;
-	object = hit->object;
-	is_inside = object->methods->is_inside;
+	oid = hit->object->oid;
 	while (light)
 	{
-		if (!inside || (is_inside && is_inside(object, light->position)))
+		if (!inside || is_light_inside(oid, light))
 			apply_diffuse_lights(mrt, light, hit, &color);
 		light = (t_light *)light->next;
 	}

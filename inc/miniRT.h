@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/26 14:02:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 18:37:00 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct s_pattern
 typedef struct s_object
 {
 	char		*id;
+	int			oid;
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
@@ -98,6 +99,7 @@ typedef struct s_object
 typedef struct s_normal_object
 {
 	char		*id;
+	int			oid;
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
@@ -110,6 +112,7 @@ typedef struct s_normal_object
 typedef struct s_ambiant
 {
 	char		*id;
+	int			oid;
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
@@ -132,6 +135,7 @@ typedef struct s_ray
 typedef struct s_camera
 {
 	char		*id;
+	int			oid;
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
@@ -146,6 +150,7 @@ typedef struct s_camera
 typedef struct s_light
 {
 	char		*id;
+	int			oid;
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
@@ -157,11 +162,13 @@ typedef struct s_light
 	float		scale;
 	float		radius;
 	int			visible;
+	t_list		*inside;
 }	t_light;
 
 typedef struct s_sphere
 {
 	char		*id;
+	int			oid;
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
@@ -175,6 +182,7 @@ typedef struct s_sphere
 typedef struct s_plane
 {
 	char		*id;
+	int			oid;
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
@@ -189,6 +197,7 @@ typedef struct s_plane
 typedef struct s_cone
 {
 	char		*id;
+	int			oid;
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
@@ -209,6 +218,7 @@ typedef struct s_cone
 typedef struct s_cylinder
 {
 	char		*id;
+	int			oid;
 	t_object	*next;
 	t_methods	*methods;
 	int			selected;
@@ -372,6 +382,8 @@ void		show_light(t_ray *ray, t_light *light);
 float		intersect_light(t_ray *ray, t_object *object, float amplifier);
 void		on_press_key_light(t_object *object, int keycode, t_camera *camera);
 t_object	*duplicate_light(t_object *object);
+int			is_light_inside(int oid, t_light *light);
+void		refresh_inside_lights(t_minirt *mrt);
 
 t_plane		*plane(t_fvector3 position, t_fvector3 normal, t_pattern pattern);
 void		*parse_plane(char **values);

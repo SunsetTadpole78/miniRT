@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/26 14:04:22 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 18:31:10 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ void	init_render(t_minirt *mrt)
 		cur->default_level = level;
 		cur = cur->next;
 	}
+	refresh_inside_lights(mrt);
 }
 
 inline void	init_thread_data(t_thread_data *data, int cores, int i,

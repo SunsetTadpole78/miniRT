@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:39 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/25 12:50:51 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:02:43 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_light	*light(t_fvector3 position, float level, t_pattern pattern, float scale)
 	l->selected = 0;
 	l->radius = level * scale;
 	l->visible = scale != 0.0f && level != 0.0f;
+	l->inside = NULL;
 	return (l);
 }
 
