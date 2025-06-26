@@ -58,10 +58,8 @@ static inline t_rgb	get_base_color(t_cone *cone, t_pattern pattern,
 		angle = atan2f(hit.diff.x * cone->up.x + hit.diff.y * cone->up.y
 				+ hit.diff.z * cone->up.z, hit.diff.x * cone->right.x
 				+ hit.diff.y * cone->right.y + hit.diff.z * cone->right.z);
-		if (angle < 0.0f)
-			angle += 2.0f * M_PI;
-		if ((int)((floorf(angle * 3.0f + EPSILON))
-			+ (floorf(hit.h * 0.3f + EPSILON))) & 1)
+		if ((int)(floorf((angle + (angle < 0.0f) * 2.0f * M_PI)
+				* 3.0f + EPSILON) + floorf(hit.h * 0.3f + EPSILON)) & 1)
 			return (pattern.secondary_color);
 	}
 	if (pattern.path)

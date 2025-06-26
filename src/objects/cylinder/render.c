@@ -61,10 +61,9 @@ static inline t_rgb	get_base_color(t_cylinder *cy, t_pattern pattern,
 		angle = atan2f(hit.proj.x * cy->up.x + hit.proj.y * cy->up.y
 				+ hit.proj.z * cy->up.z, hit.proj.x * cy->right.x
 				+ hit.proj.y * cy->right.y + hit.proj.z * cy->right.z);
-		if (angle < 0.0f)
-			angle += 2.0f * M_PI;
-		if ((int)(floorf(angle * 3.0f + EPSILON)
-			+ floorf((hit.h + cy->half_height) * 0.3f + EPSILON)) & 1)
+		if ((int)(floorf((angle + (angle < 0.0f) * 2.0f * M_PI)
+				* 3.0f + EPSILON) + floorf((hit.h + cy->half_height)
+				* 0.3f + EPSILON)) & 1)
 			return (pattern.secondary_color);
 	}
 	if (pattern.path)
