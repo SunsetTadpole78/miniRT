@@ -76,10 +76,8 @@ static inline t_rgb	get_base_color(t_plane *plane, t_pattern pattern,
 
 static inline t_rgb	display_texture(t_mlx_image texture, t_hit_data hit)
 {
-	float	v;
-
-	v = hit.v * texture.ratio;
+	hit.v *= texture.ratio;
 	return (mlx_pixel_to_rgb(texture,
 			(int)((hit.u - floorf(hit.u)) * texture.width) % texture.width,
-		(int)((v - floorf(v)) * texture.height) % texture.height));
+		(int)((hit.v - floorf(hit.v)) * texture.height) % texture.height));
 }
