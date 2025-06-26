@@ -1,5 +1,5 @@
 C 0,3,0 0,0,1 70
-cy 0,3,20 0,1,0 10 10 resources/ship.xpm,resources/ship.xpm
+cy 0,3,20 0,1,0 10 10 resources/ship.xpm checker
 pl 0,0,0 0,1,0 255,255,255
 l 0,3,20 1 0,255,0 1
  l 0,20,20 1 255,0,0 0.1

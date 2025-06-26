@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 18:34:10 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 16:21:15 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:43:04 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,30 @@ int	init_cylinder(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder)
 static inline t_fvector3	get_normal(int type,
 	t_fvector3 impact_point, t_cylinder *cylinder)
 {
+	t_fvector3	diff;
+	float		scale;
+
 	if (type == 1)
-		return (ft_fvector3_scale(cylinder->normal, -1.0f));
+	{
+		return ((t_fvector3){
+			cylinder->normal.x * -1.0f,
+			cylinder->normal.y * -1.0f,
+			cylinder->normal.z * -1.0f
+		});
+	}
 	if (type == 2)
 		return (cylinder->normal);
-	return (ft_fnormalize(ft_fvector3_diff(impact_point,
-				ft_fvector3_sum(cylinder->position,
-					ft_fvector3_scale(cylinder->normal,
-						ft_fdot_product(ft_fvector3_diff(
-								impact_point,
-								cylinder->position),
-							cylinder->normal))))));
+	diff = ft_fvector3_diff(impact_point, cylinder->position);
+	scale = diff.x * cylinder->normal.x + diff.y * cylinder->normal.y
+		+ diff.z * cylinder->normal.z;
+	return (ft_fnormalize((t_fvector3){
+			impact_point.x - (cylinder->position.x
+				+ (cylinder->normal.x * scale)),
+			impact_point.y - (cylinder->position.y
+				+ (cylinder->normal.y * scale)),
+			impact_point.z - (cylinder->position.z
+				+ (cylinder->normal.z * scale))
+		}));
 }
 
 int	is_inside_cylinder(t_object *object, t_fvector3 point)
@@ -57,16 +70,16 @@ int	is_inside_cylinder(t_object *object, t_fvector3 point)
 
 	cylinder = (t_cylinder *)object;
 	diff = ft_fvector3_diff(point, cylinder->position);
-	projection = ft_fdot_product(diff, cylinder->normal);
+	projection = diff.x * cylinder->normal.x + diff.y * cylinder->normal.y
+		+ diff.z * cylinder->normal.z;
 	if (!cylinder->infinite && (fabsf(projection) > cylinder->half_height))
 		return (0);
 	radial = (t_fvector3){
 		diff.x - projection * cylinder->normal.x,
 		diff.y - projection * cylinder->normal.y,
 		diff.z - projection * cylinder->normal.z};
-	if (ft_fdot_product(radial, radial) < cylinder->radius * cylinder->radius)
-		return (1);
-	return (0);
+	return ((radial.x * radial.x + radial.y * radial.y + radial.z * radial.z)
+		<= cylinder->radius * cylinder->radius);
 }
 
 t_object	*duplicate_cylinder(t_object *object)

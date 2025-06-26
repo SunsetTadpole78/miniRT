@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated:   by Juste                              ###   ########.fr       */
+/*   Updated: 2025/06/25 00:11:47 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_fvector3	rotate_object(t_fvector3 v, t_fvector3 axis, float theta)
 
 	cos_t = cosf(theta);
 	sin_t = sinf(theta);
-	dot = ft_fdot_product(axis, v);
+	dot = axis.x * v.x + axis.y * v.y + axis.z * v.z;
 	cross = ft_fcross_product(axis, v);
 	return ((t_fvector3){
 		v.x * cos_t + cross.x * sin_t + axis.x * dot * (1 - cos_t),

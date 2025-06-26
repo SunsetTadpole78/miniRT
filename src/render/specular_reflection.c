@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/20 15:47:16 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/25 13:06:02 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,17 @@ void	specular_reflection(t_ray *ray, t_hit_data *hit,
 		float smoothness_factor)
 {
 	float		cos_theta;
-	t_fvector3	direction;
+	t_fvector3	dir;
 	t_fvector3	normal;
 
-	direction = ray->direction;
+	dir = ray->direction;
 	normal = hit->normal;
 	cos_theta = 1.0f - smoothness_factor * (fast_rand() / 2147483647.0f);
 	ray->origin = ft_fvector3_sum(hit->impact_point,
 			ft_fvector3_scale(hit->normal, EPSILON));
 	ray->direction = random_seed(
-			ft_fvector3_diff(direction, ft_fvector3_scale(normal, 2.0f
-					* ft_fdot_product(direction, normal))),
+			ft_fvector3_diff(dir, ft_fvector3_scale(normal, 2.0f * (dir.x
+						* normal.x + dir.y * normal.y + dir.z * normal.z))),
 			2.0f * M_PI * (fast_rand() / 2147483647.0f),
 			cos_theta,
 			sqrtf(1.0f - cos_theta * cos_theta));

@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/03 02:52:20 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/25 12:53:22 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	apply_lights_plane(t_minirt *mrt, t_ray *ray, t_object *object,
 
 	plane = (t_plane *)object;
 	init_plane(ray, &hit, plane);
-	if (ft_fdot_product(ray->direction, hit.normal) > 0)
+	if ((ray->direction.x * hit.normal.x + ray->direction.y * hit.normal.y
+			+ ray->direction.z * hit.normal.z) > 0)
 		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, 0),
 			get_base_color(plane, plane->pattern, hit.impact_point));
@@ -64,8 +65,10 @@ static inline t_rgb	get_base_color(t_plane *plane, t_pattern pattern,
 		return (pattern.main_color);
 	diff = ft_fvector3_diff(impact_point, plane->position);
 	if (pattern.id == 'c'
-		&& (int)((floorf(ft_fdot_product(diff, plane->right) * 0.05f))
-		+ (floorf(ft_fdot_product(diff, plane->up) * 0.05f))) & 1)
+		&& (int)((floorf((diff.x * plane->right.x + diff.y * plane->right.y
+					+ diff.z * plane->right.z) * 0.05f))
+		+ (floorf((diff.x * plane->up.x + diff.y * plane->up.y
+					+ diff.z * plane->up.z) * 0.05f))) & 1)
 		return (pattern.secondary_color);
 	if (pattern.path)
 		return (display_texture(plane, pattern.texture, diff));
@@ -78,8 +81,10 @@ static inline t_rgb	display_texture(t_plane *plane, t_mlx_image texture,
 	float	u;
 	float	v;
 
-	u = ft_fdot_product(diff, plane->right) * 0.05f;
-	v = ft_fdot_product(diff, plane->up) * 0.05f * texture.ratio;
+	u = (diff.x * plane->right.x + diff.y * plane->right.y + diff.z
+			* plane->right.z) * 0.05f;
+	v = (diff.x * plane->up.x + diff.y * plane->up.y + diff.z * plane->up.z)
+		* 0.05f * texture.ratio;
 	return (mlx_pixel_to_rgb(texture,
 			(int)((u - floorf(u)) * texture.width) % texture.width,
 		(int)((v - floorf(v)) * texture.height) % texture.height));
