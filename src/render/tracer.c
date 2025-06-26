@@ -6,13 +6,15 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 01:38:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/26 19:31:47 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 20:51:20 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
+/* ------------------------------- PROTOTYPE -------------------------------- */
 static inline void	check_intersection(t_object *object, t_ray *ray);
+/* -------------------------------------------------------------------------- */
 
 t_fvector3	primary_ray(t_camera *cam, t_vector2 pos, float ratio)
 {
@@ -22,14 +24,14 @@ t_fvector3	primary_ray(t_camera *cam, t_vector2 pos, float ratio)
 		-(2.0f * (((float)pos.x + 0.5f) / WIN_WIDTH) - 1.0f) * ratio,
 		-(2.0f * (((float)pos.y + 0.5f) / WIN_HEIGHT) - 1.0f)
 		* cam->iplane_scale, 1.0f};
-	return (ft_fnormalize(
-			ft_fvector3_sum(
-				ft_fvector3_sum(
-					(t_fvector3){cam->right.x * ndc_vec.x,
-					cam->right.y * ndc_vec.x, cam->right.z * ndc_vec.x},
-				(t_fvector3){cam->up.x * ndc_vec.y,
-				cam->up.y * ndc_vec.y, cam->up.z * ndc_vec.y}),
-		cam->normal)));
+	return (ft_fnormalize((t_fvector3){
+			(cam->right.x * ndc_vec.x) + (cam->up.x * ndc_vec.y)
+			+ cam->normal.x,
+			(cam->right.y * ndc_vec.x) + (cam->up.y * ndc_vec.y)
+			+ cam->normal.y,
+			(cam->right.z * ndc_vec.x) + (cam->up.z * ndc_vec.y)
+			+ cam->normal.z
+		}));
 }
 
 t_rgb	ray_tracer(t_minirt *mrt, t_ray *ray, int depth)

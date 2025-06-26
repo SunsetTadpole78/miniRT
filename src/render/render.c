@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/26 14:26:30 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/27 01:17:24 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,24 +99,27 @@ static inline void	init_threads(t_minirt *mrt)
 
 static inline void	fill_image(t_thread_data *data)
 {
-	t_vector2	pos;
-	t_ray		ray;
-	int			id;
-	int			incr;
+	t_vector2		pos;
+	t_ray			ray;
+	int				id;
+	unsigned int	*ptr;
+	t_mlx_image		image;
 
 	ray.origin = data->camera->position;
 	pos.y = 0;
 	id = data->id;
-	incr = data->cores;
+	image = data->mrt->mlx->image;
 	while (pos.y < WIN_HEIGHT)
 	{
+		ptr = (unsigned int *)(image.data + (pos.y * image.ll + id * image.cl));
 		pos.x = id;
 		while (pos.x < WIN_WIDTH)
 		{
 			ray.direction = primary_ray(data->camera, pos, data->ratio);
 			ray_tracer(data->mrt, &ray, 0);
-			blend_colors(data->mrt, &ray, pos, data->count);
-			pos.x += incr;
+			*ptr = blend_colors(data->mrt, &ray, pos, data->count);
+			ptr += data->cores;
+			pos.x += data->cores;
 		}
 		pos.y++;
 	}
