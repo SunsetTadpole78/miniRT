@@ -1,5 +1,6 @@
 A 0.6 255,255,255
-C 0,0,-47 0,0,1 70
+C 35,0,35 -1,0,-1 70
 sp 0,0,0 50 resources/earth_map.xpm,resources/earth_bump.xpm
+sp 0,0,0 1000 resources/stars.xpm 0 0
 l 0,15,20 1 255,255,255
 l 0,15,1 1 255,255,255
