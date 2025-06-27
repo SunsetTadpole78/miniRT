@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/24 22:43:09 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/27 01:12:17 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static inline unsigned int	rgb_to_uint(t_rgb color);
 /* -------------------------------------------------------------------------- */
 
-void	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos, int count)
+int	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos, int count)
 {
 	t_mlx		*mlx;
 	t_rgb		prev_color;
@@ -25,14 +25,14 @@ void	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos, int count)
 	mlx = mrt->mlx;
 	image = mlx->image;
 	prev_color = mlx_pixel_to_rgb(image, pos.x, pos.y);
-	*((unsigned int *)(image.data + (pos.y * image.ll + pos.x * image.cl)))
-		= rgb_to_uint((t_rgb){
+	return (rgb_to_uint((t_rgb){
 			(unsigned char)((prev_color.r * count + ray->color.r)
-				/ (count + 1)),
-			(unsigned char)((prev_color.g * count + ray->color.g)
-				/ (count + 1)),
+			/ (count + 1)),
+		(unsigned char)((prev_color.g * count + ray->color.g)
+		/ (count + 1)),
 			(unsigned char)((prev_color.b * count + ray->color.b)
-				/ (count + 1))});
+			/ (count + 1))
+			}));
 }
 
 static inline unsigned int	rgb_to_uint(t_rgb color)

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 12:46:20 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/25 13:02:00 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:50:19 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	init_cone(t_ray *ray, t_hit_data *hit, t_cone *cone)
 	inside = is_inside_cone((t_object *)cone, ray->origin);
 	if (inside)
 		hit->normal = ft_fvector3_scale(hit->normal, -1);
+	hit->level = cone->default_level;
 	return (inside);
 }
 

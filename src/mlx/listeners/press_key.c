@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/03 03:33:54 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 18:39:11 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,8 @@ static inline void	objects_key(t_minirt *mrt, int keycode)
 
 	on_press_key = mrt->selected->methods->on_press_key;
 	if (on_press_key)
+	{
 		on_press_key(mrt->selected, keycode, mrt->camera);
+		refresh_inside_lights(mrt);
+	}
 }
