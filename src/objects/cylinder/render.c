@@ -31,7 +31,7 @@ void	apply_lights_cylinder(t_minirt *mrt, t_ray *ray, t_object *object,
 
 	cylinder = (t_cylinder *)object;
 	inside = init_cylinder(ray, &hit, cylinder);
-	base = get_base_color(cylinder, cylinder->pattern, hit.impact_point);
+	base = get_base_color(cylinder, cylinder->pattern, hit);
 	if (base.r != 0 || base.g != 0 || base.b != 0)
 		ray->color = apply_lights_modifier(
 				get_lights_modifier(mrt, &hit, inside), base);

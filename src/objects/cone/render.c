@@ -30,7 +30,7 @@ void	apply_lights_cone(t_minirt *mrt, t_ray *ray, t_object *object,
 
 	cone = (t_cone *)object;
 	inside = init_cone(ray, &hit, cone);
-	base = get_base_color(cone, cone->pattern, hit.impact_point);
+	base = get_base_color(cone, cone->pattern, hit);
 	if (base.r != 0 || base.g != 0 || base.b != 0)
 		ray->color = apply_lights_modifier(
 				get_lights_modifier(mrt, &hit, inside), base);
