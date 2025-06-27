@@ -93,14 +93,21 @@ static inline t_rgb	display_texture(t_mlx_image texture, float u, float v)
 static inline t_fvector3	bump_mapping(t_mlx_image bump, t_fvector3 normal,
 	float u, float v)
 {
-	t_rgb	c;
-	float	intensity;
-	float	offset;
+	t_rgb		c;
+	float		du;
+	float		dv;
+	float		hC;
+	t_fvector3	t;
 
 	c = display_texture(bump, u, v);
-	intensity = (c.r + c.g + c.b) / (3.0f * 255.0f);
-	offset = 0.8f * (intensity - 0.5f);
+	hC = (c.r + c.g + c.b) / 3.0f;
+	c = display_texture(bump, u + 1.0f / (float)bump.width, v);
+	du = ((c.r + c.g + c.b) / 3.0f - hC) * 0.8f;
+	c = display_texture(bump, u, v + 1.0f / (float)bump.height);
+	dv = ((c.r + c.g + c.b) / 3.0f - hC) * 0.8f;
+	t = ft_fnormalize(ft_fcross_product((t_fvector3){0.0f, 1.0f, 0.0f}, normal));
 	return (ft_fnormalize(ft_fvector3_sum(normal,
-			(t_fvector3){offset, offset, offset})));
+		ft_fvector3_sum(ft_fvector3_scale(t, du),
+		ft_fvector3_scale(ft_fnormalize(ft_fcross_product(normal, t)), dv)))));
 }
 */
