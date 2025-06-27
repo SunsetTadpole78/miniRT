@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/03 02:47:42 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:46:52 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,16 @@ void	apply_lights_sphere(t_minirt *mrt, t_ray *ray, t_object *object,
 	t_sphere	*sphere;
 	t_hit_data	hit;
 	int			inside;
+	t_rgb		base;
 	t_ray		reflect_ray;
 
 	sphere = (t_sphere *)object;
 	inside = init_sphere(ray, &hit, sphere);
-	ray->color = apply_lights_modifier(get_lights_modifier(mrt, hit, inside),
-			get_base_color(sphere->pattern, hit.normal, inside));
-	if (!inside && sphere->pattern.mattifying != 0.0f)
+	base = get_base_color(sphere->pattern, hit.normal, inside);
+	if (base.r != 0 || base.g != 0 || base.b != 0)
+		ray->color = apply_lights_modifier(
+				get_lights_modifier(mrt, &hit, inside), base);
+	if (!inside && sphere->pattern.mattifying != 0.0f && hit.level != 0.0f)
 	{
 		reflect_ray = *ray;
 		specular_reflection(&reflect_ray, &hit,
@@ -59,6 +62,7 @@ static inline int	init_sphere(t_ray *ray, t_hit_data *hit, t_sphere *sphere)
 				sphere->position)) < sphere->radius;
 	if (inside)
 		hit->normal = ft_fvector3_scale(hit->normal, -1);
+	hit->level = sphere->default_level;
 	return (inside);
 }
 

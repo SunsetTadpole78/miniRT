@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 18:34:10 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/25 12:43:04 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:50:26 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	init_cylinder(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder)
 	inside = is_inside_cylinder((t_object *)cylinder, ray->origin);
 	if (inside)
 		hit->normal = ft_fvector3_scale(hit->normal, -1);
+	hit->level = cylinder->default_level;
 	return (inside);
 }
 

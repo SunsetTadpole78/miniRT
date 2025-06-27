@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 09:49:15 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/26 11:21:00 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 21:18:09 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,11 @@ void	init_render(t_minirt *mrt)
 	t_object	*cur;
 	void		*ptr;
 	t_pattern	*pattern;
+	float		level;
 
 	cur = mrt->objects;
 	ptr = mrt->mlx->mlx_ptr;
+	level = mrt->ambiant->level;
 	while (cur)
 	{
 		pattern = &cur->pattern;
@@ -110,23 +112,19 @@ void	init_render(t_minirt *mrt)
 			init_texture(&pattern->texture, pattern->path, ptr);
 		if (pattern->bump_path)
 			init_texture(&pattern->bump, pattern->bump_path, ptr);
+		cur->default_level = level;
 		cur = cur->next;
 	}
+	refresh_inside_lights(mrt);
 }
 
 inline void	init_thread_data(t_thread_data *data, int cores, int i,
 		t_minirt *mrt)
 {
-	int	pixels_per_thread;
-
-	pixels_per_thread = mrt->pixels_per_thread;
 	data->mrt = mrt;
 	data->id = i;
-	data->start = i * pixels_per_thread;
-	if (i == cores - 1)
-		data->end = WIN_WIDTH * WIN_HEIGHT;
-	else
-		data->end = (i + 1) * pixels_per_thread;
+	data->cores = cores;
+	data->max = WIN_WIDTH * WIN_HEIGHT;
 	data->camera = data->mrt->camera;
 	data->ratio = ((float)WIN_WIDTH / (float)WIN_HEIGHT)
 		* data->camera->iplane_scale;
