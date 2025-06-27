@@ -301,6 +301,11 @@ typedef struct s_hit_data
 	t_fvector3	impact_point;
 	t_fvector3	normal;
 	t_fvector3	position;
+	t_fvector3	diff;
+	t_fvector3	proj;
+	float		u;
+	float		v;
+	float		h;
 	float		level;
 }	t_hit_data;
 
