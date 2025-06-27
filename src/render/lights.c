@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:44:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/26 19:51:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/28 01:07:53 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline float	calculate_light_level(t_minirt *mrt, t_light *light,
-						t_hit_data *hit);
+						t_hit_data *hit, t_fvector3 direction);
 static inline void	apply_diffuse_lights(t_minirt *mrt, t_light *light,
 						t_hit_data *hit, t_frgb *color);
 static inline int		is_light_blocked(t_minirt *mrt, t_ray *ray,
@@ -47,23 +47,45 @@ t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data *hit, int inside)
 	return (color);
 }
 
-static inline float	calculate_light_level(t_minirt *mrt, t_light *light,
-		t_hit_data *hit)
+static inline void	apply_diffuse_lights(t_minirt *mrt, t_light *light,
+		t_hit_data *hit, t_frgb *color)
 {
-	t_fvector3	direction;
+	float		level;
+	t_fvector3	pos;
+	t_fvector3	impact;
+
+	pos = light->position;
+	impact = hit->impact_point;
+	level = calculate_light_level(mrt, light, hit, (t_fvector3){
+			pos.x - impact.x,
+			pos.y - impact.y,
+			pos.z - impact.z
+		}) * light->level;
+	color->r += light->gamma_color.r * level;
+	color->g += light->gamma_color.g * level;
+	color->b += light->gamma_color.b * level;
+	hit->level += level;
+}
+
+static inline float	calculate_light_level(t_minirt *mrt, t_light *light,
+		t_hit_data *hit, t_fvector3 direction)
+{
 	float		distance;
 	float		dot;
 	t_ray		shadow_ray;
 
-	direction = ft_fvector3_diff(light->position, hit->impact_point);
-	distance = ft_fvector3_length(direction);
+	distance = sqrtf(direction.x * direction.x + direction.y * direction.y
+			+ direction.z * direction.z);
 	direction = ft_fnormalize(direction);
 	dot = hit->normal.x * direction.x + hit->normal.y * direction.y
 		+ hit->normal.z * direction.z;
 	if (dot <= 0.0f)
 		return (0.0f);
-	shadow_ray.origin = ft_fvector3_sum(hit->impact_point,
-			ft_fvector3_scale(hit->normal, 0.000001f));
+	shadow_ray.origin = (t_fvector3){
+		hit->impact_point.x + hit->normal.x * 0.000001f,
+		hit->impact_point.y + hit->normal.y * 0.000001f,
+		hit->impact_point.z + hit->normal.z * 0.000001f
+	};
 	shadow_ray.direction = direction;
 	shadow_ray.dist = distance;
 	if (is_light_blocked(mrt, &shadow_ray, light, hit->object))
@@ -73,37 +95,28 @@ static inline float	calculate_light_level(t_minirt *mrt, t_light *light,
 				* distance * distance)));
 }
 
-static inline void	apply_diffuse_lights(t_minirt *mrt, t_light *light,
-		t_hit_data *hit, t_frgb *color)
-{
-	float	level;
-
-	level = calculate_light_level(mrt, light, hit) * light->level;
-	color->r += light->gamma_color.r * level;
-	color->g += light->gamma_color.g * level;
-	color->b += light->gamma_color.b * level;
-	hit->level += level;
-}
-
 static inline int	is_light_blocked(t_minirt *mrt, t_ray *ray, t_light *light,
 		t_object *object)
 {
-	t_object	*cur;
 	float		dist;
 	float		max_dist;
-	t_fvector3	position;
+	t_fvector3	pos;
 	float		(*intersect)(t_ray *, t_object *, float);
+	t_object	*cur;
 
+	pos = (t_fvector3){
+		light->position.x - ray->origin.x,
+		light->position.y - ray->origin.y,
+		light->position.z - ray->origin.z};
+	max_dist = sqrtf(pos.x * pos.x + pos.y * pos.y + pos.z * pos.z);
+	pos = mrt->camera->position;
 	cur = mrt->objects;
-	max_dist = ft_fvector3_length(ft_fvector3_diff(light->position,
-				ray->origin));
-	position = mrt->camera->position;
 	while (cur)
 	{
 		intersect = cur->methods->intersect;
 		if (cur != object && intersect)
 		{
-			dist = get_distance(cur, position, ray, intersect);
+			dist = get_distance(cur, pos, ray, intersect);
 			if (dist > 0.0f && dist <= max_dist)
 				return (1);
 		}

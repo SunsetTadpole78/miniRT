@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/28 00:30:50 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/28 01:12:55 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,14 @@ t_rgb	apply_lights_modifier(t_frgb modifier, t_rgb base)
 		temp.g *= powf(modifier.g, gamma_inv);
 	if (modifier.b <= 1.0f)
 		temp.b *= powf(modifier.b, gamma_inv);
-	if (temp.r > 1.0f)
-		base.r = 255;
-	else
+	base.r = 255;
+	if (temp.r <= 1.0f)
 		base.r = (unsigned char)(temp.r * 255.0f);
-	if (temp.g > 1.0f)
-		base.g = 255;
-	else
+	base.g = 255;
+	if (temp.g <= 1.0f)
 		base.g = (unsigned char)(temp.g * 255.0f);
-	if (temp.b > 1.0f)
-		base.b = 255;
-	else
+	base.b = 255;
+	if (temp.b <= 1.0f)
 		base.b = (unsigned char)(temp.b * 255.0f);
 	return (base);
 }

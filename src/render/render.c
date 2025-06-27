@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/28 00:35:37 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/28 00:42:01 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	render_scene(t_minirt *mrt)
 		sem_post(mrt->workers_sem);
 		i++;
 	}
-	usleep(10);
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->image.ptr, 0, 0);
 }
 
