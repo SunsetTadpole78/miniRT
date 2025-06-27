@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/27 01:17:24 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/28 00:35:37 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 static inline void		*render_part(void *value);
 static inline void		init_threads(t_minirt *mrt);
 static inline void		fill_image(t_thread_data *data);
-static inline void		wait_workers(t_minirt *mrt, int cores);
+static inline void		blend_colors(unsigned int *ptr, t_rgb color, int count,
+							float count_ratio);
 /* -------------------------------------------------------------------------- */
 
 void	render_scene(t_minirt *mrt)
@@ -31,6 +32,7 @@ void	render_scene(t_minirt *mrt)
 	datas = mrt->threads_datas;
 	mlx = mrt->mlx;
 	datas[cores - 1].count = mlx->count;
+	datas[cores - 1].count_ratio = 1.0f / (mlx->count + 1);
 	fill_image(&datas[cores - 1]);
 	mlx->count++;
 	wait_workers(mrt, cores);
@@ -72,18 +74,19 @@ static inline void	*render_part(void *value)
 static inline void	init_threads(t_minirt *mrt)
 {
 	int				i;
-	int				cores;
 	t_thread_data	*datas;
 	int				count;
+	float			ratio;
 
-	cores = mrt->cores;
 	datas = mrt->threads_datas;
 	count = mrt->mlx->count;
-	wait_workers(mrt, cores);
+	wait_workers(mrt, mrt->cores);
 	i = 0;
-	while (i < (cores - 1))
+	ratio = 1.0f / (count + 1);
+	while (i < (mrt->cores - 1))
 	{
 		datas[i].count = count;
+		datas[i].count_ratio = ratio;
 		if (!mrt->threads_init)
 			pthread_create(&datas[i].thread, NULL, render_part, &datas[i]);
 		else
@@ -117,7 +120,7 @@ static inline void	fill_image(t_thread_data *data)
 		{
 			ray.direction = primary_ray(data->camera, pos, data->ratio);
 			ray_tracer(data->mrt, &ray, 0);
-			*ptr = blend_colors(data->mrt, &ray, pos, data->count);
+			blend_colors(ptr, ray.color, data->count, data->count_ratio);
 			ptr += data->cores;
 			pos.x += data->cores;
 		}
@@ -125,14 +128,16 @@ static inline void	fill_image(t_thread_data *data)
 	}
 }
 
-static inline void	wait_workers(t_minirt *mrt, int cores)
+static inline void	blend_colors(unsigned int *ptr, t_rgb color, int count,
+		float count_ratio)
 {
-	int	i;
+	int	v;
 
-	i = 0;
-	while (i < (cores - 1))
-	{
-		sem_wait(mrt->workers_sem);
-		i++;
-	}
+	v = *ptr;
+	*ptr = (((unsigned char)((((v >> 16) & 0xFF) * count + color.r)
+					* count_ratio)) & 0xFF) << 16
+		| ((unsigned char)((((v >> 8) & 0xFF) * count + color.g)
+				* count_ratio) & 0xFF) << 8
+		| ((unsigned char)(((v & 0xFF) * count + color.b)
+				* count_ratio) & 0xFF);
 }

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 07:20:49 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/20 15:09:31 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/28 00:25:10 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,18 @@ void	stop_threads(t_minirt *mrt)
 		pthread_cond_signal(&mrt->threads_datas[i].update_cond);
 		pthread_mutex_unlock(&mrt->threads_datas[i].update_mutex);
 		pthread_join(mrt->threads_datas[i].thread, NULL);
+		i++;
+	}
+}
+
+void	wait_workers(t_minirt *mrt, int cores)
+{
+	int	i;
+
+	i = 0;
+	while (i < (cores - 1))
+	{
+		sem_wait(mrt->workers_sem);
 		i++;
 	}
 }

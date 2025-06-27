@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/26 21:28:04 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/28 00:25:36 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@
 # define RAD_ANGLE 0.785398f
 
 # define MAX_DEPTH 100
+# define MAX_REFRESH 20
 
 // Structures
 
@@ -271,6 +272,7 @@ typedef struct s_thread_data
 	pthread_t		thread;
 	float			ratio;
 	int				count;
+	float			count_ratio;
 	pthread_mutex_t	update_mutex;
 	pthread_cond_t	update_cond;
 }	t_thread_data;
@@ -328,7 +330,6 @@ void		render_scene(t_minirt *mrt);
 t_rgb		ray_tracer(t_minirt *mrt, t_ray *ray, int depth);
 t_fvector3	primary_ray(t_camera *cam, t_vector2 pos, float ratio);
 t_frgb		get_lights_modifier(t_minirt *mrt, t_hit_data *hit, int inside);
-int			blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos, int count);
 t_rgb		apply_lights_modifier(t_frgb modifier, t_rgb base);
 void		apply_selection_effect(t_rgb *color);
 void		specular_reflection(t_ray *ray, t_hit_data *hit,
@@ -336,6 +337,7 @@ void		specular_reflection(t_ray *ray, t_hit_data *hit,
 
 int			can_exit(t_minirt *mrt);
 void		stop_threads(t_minirt *mrt);
+void		wait_workers(t_minirt *mrt, int cores);
 
 t_fvector3	rotate_object(t_fvector3 v, t_fvector3 axis, float theta);
 

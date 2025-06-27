@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/02 13:35:53 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/28 00:11:35 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	loop_hook(t_minirt *mrt)
 		}
 		else
 		{
-			if (count == 20)
+			if (count == MAX_REFRESH)
 			{
 				count = 0;
 				mlx->update = 0;

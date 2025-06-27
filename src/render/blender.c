@@ -6,41 +6,11 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/27 01:12:17 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/28 00:30:50 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
-
-/* ------------------------------- PROTOTYPE -------------------------------- */
-static inline unsigned int	rgb_to_uint(t_rgb color);
-/* -------------------------------------------------------------------------- */
-
-int	blend_colors(t_minirt *mrt, t_ray *ray, t_vector2 pos, int count)
-{
-	t_mlx		*mlx;
-	t_rgb		prev_color;
-	t_mlx_image	image;
-
-	mlx = mrt->mlx;
-	image = mlx->image;
-	prev_color = mlx_pixel_to_rgb(image, pos.x, pos.y);
-	return (rgb_to_uint((t_rgb){
-			(unsigned char)((prev_color.r * count + ray->color.r)
-			/ (count + 1)),
-		(unsigned char)((prev_color.g * count + ray->color.g)
-		/ (count + 1)),
-			(unsigned char)((prev_color.b * count + ray->color.b)
-			/ (count + 1))
-			}));
-}
-
-static inline unsigned int	rgb_to_uint(t_rgb color)
-{
-	return ((color.r & 0xFF) << 16
-		| ((color.g & 0xFF) << 8)
-		| (color.b & 0xFF));
-}
 
 t_rgb	apply_lights_modifier(t_frgb modifier, t_rgb base)
 {
