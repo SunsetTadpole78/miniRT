@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/25 13:06:02 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 20:49:48 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,26 @@ void	specular_reflection(t_ray *ray, t_hit_data *hit,
 static inline t_fvector3	random_seed(t_fvector3 center, float phi,
 	float cos_theta, float sin_theta)
 {
-	t_fvector3		w;
-	t_fvector3		u;
+	t_fvector3	w;
+	t_fvector3	u;
+	float		scale1;
+	float		scale2;
 
 	w = ft_fnormalize(center);
 	if (fabsf(w.x) > 0.1f)
 		u = ft_fnormalize(ft_fcross_product((t_fvector3){0, 1, 0}, w));
 	else
 		u = ft_fnormalize(ft_fcross_product((t_fvector3){1, 0, 0}, w));
-	return (ft_fnormalize(ft_fvector3_sum(
-				ft_fvector3_sum(ft_fvector3_scale(u, sin_theta * cosf(phi)),
-					ft_fvector3_scale(ft_fcross_product(w, u),
-						sin_theta * sinf(phi))),
-				ft_fvector3_scale(w, cos_theta))));
+	scale1 = sin_theta * cosf(phi);
+	scale2 = sin_theta * sinf(phi);
+	return (ft_fnormalize((t_fvector3){
+			(u.x * scale1) + ((w.y * u.z - w.z * u.y) * scale2)
+			+ (w.x * cos_theta),
+			(u.y * scale1) + ((w.z * u.x - w.x * u.z) * scale2)
+			+ (w.y * cos_theta),
+			(u.z * scale1) + ((w.x * u.y - w.y * u.x) * scale2)
+			+ (w.z * cos_theta)
+		}));
 }
 
 static inline float	fast_rand(void)
