@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 12:06:23 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/02 13:40:50 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 18:40:24 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,43 @@ t_object	*duplicate_light(t_object *object)
 	new->radius = light->radius;
 	new->visible = light->visible;
 	return ((t_object *)new);
+}
+
+int	is_light_inside(int oid, t_light *light)
+{
+	t_list	*cur;
+
+	cur = light->inside;
+	while (cur)
+	{
+		if (*((int *)cur->content) == oid)
+			return (1);
+		cur = cur->next;
+	}
+	return (0);
+}
+
+void	refresh_inside_lights(t_minirt *mrt)
+{
+	t_object	*cur;
+	int			(*is_inside)(t_object *, t_fvector3);
+	t_light		*light;
+
+	light = mrt->lights;
+	while (light)
+	{
+		ft_lstclear(&light->inside, ft_nothing);
+		cur = mrt->objects;
+		while (cur)
+		{
+			is_inside = cur->methods->is_inside;
+			if (is_inside)
+			{
+				if (is_inside(cur, light->position))
+					ft_lstadd_front(&light->inside, ft_lstnew(&cur->oid));
+			}
+			cur = cur->next;
+		}
+		light = (t_light *)light->next;
+	}
 }

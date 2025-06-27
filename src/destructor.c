@@ -6,15 +6,16 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:31:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/26 11:27:38 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 18:16:57 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 /* -------------------------------- PROTOTYPE ------------------------------- */
-static void	free_objects(t_object *objects, void *mlx_ptr);
-static void	free_types(t_type *types);
+static inline void	free_objects(t_object *objects, void *mlx_ptr);
+static inline void	free_lights(t_light *lights);
+static inline void	free_types(t_type *types);
 /* -------------------------------------------------------------------------- */
 
 void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
@@ -24,7 +25,7 @@ void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 	mlx = mrt->mlx;
 	free_types(mrt->types);
 	free_objects(mrt->objects, mlx->mlx_ptr);
-	free_objects((t_object *)mrt->lights, mlx->mlx_ptr);
+	free_lights(mrt->lights);
 	free(mrt->ambiant);
 	free(mrt->camera);
 	free(mrt->clipboard);
@@ -42,7 +43,7 @@ void	destruct_minirt(t_minirt *mrt, int destroy_mlx)
 	free(mrt);
 }
 
-static void	free_objects(t_object *objects, void *mlx_ptr)
+static inline void	free_objects(t_object *objects, void *mlx_ptr)
 {
 	t_object	*tmp;
 
@@ -60,7 +61,20 @@ static void	free_objects(t_object *objects, void *mlx_ptr)
 	}
 }
 
-static void	free_types(t_type *types)
+static inline void	free_lights(t_light *lights)
+{
+	t_light	*tmp;
+
+	while (lights)
+	{
+		tmp = (t_light *)lights->next;
+		ft_lstclear(&lights->inside, ft_nothing);
+		free(lights);
+		lights = tmp;
+	}
+}
+
+static inline void	free_types(t_type *types)
 {
 	t_type	*tmp;
 

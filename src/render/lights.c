@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:44:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/25 13:04:36 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:51:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,27 @@
 
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline float	calculate_light_level(t_minirt *mrt, t_light *light,
-						t_hit_data hit);
+						t_hit_data *hit);
 static inline void	apply_diffuse_lights(t_minirt *mrt, t_light *light,
-						t_hit_data hit, t_frgb *color);
+						t_hit_data *hit, t_frgb *color);
 static inline int		is_light_blocked(t_minirt *mrt, t_ray *ray,
 						t_light *light, t_object *object);
 static inline float	get_distance(t_object *cur, t_fvector3 position, t_ray *ray,
 						float (*intersect)(t_ray *, t_object *, float));
 /* -------------------------------------------------------------------------- */
 
-t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside)
+t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data *hit, int inside)
 {
-	t_frgb	color;
-	t_light	*light;
-	int		(*is_inside)(t_object *, t_fvector3);
+	t_frgb		color;
+	t_light		*light;
+	int			oid;
 
 	color = mrt->ambiant->gamma_color;
 	light = mrt->lights;
-	is_inside = hit.object->methods->is_inside;
+	oid = hit->object->oid;
 	while (light)
 	{
-		if (!inside || (is_inside && is_inside(hit.object, light->position)))
+		if (!inside || is_light_inside(oid, light))
 			apply_diffuse_lights(mrt, light, hit, &color);
 		light = (t_light *)light->next;
 	}
@@ -48,25 +48,25 @@ t_frgb	get_lights_modifier(t_minirt *mrt, t_hit_data hit, int inside)
 }
 
 static inline float	calculate_light_level(t_minirt *mrt, t_light *light,
-		t_hit_data hit)
+		t_hit_data *hit)
 {
 	t_fvector3	direction;
 	float		distance;
 	float		dot;
 	t_ray		shadow_ray;
 
-	direction = ft_fvector3_diff(light->position, hit.impact_point);
+	direction = ft_fvector3_diff(light->position, hit->impact_point);
 	distance = ft_fvector3_length(direction);
 	direction = ft_fnormalize(direction);
-	dot = hit.normal.x * direction.x + hit.normal.y * direction.y
-		+ hit.normal.z * direction.z;
+	dot = hit->normal.x * direction.x + hit->normal.y * direction.y
+		+ hit->normal.z * direction.z;
 	if (dot <= 0.0f)
 		return (0.0f);
-	shadow_ray.origin = ft_fvector3_sum(hit.impact_point,
-			ft_fvector3_scale(hit.normal, 0.000001f));
+	shadow_ray.origin = ft_fvector3_sum(hit->impact_point,
+			ft_fvector3_scale(hit->normal, 0.000001f));
 	shadow_ray.direction = direction;
 	shadow_ray.dist = distance;
-	if (is_light_blocked(mrt, &shadow_ray, light, hit.object))
+	if (is_light_blocked(mrt, &shadow_ray, light, hit->object))
 		return (0.0f);
 	return (dot * (light->level / (light->level + LINEAR_ATTENUATION_COEF
 				* distance + QUADRATIC_ATTENUATION_COEF
@@ -74,7 +74,7 @@ static inline float	calculate_light_level(t_minirt *mrt, t_light *light,
 }
 
 static inline void	apply_diffuse_lights(t_minirt *mrt, t_light *light,
-		t_hit_data hit, t_frgb *color)
+		t_hit_data *hit, t_frgb *color)
 {
 	float	level;
 
@@ -82,6 +82,7 @@ static inline void	apply_diffuse_lights(t_minirt *mrt, t_light *light,
 	color->r += light->gamma_color.r * level;
 	color->g += light->gamma_color.g * level;
 	color->b += light->gamma_color.b * level;
+	hit->level += level;
 }
 
 static inline int	is_light_blocked(t_minirt *mrt, t_ray *ray, t_light *light,
