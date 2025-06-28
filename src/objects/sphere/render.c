@@ -106,16 +106,12 @@ static inline t_fvector3	bump_mapping(t_mlx_image bump, t_hit_data hit)
 
 	c = display_texture(bump, hit.u, hit.v);
 	hc = (c.r + c.g + c.b) / 3.0f;
-	c = display_texture(bump, hit.u + 1.0f / (float)bump.width, hit.v);
-	du = ((c.r + c.g + c.b) / 3.0f - hc) * 1.0f;
-	c = display_texture(bump, hit.u, hit.v + 1.0f / (float)bump.height);
-	dv = ((c.r + c.g + c.b) / 3.0f - hc) * 1.0f;
-	if (fabsf(hit.normal.y) > 0.9f)
-		t = ft_fnormalize(
-				ft_fcross_product((t_fvector3){1.0f, 0.0f, 0.0f}, hit.normal));
-	else
-		t = ft_fnormalize(
-				ft_fcross_product((t_fvector3){0.0f, 1.0f, 0.0f}, hit.normal));
+	c = display_texture(bump, hit.u + 0.9f / (float)bump.width, hit.v);
+	du = ((c.r + c.g + c.b) / 3.0f - hc) * 0.75;
+	c = display_texture(bump, hit.u, hit.v + 0.9f / (float)bump.height);
+	dv = ((c.r + c.g + c.b) / 3.0f - hc) * 0.75;
+	t = ft_fnormalize(
+			ft_fcross_product((t_fvector3){0.0f, 1.0f, 0.0f}, hit.normal));
 	return (ft_fnormalize(ft_fvector3_sum(hit.normal, ft_fvector3_sum(
 					ft_fvector3_scale(t, du), ft_fvector3_scale(ft_fnormalize(
 							ft_fcross_product(hit.normal, t)), dv)))));
