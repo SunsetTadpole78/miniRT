@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 18:34:10 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/26 13:50:26 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/30 01:52:02 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 /* ------------------------------- PROTOTYPE -------------------------------- */
 static inline t_fvector3	get_normal(int type, t_fvector3 impact_point,
 								t_cylinder *cylinder);
+static inline void		init_uv(t_hit_data *hit, t_cylinder *cylinder,
+								int is_side);
 /* -------------------------------------------------------------------------- */
 
 int	init_cylinder(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder)
@@ -30,7 +32,33 @@ int	init_cylinder(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder)
 	if (inside)
 		hit->normal = ft_fvector3_scale(hit->normal, -1);
 	hit->level = cylinder->default_level;
+	hit->diff = ft_fvector3_diff(hit->impact_point, cylinder->position);
+	hit->h = ft_fdot_product(hit->diff, cylinder->normal);
+	hit->proj = ft_fvector3_diff(hit->diff, ft_fvector3_scale(cylinder->normal,
+				hit->h));
+	init_uv(hit, cylinder, ray->extra == 0);
 	return (inside);
+}
+
+static inline void	init_uv(t_hit_data *hit, t_cylinder *cylinder, int is_side)
+{
+	float	angle;
+
+	if (is_side)
+	{
+		angle = atan2f(hit->proj.x * cylinder->up.x + hit->proj.y
+				* cylinder->up.y + hit->proj.z * cylinder->up.z, hit->proj.x
+				* cylinder->right.x + hit->proj.y * cylinder->right.y
+				+ hit->proj.z * cylinder->right.z);
+		hit->u = (angle + (angle < 0.0f) * 2.0f * M_PI) / (2.0f * M_PI);
+		hit->v = (hit->h + cylinder->half_height) / cylinder->height;
+		return ;
+	}
+	hit->u = (hit->diff.x * cylinder->right.x + hit->diff.y
+			* cylinder->right.y + hit->diff.z * cylinder->right.z)
+		/ cylinder->diameter + 0.5f;
+	hit->v = (hit->diff.x * cylinder->up.x + hit->diff.y * cylinder->up.y
+			+ hit->diff.z * cylinder->up.z) / cylinder->diameter + 0.5f;
 }
 
 static inline t_fvector3	get_normal(int type,

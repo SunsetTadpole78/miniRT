@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:30:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/26 21:28:04 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/30 01:48:45 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,6 +301,11 @@ typedef struct s_hit_data
 	t_fvector3	impact_point;
 	t_fvector3	normal;
 	t_fvector3	position;
+	t_fvector3	diff;
+	t_fvector3	proj;
+	float		u;
+	float		v;
+	float		h;
 	float		level;
 }	t_hit_data;
 
@@ -368,6 +373,7 @@ int			init_cylinder(t_ray *ray, t_hit_data *hit,
 				t_cylinder *cylinder);
 float		intersect_cap(t_fvector3 o, t_fvector3 d, float radius,
 				float half_height);
+t_fvector3	cap_bump_mapping(t_cylinder *cy, t_mlx_image bump, t_hit_data hit);
 float		apply_side_equation(t_fvector3 o, t_fvector3 d,
 				t_cylinder *cylinder, float amplifier);
 int			is_inside_cylinder(t_object *object, t_fvector3 point);
