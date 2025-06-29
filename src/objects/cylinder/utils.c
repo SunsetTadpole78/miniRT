@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 18:34:10 by lroussel          #+#    #+#             */
-/*   Updated: 2025/06/30 01:46:15 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/30 01:52:02 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static inline void		init_uv(t_hit_data *hit, t_cylinder *cylinder,
 
 int	init_cylinder(t_ray *ray, t_hit_data *hit, t_cylinder *cylinder)
 {
-	int		inside;
+	int	inside;
 
 	hit->object = (t_object *)cylinder;
 	hit->impact_point = ft_fvector3_sum(ray->origin,
