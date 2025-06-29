@@ -31,6 +31,9 @@ void	apply_lights_plane(t_minirt *mrt, t_ray *ray, t_object *object,
 
 	plane = (t_plane *)object;
 	init_plane(ray, &hit, plane);
+	if ((ray->direction.x * hit.normal.x + ray->direction.y * hit.normal.y
+			+ ray->direction.z * hit.normal.z) > 0)
+		hit.normal = ft_fvector3_scale(hit.normal, -1);
 	base = get_base_color(plane->pattern, hit);
 	if (base.r != 0 || base.g != 0 || base.b != 0)
 		ray->color = apply_lights_modifier(
