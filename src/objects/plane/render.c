@@ -6,7 +6,7 @@
 /*   By:                                            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created:   by Juste                               #+#    #+#             */
-/*   Updated: 2025/06/26 19:46:46 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/06/30 00:09:04 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ static inline void	init_plane(t_ray *ray, t_hit_data *hit, t_plane *plane)
 	hit->diff = ft_fvector3_diff(hit->impact_point, hit->position);
 	hit->proj = (t_fvector3){0.0f, 0.0f, 0.0f};
 	hit->u = (hit->diff.x * plane->right.x + hit->diff.y
-			* plane->right.y + hit->diff.z * plane->right.z) * 0.03f;
+			* plane->right.y + hit->diff.z * plane->right.z) * 0.05f;
 	hit->v = (hit->diff.x * plane->up.x + hit->diff.y
-			* plane->up.y + hit->diff.z * plane->up.z) * 0.03f;
+			* plane->up.y + hit->diff.z * plane->up.z) * 0.05f;
 	hit->h = 0.0f;
 	hit->level = plane->default_level;
 	if (plane->pattern.bump_path)
